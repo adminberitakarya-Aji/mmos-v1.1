@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/api/response.schema.json",
+  "title": "MMOS API Response",
+  "description": "Reusable response envelope schema for MMOS REST APIs.",
+  "type": "object",
+
+  "required": [
+    "requestId",
+    "success",
+    "timestamp"
+  ],
+
+  "properties": {
+    "requestId": {
+      "$ref": "../common/identifier.schema.json"
+    },
+
+    "success": {
+      "type": "boolean",
+      "description": "Indicates whether the request was processed successfully."
+    },
+
+    "statusCode": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 599,
+      "description": "HTTP status code."
+    },
+
+    "data": {
+      "description": "Response payload.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": true
+        },
+        {
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+
+    "error": {
+      "$ref": "../common/error.schema.json"
+    },
+
+    "pagination": {
+      "$ref": "../common/pagination.schema.json"
+    },
+
+    "metadata": {
+      "$ref": "../common/metadata.schema.json"
+    },
+
+    "timestamp": {
+      "$ref": "../common/timestamp.schema.json"
+    }
+  },
+
+  "additionalProperties": false
+}

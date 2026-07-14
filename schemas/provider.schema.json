@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/provider.schema.json",
+  "title": "MMOS Provider",
+  "description": "Canonical schema for an MMOS AI Provider.",
+  "type": "object",
+
+  "required": [
+    "id",
+    "name",
+    "type",
+    "status",
+    "configuration"
+  ],
+
+  "properties": {
+    "id": {
+      "$ref": "./common/identifier.schema.json"
+    },
+
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+
+    "displayName": {
+      "type": "string"
+    },
+
+    "description": {
+      "type": "string"
+    },
+
+    "type": {
+      "type": "string",
+      "enum": [
+        "openai",
+        "anthropic",
+        "gemini",
+        "qwen",
+        "deepseek",
+        "custom"
+      ]
+    },
+
+    "status": {
+      "$ref": "./common/status.schema.json"
+    },
+
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+
+    "metadata": {
+      "$ref": "./common/metadata.schema.json"
+    },
+
+    "configuration": {
+      "$ref": "./providers/provider-config.schema.json"
+    },
+
+    "models": {
+      "type": "array",
+      "items": {
+        "$ref": "./providers/model.schema.json"
+      }
+    },
+
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "$ref": "./capability.schema.json"
+      }
+    },
+
+    "authentication": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": [
+            "api-key",
+            "oauth",
+            "service-account",
+            "custom"
+          ]
+        },
+        "credentialRef": {
+          "$ref": "./common/reference.schema.json"
+        }
+      },
+      "required": [
+        "method"
+      ],
+      "additionalProperties": false
+    },
+
+    "limits": {
+      "type": "object",
+      "properties": {
+        "maxRequestsPerMinute": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "maxTokensPerRequest": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "supportsStreaming": {
+          "type": "boolean"
+        },
+        "supportsBatch": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "health": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "checkInterval": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeout": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "pricing": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "billingModel": {
+          "type": "string",
+          "enum": [
+            "payg",
+            "subscription",
+            "custom"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+
+    "labels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+
+  "additionalProperties": false
+}

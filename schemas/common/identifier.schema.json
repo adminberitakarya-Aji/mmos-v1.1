@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/common/identifier.schema.json",
+  "title": "MMOS Identifier",
+  "description": "Reusable identifier schema for all MMOS domain objects.",
+  "type": "string",
+
+  "minLength": 1,
+  "maxLength": 128,
+
+  "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$",
+
+  "examples": [
+    "cmp-001",
+    "workflow.news.publish",
+    "agent-writer",
+    "task:generate-summary",
+    "execution-9f4c3b2a"
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/common/pagination.schema.json",
+  "title": "MMOS Pagination",
+  "description": "Reusable pagination schema for paginated API requests and responses.",
+  "type": "object",
+
+  "required": [
+    "page",
+    "pageSize"
+  ],
+
+  "properties": {
+    "page": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Current page number."
+    },
+
+    "pageSize": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000,
+      "description": "Number of items per page."
+    },
+
+    "totalItems": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of available items."
+    },
+
+    "totalPages": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of pages."
+    },
+
+    "hasPrevious": {
+      "type": "boolean",
+      "description": "Indicates whether a previous page exists."
+    },
+
+    "hasNext": {
+      "type": "boolean",
+      "description": "Indicates whether a next page exists."
+    },
+
+    "nextCursor": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Cursor token for the next page when using cursor-based pagination."
+    },
+
+    "previousCursor": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Cursor token for the previous page when using cursor-based pagination."
+    }
+  },
+
+  "additionalProperties": false
+}

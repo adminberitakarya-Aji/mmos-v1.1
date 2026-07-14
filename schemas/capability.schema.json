@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/capability.schema.json",
+  "title": "MMOS Capability",
+  "description": "Canonical schema for an MMOS Capability.",
+  "type": "object",
+
+  "required": [
+    "id",
+    "name",
+    "type",
+    "version"
+  ],
+
+  "properties": {
+    "id": {
+      "$ref": "./common/identifier.schema.json"
+    },
+
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+
+    "displayName": {
+      "type": "string"
+    },
+
+    "description": {
+      "type": "string"
+    },
+
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+
+    "type": {
+      "type": "string",
+      "enum": [
+        "chat",
+        "completion",
+        "vision",
+        "image-generation",
+        "audio-generation",
+        "speech-to-text",
+        "text-to-speech",
+        "embedding",
+        "reranking",
+        "search",
+        "ocr",
+        "translation",
+        "moderation",
+        "tool",
+        "custom"
+      ]
+    },
+
+    "status": {
+      "$ref": "./common/status.schema.json"
+    },
+
+    "metadata": {
+      "$ref": "./common/metadata.schema.json"
+    },
+
+    "provider": {
+      "$ref": "./provider.schema.json"
+    },
+
+    "models": {
+      "type": "array",
+      "items": {
+        "$ref": "./providers/model.schema.json"
+      }
+    },
+
+    "configuration": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "inputs": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "outputs": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "parameters": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "maxInputSize": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "maxOutputSize": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "supportsStreaming": {
+          "type": "boolean"
+        },
+        "supportsBatch": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "pricing": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "currency": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+
+    "labels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+
+  "additionalProperties": false
+}

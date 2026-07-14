@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/memory.schema.json",
+  "title": "MMOS Memory",
+  "description": "Canonical schema for an MMOS Memory object.",
+  "type": "object",
+
+  "required": [
+    "id",
+    "type",
+    "scope",
+    "content"
+  ],
+
+  "properties": {
+    "id": {
+      "$ref": "./common/identifier.schema.json"
+    },
+
+    "type": {
+      "type": "string",
+      "enum": [
+        "short-term",
+        "long-term",
+        "working",
+        "episodic",
+        "semantic",
+        "vector",
+        "cache",
+        "custom"
+      ]
+    },
+
+    "scope": {
+      "type": "string",
+      "enum": [
+        "global",
+        "tenant",
+        "composition",
+        "workflow",
+        "agent",
+        "execution",
+        "session"
+      ]
+    },
+
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+
+    "description": {
+      "type": "string"
+    },
+
+    "status": {
+      "$ref": "./common/status.schema.json"
+    },
+
+    "metadata": {
+      "$ref": "./common/metadata.schema.json"
+    },
+
+    "content": {
+      "description": "The canonical memory payload.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": true
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+
+    "embedding": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+
+    "provider": {
+      "$ref": "./provider.schema.json"
+    },
+
+    "index": {
+      "type": "string"
+    },
+
+    "namespace": {
+      "type": "string"
+    },
+
+    "ttl": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Time-to-live in seconds."
+    },
+
+    "expiresAt": {
+      "$ref": "./common/timestamp.schema.json"
+    },
+
+    "createdAt": {
+      "$ref": "./common/timestamp.schema.json"
+    },
+
+    "updatedAt": {
+      "$ref": "./common/timestamp.schema.json"
+    },
+
+    "owner": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "references": {
+      "type": "array",
+      "items": {
+        "$ref": "./common/reference.schema.json"
+      }
+    },
+
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+
+    "labels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+
+  "additionalProperties": false
+}

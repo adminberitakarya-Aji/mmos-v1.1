@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/common/reference.schema.json",
+  "title": "MMOS Reference",
+  "description": "Reusable reference schema for linking MMOS domain objects.",
+  "type": "object",
+
+  "required": [
+    "id"
+  ],
+
+  "properties": {
+    "id": {
+      "$ref": "./identifier.schema.json"
+    },
+
+    "type": {
+      "type": "string",
+      "description": "Referenced MMOS object type.",
+      "enum": [
+        "composition",
+        "workflow",
+        "task",
+        "agent",
+        "execution",
+        "runtime",
+        "capability",
+        "provider",
+        "memory",
+        "artifact",
+        "event",
+        "tenant",
+        "user",
+        "custom"
+      ]
+    },
+
+    "name": {
+      "type": "string",
+      "description": "Human-readable name of the referenced object."
+    },
+
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+
+    "uri": {
+      "type": "string",
+      "format": "uri",
+      "description": "Canonical URI of the referenced resource."
+    }
+  },
+
+  "additionalProperties": false
+}

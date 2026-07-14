@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/common/timestamp.schema.json",
+  "title": "MMOS Timestamp",
+  "description": "Reusable timestamp schema using the ISO 8601 date-time format.",
+  "type": "string",
+
+  "format": "date-time",
+
+  "examples": [
+    "2026-07-14T10:15:30Z",
+    "2026-07-14T10:15:30.123Z",
+    "2026-07-14T17:15:30+07:00"
+  ]
+}

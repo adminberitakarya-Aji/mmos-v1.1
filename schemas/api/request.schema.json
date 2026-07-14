@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/api/request.schema.json",
+  "title": "MMOS API Request",
+  "description": "Reusable request envelope schema for MMOS REST APIs.",
+  "type": "object",
+
+  "required": [
+    "requestId",
+    "timestamp"
+  ],
+
+  "properties": {
+    "requestId": {
+      "$ref": "../common/identifier.schema.json"
+    },
+
+    "timestamp": {
+      "$ref": "../common/timestamp.schema.json"
+    },
+
+    "operation": {
+      "type": "string",
+      "description": "Logical operation requested by the client."
+    },
+
+    "resource": {
+      "type": "string",
+      "description": "Target MMOS resource."
+    },
+
+    "version": {
+      "type": "string",
+      "pattern": "^v[0-9]+$",
+      "examples": [
+        "v1"
+      ]
+    },
+
+    "authentication": {
+      "$ref": "./authentication.schema.json"
+    },
+
+    "headers": {
+      "type": "object",
+      "description": "HTTP request headers.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+
+    "query": {
+      "type": "object",
+      "description": "Query string parameters.",
+      "additionalProperties": true
+    },
+
+    "params": {
+      "type": "object",
+      "description": "Path parameters.",
+      "additionalProperties": true
+    },
+
+    "body": {
+      "description": "Request payload.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": true
+        },
+        {
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+
+    "metadata": {
+      "$ref": "../common/metadata.schema.json"
+    }
+  },
+
+  "additionalProperties": false
+}

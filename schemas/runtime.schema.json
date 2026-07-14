@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/runtime.schema.json",
+  "title": "MMOS Runtime",
+  "description": "Canonical schema for MMOS Runtime configuration.",
+  "type": "object",
+
+  "required": [
+    "engine",
+    "scheduler",
+    "dispatcher",
+    "executor"
+  ],
+
+  "properties": {
+    "engine": {
+      "type": "string",
+      "description": "Runtime engine implementation."
+    },
+
+    "scheduler": {
+      "type": "object",
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": [
+            "fifo",
+            "priority",
+            "round-robin",
+            "fair-share"
+          ]
+        },
+        "maxConcurrency": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "strategy"
+      ],
+      "additionalProperties": false
+    },
+
+    "dispatcher": {
+      "type": "object",
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": [
+            "least-load",
+            "round-robin",
+            "sticky",
+            "random"
+          ]
+        },
+        "workerSelection": {
+          "type": "string",
+          "enum": [
+            "automatic",
+            "manual"
+          ]
+        }
+      },
+      "required": [
+        "strategy"
+      ],
+      "additionalProperties": false
+    },
+
+    "executor": {
+      "type": "object",
+      "properties": {
+        "maxWorkers": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeout": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "retryPolicy": {
+          "type": "object",
+          "properties": {
+            "maxAttempts": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "backoff": {
+              "type": "string",
+              "enum": [
+                "fixed",
+                "linear",
+                "exponential"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "eventBus": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "provider": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "memory": {
+      "$ref": "./memory.schema.json"
+    },
+
+    "providers": {
+      "type": "array",
+      "items": {
+        "$ref": "./provider.schema.json"
+      }
+    },
+
+    "logging": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": [
+            "trace",
+            "debug",
+            "info",
+            "warn",
+            "error"
+          ]
+        },
+        "structured": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "monitoring": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "metrics": {
+          "type": "boolean"
+        },
+        "tracing": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "security": {
+      "type": "object",
+      "properties": {
+        "authentication": {
+          "type": "boolean"
+        },
+        "authorization": {
+          "type": "boolean"
+        },
+        "encryption": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "metadata": {
+      "$ref": "./common/metadata.schema.json"
+    }
+  },
+
+  "additionalProperties": false
+}

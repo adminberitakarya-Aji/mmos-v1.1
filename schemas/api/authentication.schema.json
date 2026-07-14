@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/api/authentication.schema.json",
+  "title": "MMOS API Authentication",
+  "description": "Reusable authentication schema for MMOS REST and WebSocket APIs.",
+  "type": "object",
+
+  "required": [
+    "type"
+  ],
+
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "Authentication mechanism.",
+      "enum": [
+        "none",
+        "api-key",
+        "bearer",
+        "oauth2",
+        "jwt",
+        "service-account"
+      ]
+    },
+
+    "credentials": {
+      "type": "object",
+      "description": "Authentication credentials.",
+      "properties": {
+        "apiKey": {
+          "type": "string"
+        },
+
+        "accessToken": {
+          "type": "string"
+        },
+
+        "refreshToken": {
+          "type": "string"
+        },
+
+        "clientId": {
+          "type": "string"
+        },
+
+        "clientSecret": {
+          "type": "string"
+        },
+
+        "serviceAccount": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "expiresAt": {
+      "$ref": "../common/timestamp.schema.json"
+    },
+
+    "scopes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+
+    "tenantId": {
+      "$ref": "../common/identifier.schema.json"
+    },
+
+    "userId": {
+      "$ref": "../common/identifier.schema.json"
+    },
+
+    "metadata": {
+      "$ref": "../common/metadata.schema.json"
+    }
+  },
+
+  "additionalProperties": false
+}

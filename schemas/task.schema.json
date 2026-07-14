@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/task.schema.json",
+  "title": "MMOS Task",
+  "description": "Canonical schema for an MMOS Task.",
+  "type": "object",
+
+  "required": [
+    "id",
+    "name",
+    "type",
+    "agent",
+    "capability"
+  ],
+
+  "properties": {
+    "id": {
+      "$ref": "./common/identifier.schema.json"
+    },
+
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+
+    "displayName": {
+      "type": "string"
+    },
+
+    "description": {
+      "type": "string"
+    },
+
+    "type": {
+      "type": "string",
+      "enum": [
+        "action",
+        "decision",
+        "parallel",
+        "sequential",
+        "condition",
+        "loop",
+        "human",
+        "system"
+      ]
+    },
+
+    "status": {
+      "$ref": "./common/status.schema.json"
+    },
+
+    "metadata": {
+      "$ref": "./common/metadata.schema.json"
+    },
+
+    "agent": {
+      "$ref": "./agent.schema.json"
+    },
+
+    "capability": {
+      "$ref": "./capability.schema.json"
+    },
+
+    "inputs": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "outputs": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "parameters": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+
+    "dependsOn": {
+      "type": "array",
+      "items": {
+        "$ref": "./common/identifier.schema.json"
+      }
+    },
+
+    "timeout": {
+      "type": "integer",
+      "minimum": 0
+    },
+
+    "retryPolicy": {
+      "type": "object",
+      "properties": {
+        "maxAttempts": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "backoff": {
+          "type": "string",
+          "enum": [
+            "fixed",
+            "linear",
+            "exponential"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "memory": {
+      "$ref": "./memory.schema.json"
+    },
+
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "./artifact.schema.json"
+      }
+    },
+
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "./event.schema.json"
+      }
+    },
+
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+
+    "labels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+
+  "additionalProperties": false
+}

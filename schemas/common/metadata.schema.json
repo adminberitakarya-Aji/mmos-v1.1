@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/common/metadata.schema.json",
+  "title": "MMOS Metadata",
+  "description": "Reusable metadata schema shared by all MMOS domain objects.",
+  "type": "object",
+
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+
+    "description": {
+      "type": "string"
+    },
+
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+
+    "owner": {
+      "$ref": "./reference.schema.json"
+    },
+
+    "createdBy": {
+      "$ref": "./reference.schema.json"
+    },
+
+    "updatedBy": {
+      "$ref": "./reference.schema.json"
+    },
+
+    "createdAt": {
+      "$ref": "./timestamp.schema.json"
+    },
+
+    "updatedAt": {
+      "$ref": "./timestamp.schema.json"
+    },
+
+    "labels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+
+    "annotations": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+
+  "additionalProperties": false
+}

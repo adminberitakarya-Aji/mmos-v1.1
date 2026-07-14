@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/execution.schema.json",
+  "title": "MMOS Execution",
+  "description": "Canonical schema for an MMOS Execution.",
+  "type": "object",
+
+  "required": [
+    "id",
+    "compositionId",
+    "status",
+    "startedAt"
+  ],
+
+  "properties": {
+    "id": {
+      "$ref": "./common/identifier.schema.json"
+    },
+
+    "compositionId": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "workflowId": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "parentExecutionId": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "queued",
+        "running",
+        "paused",
+        "completed",
+        "failed",
+        "cancelled",
+        "timeout"
+      ]
+    },
+
+    "metadata": {
+      "$ref": "./common/metadata.schema.json"
+    },
+
+    "runtime": {
+      "$ref": "./runtime.schema.json"
+    },
+
+    "inputs": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "outputs": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "variables": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "tasks": {
+      "type": "array",
+      "items": {
+        "$ref": "./task.schema.json"
+      }
+    },
+
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "./event.schema.json"
+      }
+    },
+
+    "memory": {
+      "$ref": "./memory.schema.json"
+    },
+
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "./artifact.schema.json"
+      }
+    },
+
+    "error": {
+      "$ref": "./common/error.schema.json"
+    },
+
+    "startedAt": {
+      "$ref": "./common/timestamp.schema.json"
+    },
+
+    "completedAt": {
+      "$ref": "./common/timestamp.schema.json"
+    },
+
+    "duration": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Execution duration in milliseconds."
+    },
+
+    "retryCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+
+    "executor": {
+      "type": "string"
+    },
+
+    "node": {
+      "type": "string",
+      "description": "Runtime node or worker responsible for execution."
+    },
+
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+
+    "labels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+
+  "additionalProperties": false
+}

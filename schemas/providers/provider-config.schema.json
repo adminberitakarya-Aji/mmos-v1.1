@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/providers/provider-config.schema.json",
+  "title": "MMOS Provider Configuration",
+  "description": "Reusable configuration schema for MMOS AI Providers.",
+  "type": "object",
+
+  "required": [
+    "endpoint",
+    "authentication"
+  ],
+
+  "properties": {
+    "endpoint": {
+      "type": "string",
+      "format": "uri",
+      "description": "Base endpoint of the provider API."
+    },
+
+    "authentication": {
+      "type": "object",
+      "required": [
+        "method"
+      ],
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": [
+            "api-key",
+            "oauth2",
+            "service-account",
+            "custom"
+          ]
+        },
+
+        "credentialRef": {
+          "$ref": "../common/reference.schema.json"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "defaultModel": {
+      "type": "string",
+      "description": "Default model used by the provider."
+    },
+
+    "timeout": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Request timeout in milliseconds."
+    },
+
+    "maxRetries": {
+      "type": "integer",
+      "minimum": 0
+    },
+
+    "retryBackoff": {
+      "type": "string",
+      "enum": [
+        "fixed",
+        "linear",
+        "exponential"
+      ]
+    },
+
+    "rateLimit": {
+      "type": "object",
+      "properties": {
+        "requestsPerMinute": {
+          "type": "integer",
+          "minimum": 0
+        },
+
+        "tokensPerMinute": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "streaming": {
+      "type": "boolean",
+      "default": false
+    },
+
+    "healthCheck": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+
+        "interval": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Health check interval in seconds."
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "metadata": {
+      "$ref": "../common/metadata.schema.json"
+    }
+  },
+
+  "additionalProperties": false
+}

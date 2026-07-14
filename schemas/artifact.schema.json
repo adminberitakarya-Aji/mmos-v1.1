@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/artifact.schema.json",
+  "title": "MMOS Artifact",
+  "description": "Canonical schema for an MMOS Artifact.",
+  "type": "object",
+
+  "required": [
+    "id",
+    "type",
+    "name",
+    "location"
+  ],
+
+  "properties": {
+    "id": {
+      "$ref": "./common/identifier.schema.json"
+    },
+
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+
+    "displayName": {
+      "type": "string"
+    },
+
+    "description": {
+      "type": "string"
+    },
+
+    "type": {
+      "type": "string",
+      "enum": [
+        "text",
+        "image",
+        "audio",
+        "video",
+        "document",
+        "spreadsheet",
+        "presentation",
+        "json",
+        "markdown",
+        "html",
+        "pdf",
+        "code",
+        "archive",
+        "embedding",
+        "dataset",
+        "custom"
+      ]
+    },
+
+    "mimeType": {
+      "type": "string"
+    },
+
+    "extension": {
+      "type": "string"
+    },
+
+    "size": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Artifact size in bytes."
+    },
+
+    "location": {
+      "type": "string",
+      "description": "Storage URI or object location."
+    },
+
+    "checksum": {
+      "type": "string"
+    },
+
+    "status": {
+      "$ref": "./common/status.schema.json"
+    },
+
+    "metadata": {
+      "$ref": "./common/metadata.schema.json"
+    },
+
+    "owner": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "provider": {
+      "$ref": "./provider.schema.json"
+    },
+
+    "createdBy": {
+      "$ref": "./agent.schema.json"
+    },
+
+    "execution": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "workflow": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "composition": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "createdAt": {
+      "$ref": "./common/timestamp.schema.json"
+    },
+
+    "updatedAt": {
+      "$ref": "./common/timestamp.schema.json"
+    },
+
+    "expiresAt": {
+      "$ref": "./common/timestamp.schema.json"
+    },
+
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+
+    "labels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+
+  "additionalProperties": false
+}

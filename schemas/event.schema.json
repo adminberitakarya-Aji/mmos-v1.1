@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/event.schema.json",
+  "title": "MMOS Event",
+  "description": "Canonical schema for an MMOS Event.",
+  "type": "object",
+
+  "required": [
+    "id",
+    "type",
+    "source",
+    "timestamp"
+  ],
+
+  "properties": {
+    "id": {
+      "$ref": "./common/identifier.schema.json"
+    },
+
+    "type": {
+      "type": "string",
+      "description": "Logical event type."
+    },
+
+    "name": {
+      "type": "string"
+    },
+
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+
+    "source": {
+      "type": "string",
+      "description": "Originating MMOS component."
+    },
+
+    "subject": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "status": {
+      "$ref": "./common/status.schema.json"
+    },
+
+    "metadata": {
+      "$ref": "./common/metadata.schema.json"
+    },
+
+    "payload": {
+      "description": "Event payload.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": true
+        },
+        {
+          "type": "array"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "normal",
+        "high",
+        "critical"
+      ]
+    },
+
+    "correlationId": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "causationId": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "execution": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "workflow": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "composition": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "agent": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "provider": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "artifact": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "memory": {
+      "$ref": "./common/reference.schema.json"
+    },
+
+    "timestamp": {
+      "$ref": "./common/timestamp.schema.json"
+    },
+
+    "publishedAt": {
+      "$ref": "./common/timestamp.schema.json"
+    },
+
+    "receivedAt": {
+      "$ref": "./common/timestamp.schema.json"
+    },
+
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+
+    "labels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+
+  "additionalProperties": false
+}

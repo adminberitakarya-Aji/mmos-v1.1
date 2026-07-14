@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/common/response.schema.json",
+  "title": "MMOS Response",
+  "description": "Reusable response envelope schema for MMOS REST APIs and internal platform services.",
+  "type": "object",
+
+  "required": [
+    "success"
+  ],
+
+  "properties": {
+    "success": {
+      "type": "boolean",
+      "description": "Indicates whether the request was successfully processed."
+    },
+
+    "data": {
+      "description": "Response payload.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": true
+        },
+        {
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+
+    "error": {
+      "$ref": "./error.schema.json"
+    },
+
+    "pagination": {
+      "$ref": "./pagination.schema.json"
+    },
+
+    "metadata": {
+      "$ref": "./metadata.schema.json"
+    },
+
+    "requestId": {
+      "$ref": "./identifier.schema.json"
+    },
+
+    "timestamp": {
+      "$ref": "./timestamp.schema.json"
+    }
+  },
+
+  "additionalProperties": false
+}

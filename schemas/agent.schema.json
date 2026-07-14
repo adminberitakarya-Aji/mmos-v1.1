@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/agent.schema.json",
+  "title": "MMOS Agent",
+  "description": "Canonical schema for an MMOS Agent.",
+  "type": "object",
+
+  "required": [
+    "id",
+    "name",
+    "type"
+  ],
+
+  "properties": {
+    "id": {
+      "$ref": "./common/identifier.schema.json"
+    },
+
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+
+    "displayName": {
+      "type": "string"
+    },
+
+    "description": {
+      "type": "string"
+    },
+
+    "type": {
+      "type": "string",
+      "enum": [
+        "assistant",
+        "planner",
+        "executor",
+        "reviewer",
+        "coordinator",
+        "specialist",
+        "system",
+        "human"
+      ]
+    },
+
+    "status": {
+      "$ref": "./common/status.schema.json"
+    },
+
+    "metadata": {
+      "$ref": "./common/metadata.schema.json"
+    },
+
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "$ref": "./capability.schema.json"
+      }
+    },
+
+    "provider": {
+      "$ref": "./provider.schema.json"
+    },
+
+    "memory": {
+      "$ref": "./memory.schema.json"
+    },
+
+    "runtime": {
+      "$ref": "./runtime.schema.json"
+    },
+
+    "configuration": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "maxIterations": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeout": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "maxRetries": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "inputs": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "outputs": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+
+    "labels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+
+  "additionalProperties": false
+}

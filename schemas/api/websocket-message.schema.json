@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/api/websocket-message.schema.json",
+  "title": "MMOS WebSocket Message",
+  "description": "Reusable schema for MMOS WebSocket communication.",
+  "type": "object",
+
+  "required": [
+    "messageId",
+    "type",
+    "timestamp"
+  ],
+
+  "properties": {
+    "messageId": {
+      "$ref": "../common/identifier.schema.json"
+    },
+
+    "type": {
+      "type": "string",
+      "description": "WebSocket message type.",
+      "enum": [
+        "connect",
+        "disconnect",
+        "ping",
+        "pong",
+        "subscribe",
+        "unsubscribe",
+        "event",
+        "execution",
+        "stream",
+        "notification",
+        "error"
+      ]
+    },
+
+    "channel": {
+      "type": "string",
+      "description": "Logical subscription channel."
+    },
+
+    "event": {
+      "$ref": "../event.schema.json"
+    },
+
+    "payload": {
+      "description": "Message payload.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": true
+        },
+        {
+          "type": "array"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+
+    "authentication": {
+      "$ref": "./authentication.schema.json"
+    },
+
+    "correlationId": {
+      "$ref": "../common/identifier.schema.json"
+    },
+
+    "requestId": {
+      "$ref": "../common/identifier.schema.json"
+    },
+
+    "metadata": {
+      "$ref": "../common/metadata.schema.json"
+    },
+
+    "timestamp": {
+      "$ref": "../common/timestamp.schema.json"
+    }
+  },
+
+  "additionalProperties": false
+}

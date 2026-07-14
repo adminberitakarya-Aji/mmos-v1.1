@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/providers/model.schema.json",
+  "title": "MMOS AI Model",
+  "description": "Reusable schema describing an AI model supported by an MMOS Provider.",
+  "type": "object",
+
+  "required": [
+    "id",
+    "name",
+    "provider",
+    "type"
+  ],
+
+  "properties": {
+    "id": {
+      "$ref": "../common/identifier.schema.json"
+    },
+
+    "name": {
+      "type": "string",
+      "description": "Unique model name exposed by the provider."
+    },
+
+    "displayName": {
+      "type": "string"
+    },
+
+    "description": {
+      "type": "string"
+    },
+
+    "provider": {
+      "type": "string",
+      "enum": [
+        "openai",
+        "anthropic",
+        "gemini",
+        "qwen",
+        "deepseek",
+        "custom"
+      ]
+    },
+
+    "type": {
+      "type": "string",
+      "enum": [
+        "chat",
+        "reasoning",
+        "vision",
+        "embedding",
+        "image-generation",
+        "audio-generation",
+        "speech-to-text",
+        "text-to-speech",
+        "moderation",
+        "reranking",
+        "custom"
+      ]
+    },
+
+    "version": {
+      "type": "string"
+    },
+
+    "contextWindow": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Maximum supported context window in tokens."
+    },
+
+    "maxOutputTokens": {
+      "type": "integer",
+      "minimum": 1
+    },
+
+    "supportsStreaming": {
+      "type": "boolean"
+    },
+
+    "supportsFunctionCalling": {
+      "type": "boolean"
+    },
+
+    "supportsVision": {
+      "type": "boolean"
+    },
+
+    "supportsAudio": {
+      "type": "boolean"
+    },
+
+    "supportsStructuredOutput": {
+      "type": "boolean"
+    },
+
+    "supportsSystemPrompt": {
+      "type": "boolean"
+    },
+
+    "status": {
+      "$ref": "../common/status.schema.json"
+    },
+
+    "pricing": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+
+        "inputCostPerMillionTokens": {
+          "type": "number",
+          "minimum": 0
+        },
+
+        "outputCostPerMillionTokens": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "limits": {
+      "type": "object",
+      "properties": {
+        "requestsPerMinute": {
+          "type": "integer",
+          "minimum": 0
+        },
+
+        "tokensPerMinute": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "metadata": {
+      "$ref": "../common/metadata.schema.json"
+    }
+  },
+
+  "additionalProperties": false
+}

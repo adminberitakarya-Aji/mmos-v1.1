@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/v1/common/status.schema.json",
+  "title": "MMOS Status",
+  "description": "Reusable lifecycle status schema for MMOS domain objects.",
+  "type": "string",
+
+  "enum": [
+    "draft",
+    "active",
+    "inactive",
+    "pending",
+    "queued",
+    "running",
+    "paused",
+    "completed",
+    "failed",
+    "cancelled",
+    "timeout",
+    "archived",
+    "deleted"
+  ],
+
+  "examples": [
+    "draft",
+    "active",
+    "running",
+    "completed",
+    "failed"
+  ]
+}
