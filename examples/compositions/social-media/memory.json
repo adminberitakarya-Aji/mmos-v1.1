@@ -1,0 +1,126 @@
+{
+  "$schema": "../../../schemas/memory.schema.json",
+
+  "id": "memory.social-media",
+
+  "type": "working",
+
+  "scope": "workflow",
+
+  "name": "Social Media Working Memory",
+
+  "description": "Working memory used throughout the Social Media composition to maintain campaign context, generated assets, platform adaptations, and publication state.",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Social Media Working Memory",
+    "description": "Stores campaign information, generated content, visual prompts, hashtags, and publication metadata.",
+    "version": "1.0.0",
+    "tags": [
+      "memory",
+      "working",
+      "social-media",
+      "marketing",
+      "example"
+    ]
+  },
+
+  "content": {
+    "campaignTitle": "",
+
+    "campaignObjective": "",
+
+    "targetAudience": "",
+
+    "brandVoice": "professional",
+
+    "language": "en",
+
+    "platforms": [
+      "instagram",
+      "facebook",
+      "linkedin",
+      "x"
+    ],
+
+    "contentStrategy": {
+      "tone": "",
+      "callToAction": "",
+      "keyMessages": []
+    },
+
+    "captions": {
+      "instagram": "",
+      "facebook": "",
+      "linkedin": "",
+      "x": ""
+    },
+
+    "hashtags": [],
+
+    "imagePrompt": "",
+
+    "publication": {
+      "status": "draft",
+      "scheduledAt": null,
+      "timezone": "UTC"
+    },
+
+    "artifacts": {
+      "captions": [],
+      "hashtags": "",
+      "imagePrompt": ""
+    }
+  },
+
+  "embedding": [],
+
+  "provider": {
+    "id": "provider.openai",
+    "name": "openai",
+    "type": "openai"
+  },
+
+  "index": "social-media-memory",
+
+  "namespace": "examples.social-media",
+
+  "ttl": 259200,
+
+  "owner": {
+    "id": "workflow.social-media",
+    "type": "workflow",
+    "name": "Social Media Workflow"
+  },
+
+  "references": [
+    {
+      "id": "composition.social-media",
+      "type": "composition"
+    },
+    {
+      "id": "workflow.social-media",
+      "type": "workflow"
+    }
+  ],
+
+  "createdAt": "2026-01-01T00:00:00Z",
+
+  "updatedAt": "2026-01-01T00:00:00Z",
+
+  "expiresAt": "2026-01-04T00:00:00Z",
+
+  "tags": [
+    "working-memory",
+    "marketing",
+    "social-media",
+    "example"
+  ],
+
+  "labels": {
+    "environment": "development",
+    "retention": "3d",
+    "domain": "social-media"
+  }
+}

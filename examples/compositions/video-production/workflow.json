@@ -1,0 +1,266 @@
+{
+  "$schema": "../../../schemas/workflow.schema.json",
+
+  "id": "workflow.video-production",
+
+  "name": "video-production-workflow",
+
+  "displayName": "Video Production Workflow",
+
+  "description": "Reference workflow for generating AI-powered videos from structured content.",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Video Production Workflow",
+    "description": "Transforms a topic into a fully rendered multimedia video.",
+    "version": "1.0.0",
+    "tags": [
+      "video-production",
+      "workflow",
+      "creative",
+      "example"
+    ]
+  },
+
+  "inputs": {
+    "topic": "",
+    "language": "en",
+    "duration": 60,
+    "format": "9:16",
+    "style": "cinematic",
+    "voice": "professional"
+  },
+
+  "outputs": {
+    "video": "",
+    "script": "",
+    "storyboard": [],
+    "subtitles": "",
+    "thumbnail": "",
+    "metadata": {},
+    "status": "completed"
+  },
+
+  "variables": {
+    "outline": null,
+    "scriptDraft": null,
+    "storyboardDraft": null,
+    "sceneAssets": null,
+    "voiceTrack": null,
+    "renderResult": null,
+    "qualityReport": null
+  },
+
+  "tasks": [
+    {
+      "id": "task.analyze-topic",
+      "name": "Analyze Topic",
+      "type": "action",
+      "agent": {
+        "id": "agent.planner"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      }
+    },
+    {
+      "id": "task.generate-script",
+      "name": "Generate Script",
+      "type": "action",
+      "agent": {
+        "id": "agent.script-writer"
+      },
+      "capability": {
+        "id": "capability.chat"
+      },
+      "dependsOn": [
+        {
+          "id": "task.analyze-topic"
+        }
+      ]
+    },
+    {
+      "id": "task.generate-storyboard",
+      "name": "Generate Storyboard",
+      "type": "action",
+      "agent": {
+        "id": "agent.storyboard"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-script"
+        }
+      ]
+    },
+    {
+      "id": "task.generate-scenes",
+      "name": "Generate Scene Images",
+      "type": "action",
+      "agent": {
+        "id": "agent.image-generator"
+      },
+      "capability": {
+        "id": "capability.image-generation"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-storyboard"
+        }
+      ]
+    },
+    {
+      "id": "task.generate-narration",
+      "name": "Generate Narration",
+      "type": "action",
+      "agent": {
+        "id": "agent.voice-generator"
+      },
+      "capability": {
+        "id": "capability.audio-generation"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-scenes"
+        }
+      ]
+    },
+    {
+      "id": "task.generate-subtitles",
+      "name": "Generate Subtitles",
+      "type": "action",
+      "agent": {
+        "id": "agent.subtitle-generator"
+      },
+      "capability": {
+        "id": "capability.subtitle-generation"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-narration"
+        }
+      ]
+    },
+    {
+      "id": "task.compose-video",
+      "name": "Compose Video",
+      "type": "action",
+      "agent": {
+        "id": "agent.video-composer"
+      },
+      "capability": {
+        "id": "capability.video-generation"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-subtitles"
+        }
+      ]
+    },
+    {
+      "id": "task.review-video",
+      "name": "Review Video",
+      "type": "action",
+      "agent": {
+        "id": "agent.reviewer"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      },
+      "dependsOn": [
+        {
+          "id": "task.compose-video"
+        }
+      ]
+    },
+    {
+      "id": "task.publish-artifacts",
+      "name": "Publish Artifacts",
+      "type": "action",
+      "agent": {
+        "id": "agent.publisher"
+      },
+      "capability": {
+        "id": "capability.artifact"
+      },
+      "dependsOn": [
+        {
+          "id": "task.review-video"
+        }
+      ]
+    }
+  ],
+
+  "memory": {
+    "id": "memory.video-production"
+  },
+
+  "capabilities": [
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.chat"
+    },
+    {
+      "id": "capability.image-generation"
+    },
+    {
+      "id": "capability.audio-generation"
+    },
+    {
+      "id": "capability.video-generation"
+    },
+    {
+      "id": "capability.subtitle-generation"
+    },
+    {
+      "id": "capability.artifact"
+    }
+  ],
+
+  "artifacts": [
+    {
+      "id": "artifact.video"
+    },
+    {
+      "id": "artifact.script"
+    },
+    {
+      "id": "artifact.storyboard"
+    },
+    {
+      "id": "artifact.subtitle"
+    },
+    {
+      "id": "artifact.thumbnail"
+    },
+    {
+      "id": "artifact.metadata"
+    }
+  ],
+
+  "timeout": 600000,
+
+  "retryPolicy": {
+    "maxAttempts": 3,
+    "backoff": "exponential"
+  },
+
+  "tags": [
+    "video-production",
+    "creative",
+    "workflow",
+    "example"
+  ],
+
+  "labels": {
+    "pattern": "multimedia-pipeline",
+    "domain": "video-production"
+  }
+}

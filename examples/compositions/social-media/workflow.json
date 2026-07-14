@@ -1,0 +1,200 @@
+{
+  "$schema": "../../../schemas/workflow.schema.json",
+
+  "id": "workflow.social-media",
+
+  "name": "social-media-workflow",
+
+  "displayName": "Social Media Content Workflow",
+
+  "description": "Reference workflow for generating platform-specific social media content from a single campaign.",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Social Media Workflow",
+    "description": "Transforms a campaign brief into optimized social media assets.",
+    "version": "1.0.0",
+    "tags": [
+      "social-media",
+      "workflow",
+      "marketing",
+      "example"
+    ]
+  },
+
+  "inputs": {
+    "campaignTitle": "",
+    "campaignObjective": "",
+    "targetAudience": "",
+    "brandVoice": "professional",
+    "platforms": [
+      "instagram",
+      "facebook",
+      "linkedin",
+      "x"
+    ],
+    "language": "en"
+  },
+
+  "outputs": {
+    "captions": {},
+    "hashtags": [],
+    "imagePrompt": "",
+    "publishingMetadata": {},
+    "status": "ready-for-publication"
+  },
+
+  "variables": {
+    "campaignStrategy": null,
+    "contentDraft": null,
+    "platformContent": null,
+    "seo": null
+  },
+
+  "tasks": [
+    {
+      "id": "task.analyze-campaign",
+      "name": "Analyze Campaign",
+      "type": "action",
+      "agent": {
+        "id": "agent.planner"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      }
+    },
+    {
+      "id": "task.generate-caption",
+      "name": "Generate Caption",
+      "type": "action",
+      "agent": {
+        "id": "agent.writer"
+      },
+      "capability": {
+        "id": "capability.chat"
+      },
+      "dependsOn": [
+        {
+          "id": "task.analyze-campaign"
+        }
+      ]
+    },
+    {
+      "id": "task.adapt-platform-content",
+      "name": "Adapt Platform Content",
+      "type": "action",
+      "agent": {
+        "id": "agent.social-media"
+      },
+      "capability": {
+        "id": "capability.chat"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-caption"
+        }
+      ]
+    },
+    {
+      "id": "task.generate-hashtags",
+      "name": "Generate Hashtags",
+      "type": "action",
+      "agent": {
+        "id": "agent.seo"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      },
+      "dependsOn": [
+        {
+          "id": "task.adapt-platform-content"
+        }
+      ]
+    },
+    {
+      "id": "task.generate-image-prompt",
+      "name": "Generate Image Prompt",
+      "type": "action",
+      "agent": {
+        "id": "agent.creative"
+      },
+      "capability": {
+        "id": "capability.image-generation"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-hashtags"
+        }
+      ]
+    },
+    {
+      "id": "task.prepare-publication",
+      "name": "Prepare Publication Assets",
+      "type": "action",
+      "agent": {
+        "id": "agent.publisher"
+      },
+      "capability": {
+        "id": "capability.markdown"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-image-prompt"
+        }
+      ]
+    }
+  ],
+
+  "memory": {
+    "id": "memory.social-media"
+  },
+
+  "capabilities": [
+    {
+      "id": "capability.chat"
+    },
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.image-generation"
+    },
+    {
+      "id": "capability.markdown"
+    }
+  ],
+
+  "artifacts": [
+    {
+      "id": "artifact.social-post"
+    },
+    {
+      "id": "artifact.image-prompt"
+    },
+    {
+      "id": "artifact.hashtags"
+    }
+  ],
+
+  "timeout": 300000,
+
+  "retryPolicy": {
+    "maxAttempts": 3,
+    "backoff": "exponential"
+  },
+
+  "tags": [
+    "social-media",
+    "marketing",
+    "workflow",
+    "example"
+  ],
+
+  "labels": {
+    "pattern": "content-pipeline",
+    "domain": "social-media"
+  }
+}

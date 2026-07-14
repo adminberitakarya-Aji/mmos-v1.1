@@ -1,0 +1,145 @@
+{
+  "$schema": "../../../schemas/provider.schema.json",
+
+  "id": "provider.openai",
+
+  "name": "openai",
+
+  "displayName": "OpenAI",
+
+  "description": "Default AI provider configuration for the Podcast Production composition.",
+
+  "type": "openai",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "OpenAI Provider",
+    "description": "Reference provider configuration for AI-powered podcast production.",
+    "version": "1.0.0",
+    "tags": [
+      "provider",
+      "openai",
+      "podcast-production",
+      "audio",
+      "example"
+    ]
+  },
+
+  "configuration": {
+    "endpoint": "https://api.openai.com/v1",
+
+    "authentication": {
+      "method": "api-key",
+      "credentialRef": {
+        "id": "secret.openai-api-key",
+        "type": "custom",
+        "name": "OPENAI_API_KEY"
+      }
+    },
+
+    "defaultModel": "gpt-5",
+
+    "timeout": 60000,
+
+    "maxRetries": 3,
+
+    "retryBackoff": "exponential",
+
+    "rateLimit": {
+      "requestsPerMinute": 300,
+      "tokensPerMinute": 2000000
+    },
+
+    "streaming": true,
+
+    "healthCheck": {
+      "enabled": true,
+      "interval": 60
+    }
+  },
+
+  "models": [
+    {
+      "id": "model.gpt-5",
+      "name": "gpt-5",
+      "provider": "openai",
+      "type": "reasoning"
+    },
+    {
+      "id": "model.gpt-4o-mini-tts",
+      "name": "gpt-4o-mini-tts",
+      "provider": "openai",
+      "type": "audio-generation"
+    },
+    {
+      "id": "model.whisper-1",
+      "name": "whisper-1",
+      "provider": "openai",
+      "type": "transcription"
+    }
+  ],
+
+  "capabilities": [
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.chat"
+    },
+    {
+      "id": "capability.audio-generation"
+    },
+    {
+      "id": "capability.audio-processing"
+    },
+    {
+      "id": "capability.transcription"
+    },
+    {
+      "id": "capability.artifact"
+    }
+  ],
+
+  "authentication": {
+    "method": "api-key",
+    "credentialRef": {
+      "id": "secret.openai-api-key",
+      "type": "custom"
+    }
+  },
+
+  "limits": {
+    "maxRequestsPerMinute": 300,
+    "maxTokensPerRequest": 128000,
+    "maxAudioDurationSeconds": 7200,
+    "supportsStreaming": true,
+    "supportsBatch": true
+  },
+
+  "health": {
+    "enabled": true,
+    "checkInterval": 60,
+    "timeout": 5000
+  },
+
+  "pricing": {
+    "currency": "USD",
+    "billingModel": "payg"
+  },
+
+  "tags": [
+    "provider",
+    "openai",
+    "podcast-production",
+    "audio"
+  ],
+
+  "labels": {
+    "environment": "development",
+    "domain": "podcast-production",
+    "default": "true"
+  }
+}

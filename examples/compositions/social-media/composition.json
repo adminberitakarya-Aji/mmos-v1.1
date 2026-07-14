@@ -1,0 +1,105 @@
+{
+  "$schema": "../../../schemas/composition.schema.json",
+
+  "id": "composition.social-media",
+
+  "name": "social-media",
+
+  "displayName": "Social Media Content Generation",
+
+  "description": "Reference MMOS composition for generating multi-platform social media content from a single campaign.",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Social Media Composition",
+    "description": "End-to-end social media content generation pipeline.",
+    "version": "1.0.0",
+    "tags": [
+      "social-media",
+      "marketing",
+      "content",
+      "composition",
+      "example"
+    ]
+  },
+
+  "runtime": {
+    "engine": "mmos-runtime",
+
+    "scheduler": {
+      "strategy": "fifo",
+      "maxConcurrency": 8
+    },
+
+    "dispatcher": {
+      "strategy": "least-load",
+      "workerSelection": "automatic"
+    },
+
+    "executor": {
+      "maxWorkers": 8,
+      "timeout": 300000
+    }
+  },
+
+  "workflows": [
+    {
+      "id": "workflow.social-media",
+      "name": "Social Media Workflow"
+    }
+  ],
+
+  "capabilities": [
+    {
+      "id": "capability.chat"
+    },
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.image-generation"
+    },
+    {
+      "id": "capability.markdown"
+    }
+  ],
+
+  "providers": [
+    {
+      "id": "provider.openai"
+    }
+  ],
+
+  "memory": {
+    "id": "memory.social-media"
+  },
+
+  "artifacts": [
+    {
+      "id": "artifact.social-post"
+    },
+    {
+      "id": "artifact.image-prompt"
+    },
+    {
+      "id": "artifact.hashtags"
+    }
+  ],
+
+  "tags": [
+    "social-media",
+    "marketing",
+    "campaign",
+    "composition",
+    "example"
+  ],
+
+  "labels": {
+    "category": "marketing",
+    "industry": "digital-media",
+    "difficulty": "beginner"
+  }
+}

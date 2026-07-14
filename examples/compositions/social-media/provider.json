@@ -1,0 +1,132 @@
+{
+  "$schema": "../../../schemas/provider.schema.json",
+
+  "id": "provider.openai",
+
+  "name": "openai",
+
+  "displayName": "OpenAI",
+
+  "description": "Default AI provider configuration for the Social Media composition.",
+
+  "type": "openai",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "OpenAI Provider",
+    "description": "Reference provider configuration for multi-platform social media content generation.",
+    "version": "1.0.0",
+    "tags": [
+      "provider",
+      "openai",
+      "social-media",
+      "marketing",
+      "example"
+    ]
+  },
+
+  "configuration": {
+    "endpoint": "https://api.openai.com/v1",
+
+    "authentication": {
+      "method": "api-key",
+      "credentialRef": {
+        "id": "secret.openai-api-key",
+        "type": "custom",
+        "name": "OPENAI_API_KEY"
+      }
+    },
+
+    "defaultModel": "gpt-5",
+
+    "timeout": 30000,
+
+    "maxRetries": 3,
+
+    "retryBackoff": "exponential",
+
+    "rateLimit": {
+      "requestsPerMinute": 500,
+      "tokensPerMinute": 2000000
+    },
+
+    "streaming": true,
+
+    "healthCheck": {
+      "enabled": true,
+      "interval": 60
+    }
+  },
+
+  "models": [
+    {
+      "id": "model.gpt-5",
+      "name": "gpt-5",
+      "provider": "openai",
+      "type": "chat"
+    },
+    {
+      "id": "model.gpt-image-1",
+      "name": "gpt-image-1",
+      "provider": "openai",
+      "type": "image-generation"
+    }
+  ],
+
+  "capabilities": [
+    {
+      "id": "capability.chat"
+    },
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.image-generation"
+    },
+    {
+      "id": "capability.markdown"
+    }
+  ],
+
+  "authentication": {
+    "method": "api-key",
+    "credentialRef": {
+      "id": "secret.openai-api-key",
+      "type": "custom"
+    }
+  },
+
+  "limits": {
+    "maxRequestsPerMinute": 500,
+    "maxTokensPerRequest": 128000,
+    "supportsStreaming": true,
+    "supportsBatch": false
+  },
+
+  "health": {
+    "enabled": true,
+    "checkInterval": 60,
+    "timeout": 5000
+  },
+
+  "pricing": {
+    "currency": "USD",
+    "billingModel": "payg"
+  },
+
+  "tags": [
+    "provider",
+    "openai",
+    "social-media",
+    "marketing"
+  ],
+
+  "labels": {
+    "environment": "development",
+    "domain": "social-media",
+    "default": "true"
+  }
+}

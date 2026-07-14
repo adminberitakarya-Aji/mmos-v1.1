@@ -1,0 +1,210 @@
+{
+  "$schema": "../../../schemas/workflow.schema.json",
+
+  "id": "workflow.news-production",
+
+  "name": "news-production-workflow",
+
+  "displayName": "News Production Workflow",
+
+  "description": "Reference workflow for automated newsroom content production.",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "News Production Workflow",
+    "description": "Transforms raw news information into a publication-ready article.",
+    "version": "1.0.0",
+    "tags": [
+      "news",
+      "workflow",
+      "editorial",
+      "example"
+    ]
+  },
+
+  "inputs": {
+    "headline": "",
+    "summary": "",
+    "facts": [],
+    "sources": [],
+    "language": "en",
+    "category": "general",
+    "priority": "normal"
+  },
+
+  "outputs": {
+    "headline": "",
+    "summary": "",
+    "article": "",
+    "seo": {},
+    "featuredImage": "",
+    "status": "ready-for-publication"
+  },
+
+  "variables": {
+    "draft": null,
+    "review": null,
+    "factCheck": null,
+    "seoMetadata": null
+  },
+
+  "tasks": [
+    {
+      "id": "task.analyze-news",
+      "name": "Analyze News",
+      "type": "action",
+      "agent": {
+        "id": "agent.planner"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      }
+    },
+    {
+      "id": "task.generate-headline",
+      "name": "Generate Headline",
+      "type": "action",
+      "agent": {
+        "id": "agent.editor"
+      },
+      "capability": {
+        "id": "capability.chat"
+      },
+      "dependsOn": [
+        {
+          "id": "task.analyze-news"
+        }
+      ]
+    },
+    {
+      "id": "task.write-article",
+      "name": "Write Article",
+      "type": "action",
+      "agent": {
+        "id": "agent.writer"
+      },
+      "capability": {
+        "id": "capability.chat"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-headline"
+        }
+      ]
+    },
+    {
+      "id": "task.fact-check",
+      "name": "Fact Check",
+      "type": "action",
+      "agent": {
+        "id": "agent.fact-checker"
+      },
+      "capability": {
+        "id": "capability.search"
+      },
+      "dependsOn": [
+        {
+          "id": "task.write-article"
+        }
+      ]
+    },
+    {
+      "id": "task.editorial-review",
+      "name": "Editorial Review",
+      "type": "action",
+      "agent": {
+        "id": "agent.editor"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      },
+      "dependsOn": [
+        {
+          "id": "task.fact-check"
+        }
+      ]
+    },
+    {
+      "id": "task.optimize-seo",
+      "name": "Optimize SEO",
+      "type": "action",
+      "agent": {
+        "id": "agent.seo"
+      },
+      "capability": {
+        "id": "capability.chat"
+      },
+      "dependsOn": [
+        {
+          "id": "task.editorial-review"
+        }
+      ]
+    },
+    {
+      "id": "task.format-article",
+      "name": "Format Article",
+      "type": "action",
+      "agent": {
+        "id": "agent.publisher"
+      },
+      "capability": {
+        "id": "capability.markdown"
+      },
+      "dependsOn": [
+        {
+          "id": "task.optimize-seo"
+        }
+      ]
+    }
+  ],
+
+  "memory": {
+    "id": "memory.newsroom"
+  },
+
+  "capabilities": [
+    {
+      "id": "capability.chat"
+    },
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.search"
+    },
+    {
+      "id": "capability.markdown"
+    }
+  ],
+
+  "artifacts": [
+    {
+      "id": "artifact.news-article"
+    },
+    {
+      "id": "artifact.featured-image"
+    }
+  ],
+
+  "timeout": 300000,
+
+  "retryPolicy": {
+    "maxAttempts": 3,
+    "backoff": "exponential"
+  },
+
+  "tags": [
+    "news",
+    "editorial",
+    "workflow",
+    "example"
+  ],
+
+  "labels": {
+    "pattern": "editorial-pipeline",
+    "domain": "news-production"
+  }
+}

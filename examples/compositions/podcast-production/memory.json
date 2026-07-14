@@ -1,0 +1,145 @@
+{
+  "$schema": "../../../schemas/memory.schema.json",
+
+  "id": "memory.podcast-production",
+
+  "type": "working",
+
+  "scope": "workflow",
+
+  "name": "Podcast Production Working Memory",
+
+  "description": "Working memory used throughout the Podcast Production composition to maintain research, script, narration, transcript, publishing state, and execution metadata.",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Podcast Production Working Memory",
+    "description": "Stores research findings, episode outline, script, generated audio, transcript, metadata, and publishing information.",
+    "version": "1.0.0",
+    "tags": [
+      "memory",
+      "working",
+      "podcast-production",
+      "audio",
+      "multimedia",
+      "example"
+    ]
+  },
+
+  "content": {
+    "topic": "",
+
+    "language": "en",
+
+    "duration": 900,
+
+    "style": "conversational",
+
+    "research": {
+      "sources": [],
+      "summary": ""
+    },
+
+    "outline": [],
+
+    "script": "",
+
+    "narration": {
+      "voice": "professional",
+      "audioFile": ""
+    },
+
+    "transcript": {
+      "language": "en",
+      "file": "",
+      "text": ""
+    },
+
+    "audio": {
+      "file": "",
+      "format": "mp3",
+      "duration": 900,
+      "sampleRate": 48000
+    },
+
+    "coverPrompt": "",
+
+    "episodeMetadata": {
+      "title": "",
+      "description": "",
+      "keywords": [],
+      "category": "Technology"
+    },
+
+    "qualityReview": {
+      "approved": false,
+      "score": 0,
+      "comments": []
+    },
+
+    "artifacts": {
+      "audio": "",
+      "script": "",
+      "transcript": "",
+      "coverPrompt": "",
+      "metadata": ""
+    },
+
+    "execution": {
+      "status": "running",
+      "provider": "openai",
+      "model": "gpt-5"
+    }
+  },
+
+  "embedding": [],
+
+  "provider": {
+    "id": "provider.openai",
+    "name": "openai",
+    "type": "openai"
+  },
+
+  "index": "podcast-production-memory",
+
+  "namespace": "examples.podcast-production",
+
+  "ttl": 604800,
+
+  "owner": {
+    "id": "workflow.podcast-production",
+    "type": "workflow",
+    "name": "Podcast Production Workflow"
+  },
+
+  "references": [
+    {
+      "id": "composition.podcast-production",
+      "type": "composition"
+    },
+    {
+      "id": "workflow.podcast-production",
+      "type": "workflow"
+    }
+  ],
+
+  "createdAt": "2026-01-01T00:00:00Z",
+
+  "updatedAt": "2026-01-01T00:00:00Z",
+
+  "expiresAt": "2026-01-08T00:00:00Z",
+
+  "tags": [
+    "working-memory",
+    "podcast-production",
+    "audio",
+    "example"
+  ],
+
+  "labels": {
+    "environment": "development",
+    "retention": "7d",
+    "domain": "podcast-production"
+  }
+}

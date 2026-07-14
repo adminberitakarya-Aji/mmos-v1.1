@@ -1,0 +1,64 @@
+{
+  "campaignTitle": "Introducing MMOS AI Orchestration Platform",
+
+  "campaignObjective": "Increase awareness of the MMOS platform among software developers, AI engineers, startups, and technology companies.",
+
+  "targetAudience": "Software Developers, AI Engineers, Tech Founders",
+
+  "brandVoice": "professional",
+
+  "language": "en",
+
+  "platforms": [
+    "instagram",
+    "facebook",
+    "linkedin",
+    "x"
+  ],
+
+  "campaign": {
+    "type": "product-launch",
+    "startDate": "2026-01-15T09:00:00Z",
+    "endDate": "2026-01-22T09:00:00Z"
+  },
+
+  "content": {
+    "topic": "MMOS simplifies AI orchestration by combining workflows, agents, memory, events, and multiple AI providers into a single platform.",
+    "keyMessages": [
+      "Build AI workflows visually.",
+      "Run multiple AI providers from one platform.",
+      "Manage memory and events automatically.",
+      "Deploy locally or in production."
+    ],
+    "callToAction": "Explore MMOS and start building AI applications today."
+  },
+
+  "requirements": {
+    "generateCaptions": true,
+    "generateHashtags": true,
+    "generateImagePrompt": true,
+    "generatePlatformVariants": true,
+    "generatePostingSchedule": true,
+    "includeEmoji": true
+  },
+
+  "style": {
+    "tone": "professional",
+    "writingStyle": "engaging",
+    "maxCaptionLength": 300,
+    "hashtagsPerPlatform": 10
+  },
+
+  "publication": {
+    "timezone": "UTC",
+    "schedule": "2026-01-15T12:00:00Z",
+    "status": "draft"
+  },
+
+  "output": {
+    "captions": "captions.json",
+    "hashtags": "hashtags.json",
+    "imagePrompt": "image-prompt.txt",
+    "schedule": "schedule.json"
+  }
+}

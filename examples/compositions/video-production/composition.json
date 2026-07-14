@@ -1,0 +1,123 @@
+{
+  "$schema": "../../../schemas/composition.schema.json",
+
+  "id": "composition.video-production",
+
+  "name": "video-production",
+
+  "displayName": "Video Production",
+
+  "description": "Reference MMOS composition for AI-powered end-to-end video production.",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Video Production Composition",
+    "description": "End-to-end multimedia video production using MMOS orchestration.",
+    "version": "1.0.0",
+    "tags": [
+      "video-production",
+      "multimedia",
+      "creative",
+      "composition",
+      "example"
+    ]
+  },
+
+  "runtime": {
+    "engine": "mmos-runtime",
+
+    "scheduler": {
+      "strategy": "fifo",
+      "maxConcurrency": 8
+    },
+
+    "dispatcher": {
+      "strategy": "least-load",
+      "workerSelection": "automatic"
+    },
+
+    "executor": {
+      "maxWorkers": 8,
+      "timeout": 600000
+    }
+  },
+
+  "workflows": [
+    {
+      "id": "workflow.video-production",
+      "name": "Video Production Workflow"
+    }
+  ],
+
+  "capabilities": [
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.chat"
+    },
+    {
+      "id": "capability.image-generation"
+    },
+    {
+      "id": "capability.audio-generation"
+    },
+    {
+      "id": "capability.video-generation"
+    },
+    {
+      "id": "capability.subtitle-generation"
+    },
+    {
+      "id": "capability.artifact"
+    }
+  ],
+
+  "providers": [
+    {
+      "id": "provider.openai"
+    }
+  ],
+
+  "memory": {
+    "id": "memory.video-production"
+  },
+
+  "artifacts": [
+    {
+      "id": "artifact.video"
+    },
+    {
+      "id": "artifact.script"
+    },
+    {
+      "id": "artifact.storyboard"
+    },
+    {
+      "id": "artifact.subtitle"
+    },
+    {
+      "id": "artifact.thumbnail"
+    },
+    {
+      "id": "artifact.metadata"
+    }
+  ],
+
+  "tags": [
+    "video-production",
+    "multimedia",
+    "creative",
+    "composition",
+    "example"
+  ],
+
+  "labels": {
+    "category": "creative-ai",
+    "industry": "multimedia",
+    "difficulty": "advanced"
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "$schema": "../../../schemas/workflow.schema.json",
+
+  "id": "workflow.image-generation",
+
+  "name": "image-generation-workflow",
+
+  "displayName": "Image Generation Workflow",
+
+  "description": "Reference workflow for generating AI images from natural language prompts.",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Image Generation Workflow",
+    "description": "Transforms a text prompt into production-ready AI-generated images.",
+    "version": "1.0.0",
+    "tags": [
+      "image-generation",
+      "workflow",
+      "creative",
+      "example"
+    ]
+  },
+
+  "inputs": {
+    "prompt": "",
+    "negativePrompt": "",
+    "style": "photorealistic",
+    "aspectRatio": "1:1",
+    "resolution": "1024x1024",
+    "numberOfImages": 1,
+    "seed": null
+  },
+
+  "outputs": {
+    "optimizedPrompt": "",
+    "images": [],
+    "metadata": {},
+    "status": "completed"
+  },
+
+  "variables": {
+    "enhancedPrompt": null,
+    "generationParameters": null,
+    "qualityReport": null
+  },
+
+  "tasks": [
+    {
+      "id": "task.analyze-prompt",
+      "name": "Analyze Prompt",
+      "type": "action",
+      "agent": {
+        "id": "agent.prompt-engineer"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      }
+    },
+    {
+      "id": "task.optimize-prompt",
+      "name": "Optimize Prompt",
+      "type": "action",
+      "agent": {
+        "id": "agent.creative"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      },
+      "dependsOn": [
+        {
+          "id": "task.analyze-prompt"
+        }
+      ]
+    },
+    {
+      "id": "task.generate-image",
+      "name": "Generate Image",
+      "type": "action",
+      "agent": {
+        "id": "agent.image-generator"
+      },
+      "capability": {
+        "id": "capability.image-generation"
+      },
+      "dependsOn": [
+        {
+          "id": "task.optimize-prompt"
+        }
+      ]
+    },
+    {
+      "id": "task.review-image",
+      "name": "Review Image Quality",
+      "type": "action",
+      "agent": {
+        "id": "agent.reviewer"
+      },
+      "capability": {
+        "id": "capability.image-analysis"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-image"
+        }
+      ]
+    },
+    {
+      "id": "task.publish-artifacts",
+      "name": "Publish Artifacts",
+      "type": "action",
+      "agent": {
+        "id": "agent.publisher"
+      },
+      "capability": {
+        "id": "capability.artifact"
+      },
+      "dependsOn": [
+        {
+          "id": "task.review-image"
+        }
+      ]
+    }
+  ],
+
+  "memory": {
+    "id": "memory.image-generation"
+  },
+
+  "capabilities": [
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.image-generation"
+    },
+    {
+      "id": "capability.image-analysis"
+    },
+    {
+      "id": "capability.artifact"
+    }
+  ],
+
+  "artifacts": [
+    {
+      "id": "artifact.generated-image"
+    },
+    {
+      "id": "artifact.prompt"
+    },
+    {
+      "id": "artifact.metadata"
+    }
+  ],
+
+  "timeout": 300000,
+
+  "retryPolicy": {
+    "maxAttempts": 3,
+    "backoff": "exponential"
+  },
+
+  "tags": [
+    "image-generation",
+    "creative",
+    "workflow",
+    "example"
+  ],
+
+  "labels": {
+    "pattern": "creative-pipeline",
+    "domain": "image-generation"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "prompt": "A futuristic AI orchestration platform dashboard with multiple intelligent agents collaborating through interconnected workflows, holographic interfaces, cloud infrastructure, glowing data streams, modern control center, highly detailed, realistic lighting.",
+
+  "negativePrompt": "low quality, blurry, watermark, logo, text, distorted, duplicate, cropped, noisy",
+
+  "style": "photorealistic",
+
+  "aspectRatio": "16:9",
+
+  "resolution": "1792x1024",
+
+  "numberOfImages": 2,
+
+  "seed": null,
+
+  "provider": "openai",
+
+  "model": "gpt-image-1",
+
+  "quality": "high",
+
+  "background": "auto",
+
+  "outputFormat": "png",
+
+  "requirements": {
+    "transparentBackground": false,
+    "upscale": false,
+    "generateMetadata": true,
+    "generatePromptArtifact": true
+  },
+
+  "metadata": {
+    "project": "MMOS",
+    "composition": "image-generation",
+    "workflow": "workflow.image-generation",
+    "environment": "development"
+  },
+
+  "output": {
+    "images": [
+      "image-001.png",
+      "image-002.png"
+    ],
+    "metadata": "metadata.json",
+    "prompt": "optimized-prompt.txt"
+  }
+}

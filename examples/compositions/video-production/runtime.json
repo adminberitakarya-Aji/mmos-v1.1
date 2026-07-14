@@ -1,0 +1,89 @@
+{
+  "$schema": "../../../schemas/runtime.schema.json",
+
+  "engine": "mmos-runtime",
+
+  "scheduler": {
+    "strategy": "fifo",
+    "maxConcurrency": 8
+  },
+
+  "dispatcher": {
+    "strategy": "least-load",
+    "workerSelection": "automatic"
+  },
+
+  "executor": {
+    "maxWorkers": 8,
+    "timeout": 600000,
+    "retryPolicy": {
+      "maxAttempts": 3,
+      "backoff": "exponential"
+    }
+  },
+
+  "eventBus": {
+    "enabled": true,
+    "provider": "internal"
+  },
+
+  "memory": {
+    "id": "memory.video-production",
+    "type": "working",
+    "scope": "workflow"
+  },
+
+  "providers": [
+    {
+      "id": "provider.openai",
+      "name": "OpenAI",
+      "type": "openai"
+    }
+  ],
+
+  "logging": {
+    "level": "info",
+    "structured": true
+  },
+
+  "monitoring": {
+    "enabled": true,
+    "metrics": true,
+    "tracing": true
+  },
+
+  "security": {
+    "authentication": true,
+    "authorization": true,
+    "encryption": true
+  },
+
+  "storage": {
+    "artifacts": {
+      "provider": "local",
+      "path": "./artifacts"
+    },
+    "temporary": {
+      "provider": "local",
+      "path": "./tmp"
+    }
+  },
+
+  "metadata": {
+    "name": "Video Production Runtime",
+    "description": "Reference runtime configuration for the Video Production composition.",
+    "version": "1.0.0",
+    "tags": [
+      "runtime",
+      "video-production",
+      "multimedia",
+      "creative",
+      "example"
+    ],
+    "labels": {
+      "environment": "development",
+      "deployment": "single-node",
+      "domain": "video-production"
+    }
+  }
+}

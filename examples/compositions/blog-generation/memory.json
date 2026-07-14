@@ -1,0 +1,93 @@
+{
+  "$schema": "../../../schemas/memory.schema.json",
+
+  "id": "memory.blog",
+
+  "type": "working",
+
+  "scope": "workflow",
+
+  "name": "Blog Generation Memory",
+
+  "description": "Working memory used during the execution of the Blog Generation composition.",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Blog Generation Memory",
+    "description": "Stores execution context, intermediate results, and generated content.",
+    "version": "1.0.0",
+    "tags": [
+      "memory",
+      "working",
+      "blog",
+      "example"
+    ]
+  },
+
+  "content": {
+    "topic": "",
+    "language": "en",
+    "tone": "professional",
+    "targetAudience": "general",
+
+    "outline": [],
+
+    "draft": "",
+
+    "review": {
+      "score": 0,
+      "comments": []
+    },
+
+    "finalArticle": ""
+  },
+
+  "embedding": [],
+
+  "provider": {
+    "id": "provider.openai",
+    "name": "openai",
+    "type": "openai"
+  },
+
+  "index": "blog-memory",
+
+  "namespace": "examples.blog-generation",
+
+  "ttl": 86400,
+
+  "owner": {
+    "id": "workflow.blog-generation",
+    "type": "workflow",
+    "name": "Blog Generation Workflow"
+  },
+
+  "references": [
+    {
+      "id": "composition.blog-generation",
+      "type": "composition"
+    },
+    {
+      "id": "workflow.blog-generation",
+      "type": "workflow"
+    }
+  ],
+
+  "createdAt": "2026-01-01T00:00:00Z",
+
+  "updatedAt": "2026-01-01T00:00:00Z",
+
+  "expiresAt": "2026-01-02T00:00:00Z",
+
+  "tags": [
+    "working-memory",
+    "blog",
+    "example"
+  ],
+
+  "labels": {
+    "environment": "development",
+    "retention": "24h"
+  }
+}

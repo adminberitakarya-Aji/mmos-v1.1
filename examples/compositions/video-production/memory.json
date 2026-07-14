@@ -1,0 +1,141 @@
+{
+  "$schema": "../../../schemas/memory.schema.json",
+
+  "id": "memory.video-production",
+
+  "type": "working",
+
+  "scope": "workflow",
+
+  "name": "Video Production Working Memory",
+
+  "description": "Working memory used throughout the Video Production composition to maintain production context, generated assets, rendering state, and execution metadata.",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Video Production Working Memory",
+    "description": "Stores topic analysis, script, storyboard, generated media, rendering information, and publishing metadata.",
+    "version": "1.0.0",
+    "tags": [
+      "memory",
+      "working",
+      "video-production",
+      "multimedia",
+      "creative",
+      "example"
+    ]
+  },
+
+  "content": {
+    "topic": "",
+
+    "language": "en",
+
+    "duration": 60,
+
+    "format": "9:16",
+
+    "style": "cinematic",
+
+    "script": "",
+
+    "storyboard": [],
+
+    "sceneImages": [],
+
+    "narration": {
+      "voice": "professional",
+      "audioFile": ""
+    },
+
+    "subtitles": {
+      "language": "en",
+      "file": ""
+    },
+
+    "video": {
+      "file": "",
+      "thumbnail": "",
+      "resolution": "1080x1920",
+      "duration": 60,
+      "format": "mp4"
+    },
+
+    "rendering": {
+      "status": "running",
+      "progress": 0
+    },
+
+    "qualityReview": {
+      "approved": false,
+      "score": 0,
+      "comments": []
+    },
+
+    "artifacts": {
+      "video": "",
+      "script": "",
+      "storyboard": "",
+      "subtitles": "",
+      "thumbnail": "",
+      "metadata": ""
+    },
+
+    "execution": {
+      "status": "running",
+      "provider": "openai",
+      "model": "gpt-5"
+    }
+  },
+
+  "embedding": [],
+
+  "provider": {
+    "id": "provider.openai",
+    "name": "openai",
+    "type": "openai"
+  },
+
+  "index": "video-production-memory",
+
+  "namespace": "examples.video-production",
+
+  "ttl": 604800,
+
+  "owner": {
+    "id": "workflow.video-production",
+    "type": "workflow",
+    "name": "Video Production Workflow"
+  },
+
+  "references": [
+    {
+      "id": "composition.video-production",
+      "type": "composition"
+    },
+    {
+      "id": "workflow.video-production",
+      "type": "workflow"
+    }
+  ],
+
+  "createdAt": "2026-01-01T00:00:00Z",
+
+  "updatedAt": "2026-01-01T00:00:00Z",
+
+  "expiresAt": "2026-01-08T00:00:00Z",
+
+  "tags": [
+    "working-memory",
+    "video-production",
+    "multimedia",
+    "example"
+  ],
+
+  "labels": {
+    "environment": "development",
+    "retention": "7d",
+    "domain": "video-production"
+  }
+}

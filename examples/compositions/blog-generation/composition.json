@@ -1,0 +1,92 @@
+{
+  "$schema": "../../../schemas/composition.schema.json",
+
+  "id": "composition.blog-generation",
+
+  "name": "blog-generation",
+
+  "displayName": "Blog Generation",
+
+  "description": "Reference MMOS composition for generating high-quality blog articles using multiple AI agents.",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Blog Generation Composition",
+    "description": "End-to-end AI blog generation pipeline.",
+    "version": "1.0.0",
+    "tags": [
+      "blog",
+      "content",
+      "article",
+      "example"
+    ]
+  },
+
+  "runtime": {
+    "engine": "default",
+
+    "scheduler": {
+      "strategy": "fifo",
+      "maxConcurrency": 4
+    },
+
+    "dispatcher": {
+      "strategy": "least-load",
+      "workerSelection": "automatic"
+    },
+
+    "executor": {
+      "maxWorkers": 4,
+      "timeout": 300000
+    }
+  },
+
+  "workflows": [
+    {
+      "id": "workflow.blog-generation",
+      "name": "Generate Blog Workflow"
+    }
+  ],
+
+  "capabilities": [
+    {
+      "id": "capability.chat"
+    },
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.markdown"
+    }
+  ],
+
+  "providers": [
+    {
+      "id": "provider.openai"
+    }
+  ],
+
+  "memory": {
+    "id": "memory.blog"
+  },
+
+  "artifacts": [
+    {
+      "id": "artifact.blog-markdown"
+    }
+  ],
+
+  "tags": [
+    "example",
+    "blog",
+    "composition"
+  ],
+
+  "labels": {
+    "category": "content",
+    "difficulty": "beginner"
+  }
+}

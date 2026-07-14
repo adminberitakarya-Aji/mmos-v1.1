@@ -1,0 +1,89 @@
+{
+  "$schema": "../../../schemas/runtime.schema.json",
+
+  "engine": "mmos-runtime",
+
+  "scheduler": {
+    "strategy": "fifo",
+    "maxConcurrency": 10
+  },
+
+  "dispatcher": {
+    "strategy": "least-load",
+    "workerSelection": "automatic"
+  },
+
+  "executor": {
+    "maxWorkers": 10,
+    "timeout": 1200000,
+    "retryPolicy": {
+      "maxAttempts": 3,
+      "backoff": "exponential"
+    }
+  },
+
+  "eventBus": {
+    "enabled": true,
+    "provider": "internal"
+  },
+
+  "memory": {
+    "id": "memory.multimodal-content",
+    "type": "working",
+    "scope": "workflow"
+  },
+
+  "providers": [
+    {
+      "id": "provider.openai",
+      "name": "OpenAI",
+      "type": "openai"
+    }
+  ],
+
+  "logging": {
+    "level": "info",
+    "structured": true
+  },
+
+  "monitoring": {
+    "enabled": true,
+    "metrics": true,
+    "tracing": true
+  },
+
+  "security": {
+    "authentication": true,
+    "authorization": true,
+    "encryption": true
+  },
+
+  "storage": {
+    "artifacts": {
+      "provider": "local",
+      "path": "./artifacts"
+    },
+    "temporary": {
+      "provider": "local",
+      "path": "./tmp"
+    }
+  },
+
+  "metadata": {
+    "name": "Multimodal Content Runtime",
+    "description": "Reference runtime configuration for the Multimodal Content composition.",
+    "version": "1.0.0",
+    "tags": [
+      "runtime",
+      "multimodal-content",
+      "creative",
+      "multimedia",
+      "example"
+    ],
+    "labels": {
+      "environment": "development",
+      "deployment": "single-node",
+      "domain": "multimodal-content"
+    }
+  }
+}

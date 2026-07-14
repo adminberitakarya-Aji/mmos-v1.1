@@ -1,0 +1,123 @@
+{
+  "$schema": "../../../schemas/memory.schema.json",
+
+  "id": "memory.image-generation",
+
+  "type": "working",
+
+  "scope": "workflow",
+
+  "name": "Image Generation Working Memory",
+
+  "description": "Working memory used throughout the Image Generation composition to maintain prompt context, generation parameters, image metadata, quality assessment, and generated artifacts.",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Image Generation Working Memory",
+    "description": "Stores prompts, generation settings, image references, quality reports, and execution metadata.",
+    "version": "1.0.0",
+    "tags": [
+      "memory",
+      "working",
+      "image-generation",
+      "multimodal",
+      "creative",
+      "example"
+    ]
+  },
+
+  "content": {
+    "originalPrompt": "",
+
+    "optimizedPrompt": "",
+
+    "negativePrompt": "",
+
+    "style": "photorealistic",
+
+    "aspectRatio": "1:1",
+
+    "resolution": "1024x1024",
+
+    "numberOfImages": 1,
+
+    "seed": null,
+
+    "generationParameters": {
+      "quality": "high",
+      "background": "auto",
+      "lighting": "auto"
+    },
+
+    "generatedImages": [],
+
+    "qualityReview": {
+      "approved": false,
+      "score": 0,
+      "comments": []
+    },
+
+    "artifacts": {
+      "images": [],
+      "metadata": "",
+      "prompt": ""
+    },
+
+    "execution": {
+      "status": "running",
+      "provider": "openai",
+      "model": "gpt-image-1"
+    }
+  },
+
+  "embedding": [],
+
+  "provider": {
+    "id": "provider.openai",
+    "name": "openai",
+    "type": "openai"
+  },
+
+  "index": "image-generation-memory",
+
+  "namespace": "examples.image-generation",
+
+  "ttl": 86400,
+
+  "owner": {
+    "id": "workflow.image-generation",
+    "type": "workflow",
+    "name": "Image Generation Workflow"
+  },
+
+  "references": [
+    {
+      "id": "composition.image-generation",
+      "type": "composition"
+    },
+    {
+      "id": "workflow.image-generation",
+      "type": "workflow"
+    }
+  ],
+
+  "createdAt": "2026-01-01T00:00:00Z",
+
+  "updatedAt": "2026-01-01T00:00:00Z",
+
+  "expiresAt": "2026-01-02T00:00:00Z",
+
+  "tags": [
+    "working-memory",
+    "image-generation",
+    "creative",
+    "example"
+  ],
+
+  "labels": {
+    "environment": "development",
+    "retention": "24h",
+    "domain": "image-generation"
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "$schema": "../../../schemas/composition.schema.json",
+
+  "id": "composition.image-generation",
+
+  "name": "image-generation",
+
+  "displayName": "Image Generation",
+
+  "description": "Reference MMOS composition for AI-powered image generation from natural language prompts.",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Image Generation Composition",
+    "description": "End-to-end image generation pipeline using MMOS orchestration.",
+    "version": "1.0.0",
+    "tags": [
+      "image-generation",
+      "creative",
+      "multimodal",
+      "composition",
+      "example"
+    ]
+  },
+
+  "runtime": {
+    "engine": "mmos-runtime",
+
+    "scheduler": {
+      "strategy": "fifo",
+      "maxConcurrency": 8
+    },
+
+    "dispatcher": {
+      "strategy": "least-load",
+      "workerSelection": "automatic"
+    },
+
+    "executor": {
+      "maxWorkers": 8,
+      "timeout": 300000
+    }
+  },
+
+  "workflows": [
+    {
+      "id": "workflow.image-generation",
+      "name": "Image Generation Workflow"
+    }
+  ],
+
+  "capabilities": [
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.image-generation"
+    },
+    {
+      "id": "capability.image-analysis"
+    },
+    {
+      "id": "capability.artifact"
+    }
+  ],
+
+  "providers": [
+    {
+      "id": "provider.openai"
+    }
+  ],
+
+  "memory": {
+    "id": "memory.image-generation"
+  },
+
+  "artifacts": [
+    {
+      "id": "artifact.generated-image"
+    },
+    {
+      "id": "artifact.prompt"
+    },
+    {
+      "id": "artifact.metadata"
+    }
+  ],
+
+  "tags": [
+    "image-generation",
+    "creative",
+    "multimodal",
+    "composition",
+    "example"
+  ],
+
+  "labels": {
+    "category": "creative-ai",
+    "industry": "multimedia",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "$schema": "../../../schemas/composition.schema.json",
+
+  "id": "composition.news-production",
+
+  "name": "news-production",
+
+  "displayName": "News Production",
+
+  "description": "Reference MMOS composition for automated newsroom content production.",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "News Production Composition",
+    "description": "End-to-end newsroom orchestration for generating publish-ready news articles.",
+    "version": "1.0.0",
+    "tags": [
+      "news",
+      "media",
+      "journalism",
+      "composition",
+      "example"
+    ]
+  },
+
+  "runtime": {
+    "engine": "mmos-runtime",
+
+    "scheduler": {
+      "strategy": "fifo",
+      "maxConcurrency": 8
+    },
+
+    "dispatcher": {
+      "strategy": "least-load",
+      "workerSelection": "automatic"
+    },
+
+    "executor": {
+      "maxWorkers": 8,
+      "timeout": 300000
+    }
+  },
+
+  "workflows": [
+    {
+      "id": "workflow.news-production",
+      "name": "News Production Workflow"
+    }
+  ],
+
+  "capabilities": [
+    {
+      "id": "capability.chat"
+    },
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.search"
+    },
+    {
+      "id": "capability.markdown"
+    }
+  ],
+
+  "providers": [
+    {
+      "id": "provider.openai"
+    }
+  ],
+
+  "memory": {
+    "id": "memory.newsroom"
+  },
+
+  "artifacts": [
+    {
+      "id": "artifact.news-article"
+    },
+    {
+      "id": "artifact.featured-image"
+    }
+  ],
+
+  "tags": [
+    "news",
+    "journalism",
+    "editorial",
+    "composition",
+    "example"
+  ],
+
+  "labels": {
+    "category": "media",
+    "industry": "news",
+    "difficulty": "intermediate"
+  }
+}

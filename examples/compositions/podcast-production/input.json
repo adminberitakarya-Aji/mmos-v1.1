@@ -1,0 +1,97 @@
+{
+  "topic": "The Future of AI Orchestration",
+
+  "objective": "Produce a 15-minute podcast episode explaining how AI orchestration platforms simplify the development and deployment of intelligent applications.",
+
+  "language": "en",
+
+  "duration": 900,
+
+  "style": "conversational",
+
+  "host": {
+    "name": "AI Host",
+    "voice": "professional",
+    "gender": "neutral"
+  },
+
+  "audience": [
+    "Software Developers",
+    "AI Engineers",
+    "Solution Architects",
+    "Technology Leaders"
+  ],
+
+  "content": {
+    "summary": "Discuss the evolution of AI systems from single-model applications to AI orchestration platforms capable of coordinating workflows, agents, memory, events, runtime execution, and multiple AI providers.",
+
+    "sections": [
+      "Introduction",
+      "What is AI Orchestration?",
+      "Core Platform Components",
+      "Real-world Use Cases",
+      "Future of Intelligent Applications",
+      "Closing"
+    ],
+
+    "keyMessages": [
+      "AI applications require orchestration beyond individual models.",
+      "Workflows coordinate complex execution.",
+      "AI agents specialize in different tasks.",
+      "Memory enables contextual intelligence.",
+      "Multiple providers increase flexibility.",
+      "Production-ready orchestration improves scalability."
+    ],
+
+    "callToAction": "Learn more about MMOS and start building intelligent AI systems."
+  },
+
+  "branding": {
+    "podcastName": "MMOS AI Podcast",
+    "episodeNumber": 1,
+    "category": "Technology",
+    "author": "MMOS Team"
+  },
+
+  "audio": {
+    "format": "mp3",
+    "sampleRate": 48000,
+    "bitrate": 192,
+    "normalizeVolume": true,
+    "removeBackgroundNoise": true
+  },
+
+  "requirements": {
+    "generateOutline": true,
+    "generateScript": true,
+    "generateNarration": true,
+    "generateTranscript": true,
+    "generateShowNotes": true,
+    "generateCoverPrompt": true,
+    "generateMetadata": true
+  },
+
+  "provider": "openai",
+
+  "models": {
+    "reasoning": "gpt-5",
+    "audioGeneration": "gpt-4o-mini-tts",
+    "transcription": "whisper-1"
+  },
+
+  "metadata": {
+    "project": "MMOS",
+    "composition": "podcast-production",
+    "workflow": "workflow.podcast-production",
+    "environment": "development"
+  },
+
+  "output": {
+    "audio": "episode-001.mp3",
+    "script": "episode-001-script.md",
+    "transcript": "episode-001-transcript.md",
+    "showNotes": "episode-001-show-notes.md",
+    "coverPrompt": "cover-prompt.txt",
+    "metadata": "metadata.json"
+  }
+}

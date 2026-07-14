@@ -1,0 +1,89 @@
+{
+  "$schema": "../../../schemas/runtime.schema.json",
+
+  "engine": "mmos-runtime",
+
+  "scheduler": {
+    "strategy": "fifo",
+    "maxConcurrency": 8
+  },
+
+  "dispatcher": {
+    "strategy": "least-load",
+    "workerSelection": "automatic"
+  },
+
+  "executor": {
+    "maxWorkers": 8,
+    "timeout": 900000,
+    "retryPolicy": {
+      "maxAttempts": 3,
+      "backoff": "exponential"
+    }
+  },
+
+  "eventBus": {
+    "enabled": true,
+    "provider": "internal"
+  },
+
+  "memory": {
+    "id": "memory.podcast-production",
+    "type": "working",
+    "scope": "workflow"
+  },
+
+  "providers": [
+    {
+      "id": "provider.openai",
+      "name": "OpenAI",
+      "type": "openai"
+    }
+  ],
+
+  "logging": {
+    "level": "info",
+    "structured": true
+  },
+
+  "monitoring": {
+    "enabled": true,
+    "metrics": true,
+    "tracing": true
+  },
+
+  "security": {
+    "authentication": true,
+    "authorization": true,
+    "encryption": true
+  },
+
+  "storage": {
+    "artifacts": {
+      "provider": "local",
+      "path": "./artifacts"
+    },
+    "temporary": {
+      "provider": "local",
+      "path": "./tmp"
+    }
+  },
+
+  "metadata": {
+    "name": "Podcast Production Runtime",
+    "description": "Reference runtime configuration for the Podcast Production composition.",
+    "version": "1.0.0",
+    "tags": [
+      "runtime",
+      "podcast-production",
+      "audio",
+      "multimedia",
+      "example"
+    ],
+    "labels": {
+      "environment": "development",
+      "deployment": "single-node",
+      "domain": "podcast-production"
+    }
+  }
+}

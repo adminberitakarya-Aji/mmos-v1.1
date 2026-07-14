@@ -1,0 +1,77 @@
+{
+  "$schema": "../../../schemas/runtime.schema.json",
+
+  "engine": "mmos-runtime",
+
+  "scheduler": {
+    "strategy": "fifo",
+    "maxConcurrency": 8
+  },
+
+  "dispatcher": {
+    "strategy": "least-load",
+    "workerSelection": "automatic"
+  },
+
+  "executor": {
+    "maxWorkers": 8,
+    "timeout": 300000,
+    "retryPolicy": {
+      "maxAttempts": 3,
+      "backoff": "exponential"
+    }
+  },
+
+  "eventBus": {
+    "enabled": true,
+    "provider": "internal"
+  },
+
+  "memory": {
+    "id": "memory.social-media",
+    "type": "working",
+    "scope": "workflow"
+  },
+
+  "providers": [
+    {
+      "id": "provider.openai",
+      "name": "OpenAI",
+      "type": "openai"
+    }
+  ],
+
+  "logging": {
+    "level": "info",
+    "structured": true
+  },
+
+  "monitoring": {
+    "enabled": true,
+    "metrics": true,
+    "tracing": true
+  },
+
+  "security": {
+    "authentication": true,
+    "authorization": true,
+    "encryption": true
+  },
+
+  "metadata": {
+    "name": "Social Media Runtime",
+    "description": "Reference runtime configuration for the Social Media composition.",
+    "version": "1.0.0",
+    "tags": [
+      "runtime",
+      "social-media",
+      "marketing",
+      "example"
+    ],
+    "labels": {
+      "environment": "development",
+      "deployment": "single-node",
+      "domain": "social-media"
+    }
+  }
+}

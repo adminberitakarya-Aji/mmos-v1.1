@@ -1,0 +1,240 @@
+{
+  "$schema": "../../../schemas/workflow.schema.json",
+
+  "id": "workflow.podcast-production",
+
+  "name": "podcast-production-workflow",
+
+  "displayName": "Podcast Production Workflow",
+
+  "description": "Reference workflow for generating AI-powered podcast episodes from structured topics.",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Podcast Production Workflow",
+    "description": "Transforms a topic into a fully produced podcast episode.",
+    "version": "1.0.0",
+    "tags": [
+      "podcast-production",
+      "workflow",
+      "audio",
+      "example"
+    ]
+  },
+
+  "inputs": {
+    "topic": "",
+    "language": "en",
+    "duration": 900,
+    "style": "conversational",
+    "voice": "professional"
+  },
+
+  "outputs": {
+    "audio": "",
+    "script": "",
+    "transcript": "",
+    "metadata": {},
+    "status": "completed"
+  },
+
+  "variables": {
+    "research": null,
+    "outline": null,
+    "scriptDraft": null,
+    "audioDraft": null,
+    "transcriptDraft": null,
+    "qualityReport": null
+  },
+
+  "tasks": [
+    {
+      "id": "task.research-topic",
+      "name": "Research Topic",
+      "type": "action",
+      "agent": {
+        "id": "agent.researcher"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      }
+    },
+    {
+      "id": "task.generate-outline",
+      "name": "Generate Outline",
+      "type": "action",
+      "agent": {
+        "id": "agent.planner"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      },
+      "dependsOn": [
+        {
+          "id": "task.research-topic"
+        }
+      ]
+    },
+    {
+      "id": "task.generate-script",
+      "name": "Generate Script",
+      "type": "action",
+      "agent": {
+        "id": "agent.script-writer"
+      },
+      "capability": {
+        "id": "capability.chat"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-outline"
+        }
+      ]
+    },
+    {
+      "id": "task.generate-narration",
+      "name": "Generate Narration",
+      "type": "action",
+      "agent": {
+        "id": "agent.voice-generator"
+      },
+      "capability": {
+        "id": "capability.audio-generation"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-script"
+        }
+      ]
+    },
+    {
+      "id": "task.process-audio",
+      "name": "Enhance Audio",
+      "type": "action",
+      "agent": {
+        "id": "agent.audio-processor"
+      },
+      "capability": {
+        "id": "capability.audio-processing"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-narration"
+        }
+      ]
+    },
+    {
+      "id": "task.generate-transcript",
+      "name": "Generate Transcript",
+      "type": "action",
+      "agent": {
+        "id": "agent.transcriber"
+      },
+      "capability": {
+        "id": "capability.transcription"
+      },
+      "dependsOn": [
+        {
+          "id": "task.process-audio"
+        }
+      ]
+    },
+    {
+      "id": "task.review-podcast",
+      "name": "Review Podcast",
+      "type": "action",
+      "agent": {
+        "id": "agent.reviewer"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-transcript"
+        }
+      ]
+    },
+    {
+      "id": "task.publish-artifacts",
+      "name": "Publish Artifacts",
+      "type": "action",
+      "agent": {
+        "id": "agent.publisher"
+      },
+      "capability": {
+        "id": "capability.artifact"
+      },
+      "dependsOn": [
+        {
+          "id": "task.review-podcast"
+        }
+      ]
+    }
+  ],
+
+  "memory": {
+    "id": "memory.podcast-production"
+  },
+
+  "capabilities": [
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.chat"
+    },
+    {
+      "id": "capability.audio-generation"
+    },
+    {
+      "id": "capability.audio-processing"
+    },
+    {
+      "id": "capability.transcription"
+    },
+    {
+      "id": "capability.artifact"
+    }
+  ],
+
+  "artifacts": [
+    {
+      "id": "artifact.audio"
+    },
+    {
+      "id": "artifact.script"
+    },
+    {
+      "id": "artifact.transcript"
+    },
+    {
+      "id": "artifact.cover-prompt"
+    },
+    {
+      "id": "artifact.metadata"
+    }
+  ],
+
+  "timeout": 900000,
+
+  "retryPolicy": {
+    "maxAttempts": 3,
+    "backoff": "exponential"
+  },
+
+  "tags": [
+    "podcast-production",
+    "audio",
+    "workflow",
+    "example"
+  ],
+
+  "labels": {
+    "pattern": "audio-production-pipeline",
+    "domain": "podcast-production"
+  }
+}

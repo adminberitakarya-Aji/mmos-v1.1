@@ -1,0 +1,280 @@
+{
+  "$schema": "../../../schemas/workflow.schema.json",
+
+  "id": "workflow.multimodal-content",
+
+  "name": "multimodal-content-workflow",
+
+  "displayName": "Multimodal Content Workflow",
+
+  "description": "Reference workflow for generating complete multimedia content packages from a single topic.",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Multimodal Content Workflow",
+    "description": "Transforms one content request into articles, social media, images, videos, audio, and publishing artifacts.",
+    "version": "1.0.0",
+    "tags": [
+      "multimodal-content",
+      "workflow",
+      "creative",
+      "example"
+    ]
+  },
+
+  "inputs": {
+    "topic": "",
+    "language": "en",
+    "targetAudience": "",
+    "contentTypes": [
+      "article",
+      "social-media",
+      "image",
+      "video",
+      "podcast"
+    ]
+  },
+
+  "outputs": {
+    "article": "",
+    "socialMedia": [],
+    "images": [],
+    "video": "",
+    "podcast": "",
+    "thumbnail": "",
+    "metadata": {},
+    "status": "completed"
+  },
+
+  "variables": {
+    "contentPlan": null,
+    "articleDraft": null,
+    "socialDraft": null,
+    "imageAssets": null,
+    "videoAssets": null,
+    "audioAssets": null,
+    "qualityReport": null
+  },
+
+  "tasks": [
+    {
+      "id": "task.analyze-topic",
+      "name": "Analyze Topic",
+      "type": "action",
+      "agent": {
+        "id": "agent.planner"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      }
+    },
+    {
+      "id": "task.generate-article",
+      "name": "Generate Article",
+      "type": "action",
+      "agent": {
+        "id": "agent.writer"
+      },
+      "capability": {
+        "id": "capability.chat"
+      },
+      "dependsOn": [
+        {
+          "id": "task.analyze-topic"
+        }
+      ]
+    },
+    {
+      "id": "task.generate-social-media",
+      "name": "Generate Social Media",
+      "type": "action",
+      "agent": {
+        "id": "agent.social-media"
+      },
+      "capability": {
+        "id": "capability.chat"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-article"
+        }
+      ]
+    },
+    {
+      "id": "task.generate-images",
+      "name": "Generate Images",
+      "type": "action",
+      "agent": {
+        "id": "agent.image-generator"
+      },
+      "capability": {
+        "id": "capability.image-generation"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-article"
+        }
+      ]
+    },
+    {
+      "id": "task.generate-video",
+      "name": "Generate Video",
+      "type": "action",
+      "agent": {
+        "id": "agent.video-generator"
+      },
+      "capability": {
+        "id": "capability.video-generation"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-images"
+        }
+      ]
+    },
+    {
+      "id": "task.generate-podcast",
+      "name": "Generate Podcast",
+      "type": "action",
+      "agent": {
+        "id": "agent.voice-generator"
+      },
+      "capability": {
+        "id": "capability.audio-generation"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-article"
+        }
+      ]
+    },
+    {
+      "id": "task.generate-metadata",
+      "name": "Generate Metadata",
+      "type": "action",
+      "agent": {
+        "id": "agent.metadata"
+      },
+      "capability": {
+        "id": "capability.metadata-generation"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-social-media"
+        },
+        {
+          "id": "task.generate-video"
+        },
+        {
+          "id": "task.generate-podcast"
+        }
+      ]
+    },
+    {
+      "id": "task.review-content",
+      "name": "Review Content",
+      "type": "action",
+      "agent": {
+        "id": "agent.reviewer"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-metadata"
+        }
+      ]
+    },
+    {
+      "id": "task.publish-artifacts",
+      "name": "Publish Artifacts",
+      "type": "action",
+      "agent": {
+        "id": "agent.publisher"
+      },
+      "capability": {
+        "id": "capability.artifact"
+      },
+      "dependsOn": [
+        {
+          "id": "task.review-content"
+        }
+      ]
+    }
+  ],
+
+  "memory": {
+    "id": "memory.multimodal-content"
+  },
+
+  "capabilities": [
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.chat"
+    },
+    {
+      "id": "capability.image-generation"
+    },
+    {
+      "id": "capability.audio-generation"
+    },
+    {
+      "id": "capability.video-generation"
+    },
+    {
+      "id": "capability.metadata-generation"
+    },
+    {
+      "id": "capability.artifact"
+    }
+  ],
+
+  "artifacts": [
+    {
+      "id": "artifact.article"
+    },
+    {
+      "id": "artifact.image"
+    },
+    {
+      "id": "artifact.video"
+    },
+    {
+      "id": "artifact.audio"
+    },
+    {
+      "id": "artifact.social-post"
+    },
+    {
+      "id": "artifact.thumbnail"
+    },
+    {
+      "id": "artifact.metadata"
+    }
+  ],
+
+  "timeout": 1200000,
+
+  "retryPolicy": {
+    "maxAttempts": 3,
+    "backoff": "exponential"
+  },
+
+  "tags": [
+    "multimodal-content",
+    "creative",
+    "workflow",
+    "example"
+  ],
+
+  "labels": {
+    "pattern": "multimodal-production-pipeline",
+    "domain": "multimodal-content"
+  }
+}

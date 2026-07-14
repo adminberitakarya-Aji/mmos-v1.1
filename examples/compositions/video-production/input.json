@@ -1,0 +1,89 @@
+{
+  "topic": "Introducing MMOS AI Orchestration Platform",
+
+  "objective": "Produce a 60-second promotional video introducing the MMOS platform for software developers, AI engineers, startups, and enterprise technology teams.",
+
+  "language": "en",
+
+  "duration": 60,
+
+  "format": "9:16",
+
+  "style": "cinematic",
+
+  "voice": {
+    "gender": "neutral",
+    "tone": "professional",
+    "language": "en"
+  },
+
+  "audience": [
+    "Software Developers",
+    "AI Engineers",
+    "Tech Startups",
+    "Enterprise Architects"
+  ],
+
+  "content": {
+    "summary": "MMOS is an AI Orchestration Platform that unifies workflows, agents, memory, events, runtime execution, and multiple AI providers into a single platform.",
+
+    "keyMessages": [
+      "Build AI workflows visually.",
+      "Coordinate intelligent AI agents.",
+      "Support multiple AI providers.",
+      "Manage memory and events automatically.",
+      "Deploy from development to production."
+    ],
+
+    "callToAction": "Build your next AI application with MMOS."
+  },
+
+  "branding": {
+    "primaryColor": "#2563EB",
+    "secondaryColor": "#0F172A",
+    "logo": "mmos-logo.png",
+    "font": "Inter"
+  },
+
+  "video": {
+    "resolution": "1080x1920",
+    "fps": 30,
+    "format": "mp4",
+    "transition": "fade",
+    "backgroundMusic": "technology-modern"
+  },
+
+  "requirements": {
+    "generateStoryboard": true,
+    "generateScript": true,
+    "generateSceneImages": true,
+    "generateNarration": true,
+    "generateSubtitles": true,
+    "generateThumbnail": true,
+    "generateMetadata": true
+  },
+
+  "provider": "openai",
+
+  "models": {
+    "reasoning": "gpt-5",
+    "imageGeneration": "gpt-image-1",
+    "audioGeneration": "gpt-4o-mini-tts"
+  },
+
+  "metadata": {
+    "project": "MMOS",
+    "composition": "video-production",
+    "workflow": "workflow.video-production",
+    "environment": "development"
+  },
+
+  "output": {
+    "video": "video.mp4",
+    "thumbnail": "thumbnail.png",
+    "script": "script.md",
+    "storyboard": "storyboard.json",
+    "subtitles": "subtitles.srt",
+    "metadata": "metadata.json"
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "$schema": "../../../schemas/workflow.schema.json",
+
+  "id": "workflow.blog-generation",
+
+  "name": "blog-generation-workflow",
+
+  "displayName": "Blog Generation Workflow",
+
+  "description": "Reference workflow for generating a complete blog article.",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Blog Generation Workflow",
+    "description": "Sequential workflow that transforms a topic into a publish-ready article.",
+    "version": "1.0.0",
+    "tags": [
+      "blog",
+      "workflow",
+      "example"
+    ]
+  },
+
+  "inputs": {
+    "topic": "",
+    "language": "en",
+    "tone": "professional",
+    "targetAudience": "general",
+    "length": 1200
+  },
+
+  "outputs": {
+    "title": "",
+    "summary": "",
+    "article": "",
+    "markdown": ""
+  },
+
+  "variables": {
+    "outline": null,
+    "review": null,
+    "draft": null
+  },
+
+  "tasks": [
+    {
+      "id": "task.analyze-topic",
+      "name": "Analyze Topic",
+      "type": "action",
+      "agent": {
+        "id": "agent.planner"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      }
+    },
+    {
+      "id": "task.generate-outline",
+      "name": "Generate Outline",
+      "type": "action",
+      "agent": {
+        "id": "agent.planner"
+      },
+      "capability": {
+        "id": "capability.chat"
+      },
+      "dependsOn": [
+        {
+          "id": "task.analyze-topic"
+        }
+      ]
+    },
+    {
+      "id": "task.write-article",
+      "name": "Write Article",
+      "type": "action",
+      "agent": {
+        "id": "agent.writer"
+      },
+      "capability": {
+        "id": "capability.chat"
+      },
+      "dependsOn": [
+        {
+          "id": "task.generate-outline"
+        }
+      ]
+    },
+    {
+      "id": "task.review-article",
+      "name": "Review Article",
+      "type": "action",
+      "agent": {
+        "id": "agent.reviewer"
+      },
+      "capability": {
+        "id": "capability.reasoning"
+      },
+      "dependsOn": [
+        {
+          "id": "task.write-article"
+        }
+      ]
+    },
+    {
+      "id": "task.format-markdown",
+      "name": "Format Markdown",
+      "type": "action",
+      "agent": {
+        "id": "agent.formatter"
+      },
+      "capability": {
+        "id": "capability.markdown"
+      },
+      "dependsOn": [
+        {
+          "id": "task.review-article"
+        }
+      ]
+    }
+  ],
+
+  "memory": {
+    "id": "memory.blog"
+  },
+
+  "capabilities": [
+    {
+      "id": "capability.chat"
+    },
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.markdown"
+    }
+  ],
+
+  "artifacts": [
+    {
+      "id": "artifact.blog-markdown"
+    }
+  ],
+
+  "timeout": 300000,
+
+  "retryPolicy": {
+    "maxAttempts": 3,
+    "backoff": "exponential"
+  },
+
+  "tags": [
+    "blog",
+    "workflow",
+    "example"
+  ],
+
+  "labels": {
+    "pattern": "sequential",
+    "domain": "content-generation"
+  }
+}

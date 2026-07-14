@@ -1,0 +1,65 @@
+{
+  "headline": "Government Launches National Digital Transformation Initiative",
+
+  "summary": "The government announced a nationwide program aimed at accelerating digital transformation across public services and small businesses.",
+
+  "category": "Technology",
+
+  "language": "en",
+
+  "priority": "high",
+
+  "location": "Jakarta, Indonesia",
+
+  "publishedAt": "2026-01-15T09:00:00Z",
+
+  "sources": [
+    {
+      "name": "Government Press Release",
+      "url": "https://example.gov/news/001",
+      "trustLevel": "official"
+    },
+    {
+      "name": "National News Agency",
+      "url": "https://example-news.com/article/1001",
+      "trustLevel": "verified"
+    }
+  ],
+
+  "facts": [
+    "The program will be implemented over the next five years.",
+    "More than 10,000 public service offices will participate.",
+    "Funding has been allocated through the national digital innovation budget.",
+    "Small and medium-sized enterprises will receive digital adoption support."
+  ],
+
+  "requirements": {
+    "factChecking": true,
+    "seoOptimization": true,
+    "generateSummary": true,
+    "generateFeaturedImagePrompt": true,
+    "includeQuotes": true,
+    "includeBackground": true
+  },
+
+  "style": {
+    "tone": "objective",
+    "writingStyle": "journalistic",
+    "format": "markdown",
+    "maxWords": 800
+  },
+
+  "publication": {
+    "target": "web",
+    "status": "draft",
+    "generateSlug": true,
+    "generateMetaDescription": true
+  },
+
+  "output": {
+    "format": "markdown",
+    "article": "news.md",
+    "metadata": "metadata.json",
+    "seo": "seo.json"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "topic": "Introduction to Artificial Intelligence",
+
+  "language": "en",
+
+  "tone": "professional",
+
+  "targetAudience": "Software Engineers",
+
+  "length": 1200,
+
+  "keywords": [
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Deep Learning",
+    "Generative AI"
+  ],
+
+  "seo": {
+    "enabled": true,
+    "primaryKeyword": "Artificial Intelligence",
+    "secondaryKeywords": [
+      "AI",
+      "Machine Learning"
+    ]
+  },
+
+  "style": {
+    "voice": "informative",
+    "format": "markdown",
+    "includeHeadings": true,
+    "includeTableOfContents": true,
+    "includeConclusion": true,
+    "includeFAQ": true
+  },
+
+  "constraints": {
+    "maxWords": 1200,
+    "avoidPlagiarism": true,
+    "citationRequired": false,
+    "includeExamples": true
+  },
+
+  "output": {
+    "format": "markdown",
+    "artifact": "blog.md"
+  }
+}

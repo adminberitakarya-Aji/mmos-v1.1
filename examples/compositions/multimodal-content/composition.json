@@ -1,0 +1,126 @@
+{
+  "$schema": "../../../schemas/composition.schema.json",
+
+  "id": "composition.multimodal-content",
+
+  "name": "multimodal-content",
+
+  "displayName": "Multimodal Content",
+
+  "description": "Reference MMOS composition for AI-powered end-to-end multimodal content production.",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Multimodal Content Composition",
+    "description": "End-to-end multimodal content production using MMOS orchestration.",
+    "version": "1.0.0",
+    "tags": [
+      "multimodal-content",
+      "content-generation",
+      "creative",
+      "composition",
+      "example"
+    ]
+  },
+
+  "runtime": {
+    "engine": "mmos-runtime",
+
+    "scheduler": {
+      "strategy": "fifo",
+      "maxConcurrency": 10
+    },
+
+    "dispatcher": {
+      "strategy": "least-load",
+      "workerSelection": "automatic"
+    },
+
+    "executor": {
+      "maxWorkers": 10,
+      "timeout": 1200000
+    }
+  },
+
+  "workflows": [
+    {
+      "id": "workflow.multimodal-content",
+      "name": "Multimodal Content Workflow"
+    }
+  ],
+
+  "capabilities": [
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.chat"
+    },
+    {
+      "id": "capability.image-generation"
+    },
+    {
+      "id": "capability.audio-generation"
+    },
+    {
+      "id": "capability.video-generation"
+    },
+    {
+      "id": "capability.metadata-generation"
+    },
+    {
+      "id": "capability.artifact"
+    }
+  ],
+
+  "providers": [
+    {
+      "id": "provider.openai"
+    }
+  ],
+
+  "memory": {
+    "id": "memory.multimodal-content"
+  },
+
+  "artifacts": [
+    {
+      "id": "artifact.article"
+    },
+    {
+      "id": "artifact.image"
+    },
+    {
+      "id": "artifact.video"
+    },
+    {
+      "id": "artifact.audio"
+    },
+    {
+      "id": "artifact.social-post"
+    },
+    {
+      "id": "artifact.thumbnail"
+    },
+    {
+      "id": "artifact.metadata"
+    }
+  ],
+
+  "tags": [
+    "multimodal-content",
+    "content-generation",
+    "creative",
+    "composition",
+    "example"
+  ],
+
+  "labels": {
+    "category": "creative-ai",
+    "industry": "multimedia",
+    "difficulty": "expert"
+  }
+}

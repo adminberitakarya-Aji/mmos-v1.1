@@ -1,0 +1,117 @@
+{
+  "$schema": "../../../schemas/composition.schema.json",
+
+  "id": "composition.podcast-production",
+
+  "name": "podcast-production",
+
+  "displayName": "Podcast Production",
+
+  "description": "Reference MMOS composition for AI-powered end-to-end podcast production.",
+
+  "version": "1.0.0",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Podcast Production Composition",
+    "description": "End-to-end podcast production using MMOS orchestration.",
+    "version": "1.0.0",
+    "tags": [
+      "podcast-production",
+      "audio",
+      "multimedia",
+      "composition",
+      "example"
+    ]
+  },
+
+  "runtime": {
+    "engine": "mmos-runtime",
+
+    "scheduler": {
+      "strategy": "fifo",
+      "maxConcurrency": 8
+    },
+
+    "dispatcher": {
+      "strategy": "least-load",
+      "workerSelection": "automatic"
+    },
+
+    "executor": {
+      "maxWorkers": 8,
+      "timeout": 900000
+    }
+  },
+
+  "workflows": [
+    {
+      "id": "workflow.podcast-production",
+      "name": "Podcast Production Workflow"
+    }
+  ],
+
+  "capabilities": [
+    {
+      "id": "capability.reasoning"
+    },
+    {
+      "id": "capability.chat"
+    },
+    {
+      "id": "capability.audio-generation"
+    },
+    {
+      "id": "capability.audio-processing"
+    },
+    {
+      "id": "capability.transcription"
+    },
+    {
+      "id": "capability.artifact"
+    }
+  ],
+
+  "providers": [
+    {
+      "id": "provider.openai"
+    }
+  ],
+
+  "memory": {
+    "id": "memory.podcast-production"
+  },
+
+  "artifacts": [
+    {
+      "id": "artifact.audio"
+    },
+    {
+      "id": "artifact.script"
+    },
+    {
+      "id": "artifact.transcript"
+    },
+    {
+      "id": "artifact.cover-prompt"
+    },
+    {
+      "id": "artifact.metadata"
+    }
+  ],
+
+  "tags": [
+    "podcast-production",
+    "audio",
+    "multimedia",
+    "composition",
+    "example"
+  ],
+
+  "labels": {
+    "category": "creative-ai",
+    "industry": "multimedia",
+    "difficulty": "advanced"
+  }
+}
