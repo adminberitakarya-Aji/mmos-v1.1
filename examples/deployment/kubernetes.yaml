@@ -1,0 +1,440 @@
+# examples/deployment/kubernetes.yaml
+#
+# Reference Kubernetes deployment for MMOS, per docs/deployment/kubernetes.md
+# and docs/deployment/production.md.
+#
+# Design principles followed:
+#   - dedicated namespace (docs/deployment/kubernetes.md "Namespace")
+#   - Deployments for stateless application services (Gateway, Scheduler,
+#     Worker, Dashboard API); StatefulSets for stateful infrastructure
+#     (PostgreSQL, Redis, NATS)
+#   - configuration via ConfigMap, secrets via Secret — never mixed
+#   - Ingress is the only externally-accessible entry point
+#   - every service defines Startup/Readiness/Liveness probes and
+#     resource requests/limits
+#
+# This is a MINIMAL, PROVIDER-INDEPENDENT reference (examples/README.md
+# "Example Philosophy") — real production manifests will likely add
+# NetworkPolicies, PodDisruptionBudgets, and a service mesh depending on
+# the target cluster.
+#
+# Usage:
+#   kubectl apply -f kubernetes.yaml
+#
+# Secrets below are placeholders (base64 of literal placeholder strings,
+# NOT real credentials). Replace them via `kubectl create secret` or a
+# secrets manager (e.g. Sealed Secrets, External Secrets Operator) before
+# applying to any real cluster — never commit real secret values.
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mmos-production
+  labels:
+    app.kubernetes.io/part-of: mmos
+
+---
+# -----------------------------------------------------------------------
+# ConfigMap — non-sensitive runtime configuration
+# (docs/deployment/kubernetes.md "ConfigMaps")
+# -----------------------------------------------------------------------
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mmos-config
+  namespace: mmos-production
+data:
+  MMOS_ENV: "production"
+  LOG_LEVEL: "info"
+  LOG_FORMAT: "json"
+  POSTGRES_HOST: "postgres"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "mmos"
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  NATS_HOST: "nats"
+  NATS_PORT: "4222"
+  GATEWAY_PORT: "8080"
+  DASHBOARD_API_PORT: "8081"
+  SCHEDULER_MAX_CONCURRENCY: "8"
+  EXECUTION_DEFAULT_TIMEOUT_MS: "300000"
+  METRICS_ENABLED: "true"
+  METRICS_PORT: "9090"
+
+---
+# -----------------------------------------------------------------------
+# Secret — sensitive configuration, PLACEHOLDER VALUES ONLY
+# (docs/deployment/kubernetes.md "Secrets should never be stored in
+# ConfigMaps.")
+# -----------------------------------------------------------------------
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mmos-secrets
+  namespace: mmos-production
+type: Opaque
+stringData:
+  POSTGRES_USER: "mmos"
+  POSTGRES_PASSWORD: "CHANGE_ME_use_a_generated_secret"
+  REDIS_PASSWORD: "CHANGE_ME_use_a_generated_secret"
+  JWT_SECRET: "CHANGE_ME_use_a_long_random_secret"
+  OBJECT_STORAGE_ACCESS_KEY: "CHANGE_ME"
+  OBJECT_STORAGE_SECRET_KEY: "CHANGE_ME_use_a_generated_secret"
+  OPENAI_API_KEY: "CHANGE_ME"
+  ANTHROPIC_API_KEY: "CHANGE_ME"
+  GEMINI_API_KEY: "CHANGE_ME"
+  QWEN_API_KEY: "CHANGE_ME"
+  DEEPSEEK_API_KEY: "CHANGE_ME"
+
+---
+# =========================================================================
+# Stateful infrastructure (StatefulSets — docs/deployment/kubernetes.md
+# "Stateful Services": "Infrastructure requiring persistent identity should
+# use StatefulSets. Examples: PostgreSQL, Redis, NATS clustering.")
+# =========================================================================
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: mmos-production
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector:
+    matchLabels: { app: postgres }
+  template:
+    metadata:
+      labels: { app: postgres }
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports: [{ containerPort: 5432 }]
+          env:
+            - { name: POSTGRES_DB, valueFrom: { configMapKeyRef: { name: mmos-config, key: POSTGRES_DB } } }
+            - { name: POSTGRES_USER, valueFrom: { secretKeyRef: { name: mmos-secrets, key: POSTGRES_USER } } }
+            - { name: POSTGRES_PASSWORD, valueFrom: { secretKeyRef: { name: mmos-secrets, key: POSTGRES_PASSWORD } } }
+          volumeMounts:
+            - { name: postgres-data, mountPath: /var/lib/postgresql/data }
+          readinessProbe:
+            exec: { command: ["pg_isready", "-U", "mmos"] }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            exec: { command: ["pg_isready", "-U", "mmos"] }
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests: { cpu: "250m", memory: "512Mi" }
+            limits: { cpu: "1", memory: "1Gi" }
+  volumeClaimTemplates:
+    - metadata: { name: postgres-data }
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources: { requests: { storage: 20Gi } }
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: mmos-production
+spec:
+  selector: { app: postgres }
+  ports: [{ port: 5432, targetPort: 5432 }]
+  clusterIP: None  # headless, for stable StatefulSet DNS
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  namespace: mmos-production
+spec:
+  serviceName: redis
+  replicas: 1
+  selector:
+    matchLabels: { app: redis }
+  template:
+    metadata:
+      labels: { app: redis }
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          command: ["redis-server", "--requirepass", "$(REDIS_PASSWORD)"]
+          ports: [{ containerPort: 6379 }]
+          env:
+            - { name: REDIS_PASSWORD, valueFrom: { secretKeyRef: { name: mmos-secrets, key: REDIS_PASSWORD } } }
+          volumeMounts:
+            - { name: redis-data, mountPath: /data }
+          readinessProbe:
+            exec: { command: ["redis-cli", "-a", "$(REDIS_PASSWORD)", "ping"] }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests: { cpu: "100m", memory: "256Mi" }
+            limits: { cpu: "500m", memory: "512Mi" }
+  volumeClaimTemplates:
+    - metadata: { name: redis-data }
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources: { requests: { storage: 5Gi } }
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: mmos-production
+spec:
+  selector: { app: redis }
+  ports: [{ port: 6379, targetPort: 6379 }]
+  clusterIP: None
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nats
+  namespace: mmos-production
+spec:
+  serviceName: nats
+  replicas: 3  # clustered per docs/deployment/kubernetes.md "NATS clustering"
+  selector:
+    matchLabels: { app: nats }
+  template:
+    metadata:
+      labels: { app: nats }
+    spec:
+      containers:
+        - name: nats
+          image: nats:2-alpine
+          args: ["-js", "-cluster_name=mmos", "-m", "8222"]
+          ports:
+            - { containerPort: 4222, name: client }
+            - { containerPort: 8222, name: monitoring }
+          readinessProbe:
+            httpGet: { path: /healthz, port: 8222 }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests: { cpu: "100m", memory: "256Mi" }
+            limits: { cpu: "500m", memory: "512Mi" }
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats
+  namespace: mmos-production
+spec:
+  selector: { app: nats }
+  ports: [{ port: 4222, targetPort: 4222 }]
+  clusterIP: None
+
+---
+# =========================================================================
+# Stateless application services (Deployments — horizontally scalable)
+# =========================================================================
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  namespace: mmos-production
+spec:
+  replicas: 3  # High Availability — docs/deployment/production.md
+  selector:
+    matchLabels: { app: gateway }
+  template:
+    metadata:
+      labels: { app: gateway }
+    spec:
+      containers:
+        - name: gateway
+          image: your-registry.example.com/mmos/gateway:1.0.0
+          ports: [{ containerPort: 8080 }]
+          envFrom:
+            - configMapRef: { name: mmos-config }
+            - secretRef: { name: mmos-secrets }
+          startupProbe:
+            httpGet: { path: /health, port: 8080 }
+            failureThreshold: 30
+            periodSeconds: 2
+          readinessProbe:
+            httpGet: { path: /health, port: 8080 }
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /health, port: 8080 }
+            periodSeconds: 20
+          resources:
+            requests: { cpu: "250m", memory: "256Mi" }
+            limits: { cpu: "1", memory: "512Mi" }
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+  namespace: mmos-production
+spec:
+  selector: { app: gateway }
+  ports: [{ port: 80, targetPort: 8080 }]
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: gateway
+  namespace: mmos-production
+spec:
+  scaleTargetRef: { apiVersion: apps/v1, kind: Deployment, name: gateway }
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource: { name: cpu, target: { type: Utilization, averageUtilization: 70 } }
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scheduler
+  namespace: mmos-production
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: scheduler }
+  template:
+    metadata:
+      labels: { app: scheduler }
+    spec:
+      containers:
+        - name: scheduler
+          image: your-registry.example.com/mmos/scheduler:1.0.0
+          ports: [{ containerPort: 8090 }]
+          envFrom:
+            - configMapRef: { name: mmos-config }
+            - secretRef: { name: mmos-secrets }
+          readinessProbe:
+            httpGet: { path: /health, port: 8090 }
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /health, port: 8090 }
+            periodSeconds: 20
+          resources:
+            requests: { cpu: "250m", memory: "256Mi" }
+            limits: { cpu: "1", memory: "512Mi" }
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+  namespace: mmos-production
+spec:
+  replicas: 4  # Workers are horizontally scalable per docs/deployment/docker.md
+  selector:
+    matchLabels: { app: worker }
+  template:
+    metadata:
+      labels: { app: worker }
+    spec:
+      containers:
+        - name: worker
+          image: your-registry.example.com/mmos/worker:1.0.0
+          envFrom:
+            - configMapRef: { name: mmos-config }
+            - secretRef: { name: mmos-secrets }
+          readinessProbe:
+            exec: { command: ["cat", "/tmp/worker-ready"] }
+            periodSeconds: 10
+          resources:
+            requests: { cpu: "500m", memory: "512Mi" }
+            limits: { cpu: "2", memory: "1Gi" }
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: worker
+  namespace: mmos-production
+spec:
+  scaleTargetRef: { apiVersion: apps/v1, kind: Deployment, name: worker }
+  minReplicas: 4
+  maxReplicas: 20
+  metrics:
+    - type: Resource
+      resource: { name: cpu, target: { type: Utilization, averageUtilization: 75 } }
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard-api
+  namespace: mmos-production
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: dashboard-api }
+  template:
+    metadata:
+      labels: { app: dashboard-api }
+    spec:
+      containers:
+        - name: dashboard-api
+          image: your-registry.example.com/mmos/dashboard-api:1.0.0
+          ports: [{ containerPort: 8081 }]
+          envFrom:
+            - configMapRef: { name: mmos-config }
+            - secretRef: { name: mmos-secrets }
+          readinessProbe:
+            httpGet: { path: /health, port: 8081 }
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /health, port: 8081 }
+            periodSeconds: 20
+          resources:
+            requests: { cpu: "250m", memory: "256Mi" }
+            limits: { cpu: "1", memory: "512Mi" }
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard-api
+  namespace: mmos-production
+spec:
+  # Internal only — the Dashboard UI reaches this exclusively through the
+  # Gateway (docs/deployment/docker.md), so no separate Ingress route here.
+  selector: { app: dashboard-api }
+  ports: [{ port: 8081, targetPort: 8081 }]
+
+---
+# -----------------------------------------------------------------------
+# Ingress — the ONLY externally-accessible entry point
+# (docs/deployment/kubernetes.md "Ingress is the only externally
+# accessible entry point.")
+# -----------------------------------------------------------------------
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mmos-ingress
+  namespace: mmos-production
+  annotations:
+    nginx.ingress.kubernetes.io/websocket-services: "gateway"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts: ["api.mmos.example.com"]
+      secretName: mmos-tls
+  rules:
+    - host: api.mmos.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service: { name: gateway, port: { number: 80 } }

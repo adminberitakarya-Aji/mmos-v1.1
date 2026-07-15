@@ -1,0 +1,177 @@
+# examples/deployment/docker-compose.yml
+#
+# Reference Docker Compose deployment for MMOS — local development, testing,
+# and small-to-medium production, per docs/deployment/docker.md.
+#
+# Design principles followed (see docs/deployment/docker.md):
+#   - one service per container
+#   - immutable containers (no config baked into images)
+#   - stateless application services (Gateway, Scheduler, Worker, Dashboard API)
+#   - environment-based configuration (see production.env.example)
+#   - only Gateway is exposed publicly; internal services stay on the
+#     private mmos-network
+#
+# Usage:
+#   cp production.env.example .env   # fill in real values, never commit .env
+#   docker compose up -d
+#
+# Startup order (docs/deployment/docker.md "Startup Order") is enforced below
+# via `depends_on: condition: service_healthy` rather than a fixed sleep/delay.
+
+version: "3.9"
+
+networks:
+  mmos-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:
+  object-storage-data:
+
+services:
+  # ---------------------------------------------------------------------
+  # Infrastructure layer (stateful — brought up first)
+  # ---------------------------------------------------------------------
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-mmos}
+      POSTGRES_USER: ${POSTGRES_USER:-mmos}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - mmos-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-mmos}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # Not exposed on a public port — only reachable from mmos-network.
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD:?REDIS_PASSWORD is required}"]
+    volumes:
+      - redis-data:/data
+    networks:
+      - mmos-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  nats:
+    image: nats:2-alpine
+    restart: unless-stopped
+    command: ["-js", "-m", "8222"]  # JetStream enabled; monitoring on 8222
+    networks:
+      - mmos-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8222/healthz"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  object-storage:
+    # MinIO as a reference S3-compatible Object Storage implementation.
+    # docs/deployment/docker.md leaves the concrete implementation open
+    # ("Supported implementations depend on deployment") — swap for a
+    # managed provider (S3, GCS, etc.) in real production use.
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${OBJECT_STORAGE_ACCESS_KEY:?OBJECT_STORAGE_ACCESS_KEY is required}
+      MINIO_ROOT_PASSWORD: ${OBJECT_STORAGE_SECRET_KEY:?OBJECT_STORAGE_SECRET_KEY is required}
+    volumes:
+      - object-storage-data:/data
+    networks:
+      - mmos-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ---------------------------------------------------------------------
+  # Application layer (stateless — depends on infrastructure being healthy)
+  # ---------------------------------------------------------------------
+
+  gateway:
+    image: ${MMOS_IMAGE_REGISTRY:-mmos}/gateway:${MMOS_VERSION:-1.0.0}
+    restart: unless-stopped
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      nats: { condition: service_healthy }
+      object-storage: { condition: service_healthy }
+    env_file: .env
+    ports:
+      # Gateway is the ONLY service exposed on the host — per
+      # docs/deployment/docker.md "Networking": "Only Gateway exposes
+      # public network ports."
+      - "${GATEWAY_PORT:-8080}:8080"
+    networks:
+      - mmos-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  scheduler:
+    image: ${MMOS_IMAGE_REGISTRY:-mmos}/scheduler:${MMOS_VERSION:-1.0.0}
+    restart: unless-stopped
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      nats: { condition: service_healthy }
+    env_file: .env
+    networks:
+      - mmos-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8090/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  worker:
+    image: ${MMOS_IMAGE_REGISTRY:-mmos}/worker:${MMOS_VERSION:-1.0.0}
+    restart: unless-stopped
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      nats: { condition: service_healthy }
+      object-storage: { condition: service_healthy }
+    env_file: .env
+    networks:
+      - mmos-network
+    # Workers are horizontally scalable (docs/deployment/docker.md):
+    #   docker compose up -d --scale worker=4
+    deploy:
+      replicas: ${WORKER_REPLICAS:-1}
+
+  dashboard-api:
+    image: ${MMOS_IMAGE_REGISTRY:-mmos}/dashboard-api:${MMOS_VERSION:-1.0.0}
+    restart: unless-stopped
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      gateway: { condition: service_healthy }
+    env_file: .env
+    networks:
+      - mmos-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8081/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Not exposed publicly here — the Dashboard UI reaches this exclusively
+    # through the Gateway per docs/deployment/docker.md ("Dashboard API ...
+    # The Dashboard UI communicates exclusively with this service.").
