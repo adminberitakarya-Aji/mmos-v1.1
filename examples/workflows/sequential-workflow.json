@@ -1,0 +1,129 @@
+{
+  "$schema": "../../schemas/workflow.schema.json",
+
+  "id": "workflow.sequential.blog-generation",
+  "name": "Sequential Blog Generation",
+  "description": "Generate a blog article through a strictly sequential workflow where each task depends on the previous output.",
+
+  "version": "1.0.0",
+
+  "type": "sequential",
+
+  "input": {
+    "topic": "Artificial Intelligence for Small Business",
+    "language": "en",
+    "wordCount": 1200
+  },
+
+  "tasks": [
+    {
+      "id": "research",
+      "name": "Research Topic",
+      "agent": "research-agent",
+      "capability": "web-search",
+      "dependsOn": []
+    },
+    {
+      "id": "outline",
+      "name": "Create Outline",
+      "agent": "writer-agent",
+      "capability": "text-generation",
+      "dependsOn": [
+        "research"
+      ]
+    },
+    {
+      "id": "draft",
+      "name": "Write Draft",
+      "agent": "writer-agent",
+      "capability": "text-generation",
+      "dependsOn": [
+        "outline"
+      ]
+    },
+    {
+      "id": "review",
+      "name": "Review Content",
+      "agent": "review-agent",
+      "capability": "quality-review",
+      "dependsOn": [
+        "draft"
+      ]
+    },
+    {
+      "id": "seo",
+      "name": "SEO Optimization",
+      "agent": "seo-agent",
+      "capability": "seo-analysis",
+      "dependsOn": [
+        "review"
+      ]
+    },
+    {
+      "id": "publish",
+      "name": "Publish Content",
+      "agent": "publisher-agent",
+      "capability": "cms-publish",
+      "dependsOn": [
+        "seo"
+      ]
+    }
+  ],
+
+  "execution": {
+    "mode": "sequential",
+    "retry": {
+      "enabled": true,
+      "maxAttempts": 3
+    },
+    "timeout": "30m"
+  },
+
+  "runtime": {
+    "provider": "openai",
+    "model": "gpt-4.1",
+    "temperature": 0.7
+  },
+
+  "memory": {
+    "enabled": true,
+    "scope": "workflow"
+  },
+
+  "artifacts": [
+    {
+      "id": "research-report",
+      "producedBy": "research",
+      "type": "document"
+    },
+    {
+      "id": "outline",
+      "producedBy": "outline",
+      "type": "outline"
+    },
+    {
+      "id": "draft",
+      "producedBy": "draft",
+      "type": "document"
+    },
+    {
+      "id": "review-report",
+      "producedBy": "review",
+      "type": "review"
+    },
+    {
+      "id": "seo-report",
+      "producedBy": "seo",
+      "type": "analysis"
+    },
+    {
+      "id": "published-url",
+      "producedBy": "publish",
+      "type": "url"
+    }
+  ],
+
+  "output": {
+    "primary": "published-url"
+  }
+}

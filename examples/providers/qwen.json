@@ -1,0 +1,74 @@
+{
+  "$schema": "../../schemas/provider.schema.json",
+
+  "id": "provider.qwen.default",
+
+  "name": "Qwen",
+
+  "description": "Example configuration for Alibaba Qwen provider.",
+
+  "version": "1.0.0",
+
+  "provider": "qwen",
+
+  "enabled": true,
+
+  "authentication": {
+    "type": "api-key",
+    "apiKey": "${QWEN_API_KEY}"
+  },
+
+  "endpoint": {
+    "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "timeout": 60000
+  },
+
+  "models": {
+    "default": "qwen3-235b-a22b-instruct-2507",
+
+    "chat": "qwen3-235b-a22b-instruct-2507",
+
+    "reasoning": "qwen3-235b-a22b-thinking-2507",
+
+    "fast": "qwen3-30b-a3b-instruct-2507",
+
+    "vision": "qwen2.5-vl-72b-instruct",
+
+    "embedding": "text-embedding-v4",
+
+    "imageGeneration": "wanx2.1-t2i-turbo",
+
+    "speechToText": "paraformer-v2",
+
+    "textToSpeech": "cosyvoice-v2"
+  },
+
+  "capabilities": {
+    "chat": true,
+    "reasoning": true,
+    "vision": true,
+    "imageGeneration": true,
+    "imageUnderstanding": true,
+    "embeddings": true,
+    "functionCalling": true,
+    "structuredOutput": true,
+    "streaming": true,
+    "audioInput": true,
+    "audioOutput": true
+  },
+
+  "limits": {
+    "maxTokens": 262144,
+    "maxRequestsPerMinute": 5000
+  },
+
+  "retry": {
+    "enabled": true,
+    "maxAttempts": 3,
+    "backoff": "exponential"
+  },
+
+  "metadata": {
+    "environment": "production"
+  }
+}

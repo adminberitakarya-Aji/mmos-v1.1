@@ -1,0 +1,64 @@
+{
+  "$schema": "../../schemas/provider.schema.json",
+
+  "id": "provider.deepseek.default",
+
+  "name": "DeepSeek",
+
+  "description": "Example configuration for DeepSeek provider.",
+
+  "version": "1.0.0",
+
+  "provider": "deepseek",
+
+  "enabled": true,
+
+  "authentication": {
+    "type": "api-key",
+    "apiKey": "${DEEPSEEK_API_KEY}"
+  },
+
+  "endpoint": {
+    "baseUrl": "https://api.deepseek.com",
+    "timeout": 60000
+  },
+
+  "models": {
+    "default": "deepseek-chat",
+
+    "chat": "deepseek-chat",
+
+    "reasoning": "deepseek-reasoner",
+
+    "fast": "deepseek-chat"
+  },
+
+  "capabilities": {
+    "chat": true,
+    "reasoning": true,
+    "vision": false,
+    "imageGeneration": false,
+    "imageUnderstanding": false,
+    "embeddings": false,
+    "functionCalling": true,
+    "structuredOutput": true,
+    "streaming": true,
+    "audioInput": false,
+    "audioOutput": false
+  },
+
+  "limits": {
+    "maxTokens": 64000,
+    "maxRequestsPerMinute": 5000
+  },
+
+  "retry": {
+    "enabled": true,
+    "maxAttempts": 3,
+    "backoff": "exponential"
+  },
+
+  "metadata": {
+    "environment": "production"
+  }
+}

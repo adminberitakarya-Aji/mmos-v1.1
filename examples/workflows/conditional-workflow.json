@@ -1,0 +1,139 @@
+{
+  "$schema": "../../schemas/workflow.schema.json",
+
+  "id": "workflow.conditional.content-review",
+  "name": "Conditional Content Review Workflow",
+  "description": "Execute different workflow branches based on review results.",
+
+  "version": "1.0.0",
+
+  "type": "conditional",
+
+  "input": {
+    "topic": "Artificial Intelligence for Small Business",
+    "language": "en"
+  },
+
+  "tasks": [
+    {
+      "id": "research",
+      "name": "Research Topic",
+      "agent": "research-agent",
+      "capability": "web-search",
+      "dependsOn": []
+    },
+    {
+      "id": "draft",
+      "name": "Generate Draft",
+      "agent": "writer-agent",
+      "capability": "text-generation",
+      "dependsOn": [
+        "research"
+      ]
+    },
+    {
+      "id": "review",
+      "name": "Review Content",
+      "agent": "review-agent",
+      "capability": "quality-review",
+      "dependsOn": [
+        "draft"
+      ]
+    },
+    {
+      "id": "revise",
+      "name": "Revise Draft",
+      "agent": "writer-agent",
+      "capability": "text-generation",
+      "dependsOn": [
+        "review"
+      ]
+    },
+    {
+      "id": "publish",
+      "name": "Publish Content",
+      "agent": "publisher-agent",
+      "capability": "cms-publish",
+      "dependsOn": [
+        "review",
+        "revise"
+      ]
+    }
+  ],
+
+  "conditions": [
+    {
+      "id": "review-result",
+
+      "source": "review",
+
+      "expression": "review.score >= 80",
+
+      "trueBranch": [
+        "publish"
+      ],
+
+      "falseBranch": [
+        "revise"
+      ]
+    },
+    {
+      "id": "revision-complete",
+
+      "source": "revise",
+
+      "expression": "revise.completed == true",
+
+      "trueBranch": [
+        "publish"
+      ]
+    }
+  ],
+
+  "execution": {
+    "mode": "conditional",
+    "retry": {
+      "enabled": true,
+      "maxAttempts": 3
+    },
+    "timeout": "60m"
+  },
+
+  "runtime": {
+    "provider": "openai",
+    "model": "gpt-4.1",
+    "temperature": 0.7
+  },
+
+  "memory": {
+    "enabled": true,
+    "scope": "workflow"
+  },
+
+  "artifacts": [
+    {
+      "id": "draft",
+      "producedBy": "draft",
+      "type": "document"
+    },
+    {
+      "id": "review-report",
+      "producedBy": "review",
+      "type": "review"
+    },
+    {
+      "id": "revised-draft",
+      "producedBy": "revise",
+      "type": "document"
+    },
+    {
+      "id": "published-url",
+      "producedBy": "publish",
+      "type": "url"
+    }
+  ],
+
+  "output": {
+    "primary": "published-url"
+  }
+}

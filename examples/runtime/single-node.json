@@ -1,0 +1,74 @@
+{
+  "$schema": "../../schemas/runtime.schema.json",
+
+  "id": "runtime.single-node",
+
+  "name": "Single Node Runtime",
+
+  "description": "Development runtime deployed on a single machine.",
+
+  "version": "1.0.0",
+
+  "mode": "single-node",
+
+  "environment": "development",
+
+  "services": {
+    "gateway": {
+      "enabled": true,
+      "instances": 1
+    },
+
+    "scheduler": {
+      "enabled": true,
+      "instances": 1
+    },
+
+    "worker": {
+      "enabled": true,
+      "instances": 1
+    },
+
+    "eventBus": {
+      "enabled": true,
+      "provider": "memory"
+    },
+
+    "memory": {
+      "enabled": true,
+      "provider": "sqlite"
+    }
+  },
+
+  "execution": {
+    "maxConcurrentWorkflows": 20,
+
+    "maxConcurrentTasks": 50,
+
+    "queueSize": 1000
+  },
+
+  "providers": [
+    "openai"
+  ],
+
+  "observability": {
+    "logging": true,
+
+    "metrics": true,
+
+    "tracing": false
+  },
+
+  "security": {
+    "authentication": false,
+
+    "authorization": false
+  },
+
+  "resources": {
+    "cpu": "4",
+
+    "memory": "8Gi"
+  }
+}

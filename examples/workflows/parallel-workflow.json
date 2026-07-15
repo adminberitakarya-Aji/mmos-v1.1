@@ -1,0 +1,146 @@
+{
+  "$schema": "../../schemas/workflow.schema.json",
+
+  "id": "workflow.parallel.content-production",
+  "name": "Parallel Content Production",
+  "description": "Execute multiple independent tasks concurrently after a shared prerequisite is completed.",
+
+  "version": "1.0.0",
+
+  "type": "parallel",
+
+  "input": {
+    "topic": "Artificial Intelligence for Small Business",
+    "language": "en"
+  },
+
+  "tasks": [
+    {
+      "id": "research",
+      "name": "Research Topic",
+      "agent": "research-agent",
+      "capability": "web-search",
+      "dependsOn": []
+    },
+    {
+      "id": "draft",
+      "name": "Generate Blog Draft",
+      "agent": "writer-agent",
+      "capability": "text-generation",
+      "dependsOn": [
+        "research"
+      ]
+    },
+    {
+      "id": "thumbnail",
+      "name": "Generate Thumbnail",
+      "agent": "image-agent",
+      "capability": "image-generation",
+      "dependsOn": [
+        "draft"
+      ]
+    },
+    {
+      "id": "seo",
+      "name": "Generate SEO Metadata",
+      "agent": "seo-agent",
+      "capability": "seo-analysis",
+      "dependsOn": [
+        "draft"
+      ]
+    },
+    {
+      "id": "social",
+      "name": "Generate Social Media Post",
+      "agent": "social-agent",
+      "capability": "text-generation",
+      "dependsOn": [
+        "draft"
+      ]
+    },
+    {
+      "id": "translation",
+      "name": "Translate Article",
+      "agent": "translator-agent",
+      "capability": "translation",
+      "dependsOn": [
+        "draft"
+      ]
+    },
+    {
+      "id": "publish",
+      "name": "Publish Content Package",
+      "agent": "publisher-agent",
+      "capability": "cms-publish",
+      "dependsOn": [
+        "thumbnail",
+        "seo",
+        "social",
+        "translation"
+      ]
+    }
+  ],
+
+  "execution": {
+    "mode": "parallel",
+    "maxConcurrency": 4,
+    "retry": {
+      "enabled": true,
+      "maxAttempts": 3
+    },
+    "timeout": "45m"
+  },
+
+  "runtime": {
+    "provider": "openai",
+    "model": "gpt-4.1",
+    "temperature": 0.7
+  },
+
+  "memory": {
+    "enabled": true,
+    "scope": "workflow"
+  },
+
+  "artifacts": [
+    {
+      "id": "research-report",
+      "producedBy": "research",
+      "type": "document"
+    },
+    {
+      "id": "blog-draft",
+      "producedBy": "draft",
+      "type": "document"
+    },
+    {
+      "id": "thumbnail-image",
+      "producedBy": "thumbnail",
+      "type": "image"
+    },
+    {
+      "id": "seo-metadata",
+      "producedBy": "seo",
+      "type": "metadata"
+    },
+    {
+      "id": "social-post",
+      "producedBy": "social",
+      "type": "document"
+    },
+    {
+      "id": "translated-article",
+      "producedBy": "translation",
+      "type": "document"
+    },
+    {
+      "id": "publication-url",
+      "producedBy": "publish",
+      "type": "url"
+    }
+  ],
+
+  "output": {
+    "primary": "publication-url"
+  }
+}

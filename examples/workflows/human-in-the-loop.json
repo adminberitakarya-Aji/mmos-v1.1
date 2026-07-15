@@ -1,0 +1,146 @@
+{
+  "$schema": "../../schemas/workflow.schema.json",
+
+  "id": "workflow.hitl.editorial-approval",
+  "name": "Human-in-the-Loop Editorial Approval",
+  "description": "Pause workflow and wait for human approval before publishing content.",
+
+  "version": "1.0.0",
+
+  "type": "human-in-the-loop",
+
+  "input": {
+    "topic": "Artificial Intelligence for Small Business",
+    "language": "en"
+  },
+
+  "tasks": [
+    {
+      "id": "research",
+      "name": "Research Topic",
+      "agent": "research-agent",
+      "capability": "web-search",
+      "dependsOn": []
+    },
+    {
+      "id": "draft",
+      "name": "Generate Draft",
+      "agent": "writer-agent",
+      "capability": "text-generation",
+      "dependsOn": [
+        "research"
+      ]
+    },
+    {
+      "id": "review",
+      "name": "AI Quality Review",
+      "agent": "review-agent",
+      "capability": "quality-review",
+      "dependsOn": [
+        "draft"
+      ]
+    },
+    {
+      "id": "approval",
+      "name": "Editorial Approval",
+      "type": "human-task",
+      "assignee": "editor",
+      "dependsOn": [
+        "review"
+      ]
+    },
+    {
+      "id": "publish",
+      "name": "Publish Article",
+      "agent": "publisher-agent",
+      "capability": "cms-publish",
+      "dependsOn": [
+        "approval"
+      ]
+    },
+    {
+      "id": "revision",
+      "name": "Revise Content",
+      "agent": "writer-agent",
+      "capability": "text-generation",
+      "dependsOn": [
+        "approval"
+      ]
+    }
+  ],
+
+  "humanInteraction": {
+    "task": "approval",
+
+    "pauseWorkflow": true,
+
+    "timeout": "72h",
+
+    "onApprove": [
+      "publish"
+    ],
+
+    "onReject": [
+      "revision"
+    ],
+
+    "onTimeout": "cancel"
+  },
+
+  "execution": {
+    "mode": "human-in-the-loop",
+    "retry": {
+      "enabled": true,
+      "maxAttempts": 2
+    },
+    "timeout": "96h"
+  },
+
+  "runtime": {
+    "provider": "openai",
+    "model": "gpt-4.1"
+  },
+
+  "memory": {
+    "enabled": true,
+    "scope": "workflow"
+  },
+
+  "events": {
+    "produce": [
+      "approval.requested",
+      "approval.approved",
+      "approval.rejected",
+      "workflow.paused",
+      "workflow.resumed",
+      "workflow.completed"
+    ]
+  },
+
+  "artifacts": [
+    {
+      "id": "draft",
+      "producedBy": "draft",
+      "type": "document"
+    },
+    {
+      "id": "review-report",
+      "producedBy": "review",
+      "type": "review"
+    },
+    {
+      "id": "approval-record",
+      "producedBy": "approval",
+      "type": "approval"
+    },
+    {
+      "id": "published-url",
+      "producedBy": "publish",
+      "type": "url"
+    }
+  ],
+
+  "output": {
+    "primary": "published-url"
+  }
+}

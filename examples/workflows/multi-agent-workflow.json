@@ -1,0 +1,185 @@
+{
+  "$schema": "../../schemas/workflow.schema.json",
+
+  "id": "workflow.multi-agent.news-production",
+  "name": "Multi-Agent News Production",
+  "description": "Coordinate multiple specialized AI agents to produce and publish a complete news article.",
+
+  "version": "1.0.0",
+
+  "type": "multi-agent",
+
+  "input": {
+    "topic": "Artificial Intelligence for Small Business",
+    "language": "en",
+    "targetAudience": "business"
+  },
+
+  "agents": [
+    {
+      "id": "research-agent",
+      "role": "Research Specialist"
+    },
+    {
+      "id": "writer-agent",
+      "role": "Content Writer"
+    },
+    {
+      "id": "fact-checker-agent",
+      "role": "Fact Checker"
+    },
+    {
+      "id": "editor-agent",
+      "role": "Editor"
+    },
+    {
+      "id": "seo-agent",
+      "role": "SEO Specialist"
+    },
+    {
+      "id": "image-agent",
+      "role": "Image Generator"
+    },
+    {
+      "id": "publisher-agent",
+      "role": "Publisher"
+    }
+  ],
+
+  "tasks": [
+    {
+      "id": "research",
+      "agent": "research-agent",
+      "capability": "web-search",
+      "dependsOn": []
+    },
+    {
+      "id": "write",
+      "agent": "writer-agent",
+      "capability": "text-generation",
+      "dependsOn": [
+        "research"
+      ]
+    },
+    {
+      "id": "fact-check",
+      "agent": "fact-checker-agent",
+      "capability": "fact-check",
+      "dependsOn": [
+        "write"
+      ]
+    },
+    {
+      "id": "edit",
+      "agent": "editor-agent",
+      "capability": "editing",
+      "dependsOn": [
+        "fact-check"
+      ]
+    },
+    {
+      "id": "seo",
+      "agent": "seo-agent",
+      "capability": "seo-analysis",
+      "dependsOn": [
+        "edit"
+      ]
+    },
+    {
+      "id": "thumbnail",
+      "agent": "image-agent",
+      "capability": "image-generation",
+      "dependsOn": [
+        "edit"
+      ]
+    },
+    {
+      "id": "publish",
+      "agent": "publisher-agent",
+      "capability": "cms-publish",
+      "dependsOn": [
+        "seo",
+        "thumbnail"
+      ]
+    }
+  ],
+
+  "coordination": {
+    "strategy": "orchestrated",
+    "orchestrator": "workflow-engine",
+    "sharedMemory": true,
+    "artifactExchange": true
+  },
+
+  "execution": {
+    "mode": "multi-agent",
+    "maxConcurrency": 2,
+    "retry": {
+      "enabled": true,
+      "maxAttempts": 3
+    },
+    "timeout": "90m"
+  },
+
+  "runtime": {
+    "provider": "openai",
+    "model": "gpt-4.1"
+  },
+
+  "memory": {
+    "enabled": true,
+    "scope": "workflow",
+    "shared": true
+  },
+
+  "events": {
+    "produce": [
+      "workflow.started",
+      "agent.completed",
+      "artifact.created",
+      "workflow.completed"
+    ]
+  },
+
+  "artifacts": [
+    {
+      "id": "research-report",
+      "producedBy": "research",
+      "type": "document"
+    },
+    {
+      "id": "draft",
+      "producedBy": "write",
+      "type": "document"
+    },
+    {
+      "id": "fact-check-report",
+      "producedBy": "fact-check",
+      "type": "review"
+    },
+    {
+      "id": "edited-article",
+      "producedBy": "edit",
+      "type": "document"
+    },
+    {
+      "id": "seo-metadata",
+      "producedBy": "seo",
+      "type": "metadata"
+    },
+    {
+      "id": "thumbnail-image",
+      "producedBy": "thumbnail",
+      "type": "image"
+    },
+    {
+      "id": "publication-url",
+      "producedBy": "publish",
+      "type": "url"
+    }
+  ],
+
+  "output": {
+    "primary": "publication-url"
+  }
+}

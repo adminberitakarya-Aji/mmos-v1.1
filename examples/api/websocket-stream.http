@@ -1,0 +1,92 @@
+### ============================================
+### MMOS WebSocket Example
+### Real-time Event Streaming
+### ============================================
+
+@wsUrl = ws://localhost:8080/api/v1/ws
+@token = YOUR_ACCESS_TOKEN
+
+### ============================================
+### Connect
+### ============================================
+
+WEBSOCKET {{wsUrl}}?access_token={{token}}
+
+###
+
+### ============================================
+### Subscribe Execution Events
+### ============================================
+
+{
+  "action": "subscribe",
+  "channel": "execution",
+  "executionId": "execution-001"
+}
+
+###
+
+### ============================================
+### Subscribe Workflow Events
+### ============================================
+
+{
+  "action": "subscribe",
+  "channel": "workflow",
+  "workflowId": "workflow.pipeline.multimedia-content"
+}
+
+###
+
+### ============================================
+### Subscribe Artifact Events
+### ============================================
+
+{
+  "action": "subscribe",
+  "channel": "artifact"
+}
+
+###
+
+### ============================================
+### Subscribe Agent Events
+### ============================================
+
+{
+  "action": "subscribe",
+  "channel": "agent"
+}
+
+###
+
+### ============================================
+### Subscribe System Events
+### ============================================
+
+{
+  "action": "subscribe",
+  "channel": "system"
+}
+
+###
+
+### ============================================
+### Ping
+### ============================================
+
+{
+  "action": "ping"
+}
+
+###
+
+### ============================================
+### Unsubscribe
+### ============================================
+
+{
+  "action": "unsubscribe",
+  "channel": "execution",
+  "executionId": "execution-001"
+}

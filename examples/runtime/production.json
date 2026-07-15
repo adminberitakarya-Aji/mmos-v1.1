@@ -1,0 +1,139 @@
+{
+  "$schema": "../../schemas/runtime.schema.json",
+
+  "id": "runtime.production",
+
+  "name": "Production Runtime",
+
+  "description": "Production-ready MMOS runtime for enterprise deployment.",
+
+  "version": "1.0.0",
+
+  "mode": "production",
+
+  "environment": "production",
+
+  "services": {
+    "gateway": {
+      "enabled": true,
+      "instances": 4,
+      "loadBalancer": true,
+      "autoScaling": true
+    },
+
+    "scheduler": {
+      "enabled": true,
+      "instances": 3,
+      "leaderElection": true
+    },
+
+    "worker": {
+      "enabled": true,
+      "instances": 20,
+      "autoScaling": true,
+      "minInstances": 10,
+      "maxInstances": 100
+    },
+
+    "eventBus": {
+      "enabled": true,
+      "provider": "nats",
+      "cluster": true,
+      "replicas": 3
+    },
+
+    "memory": {
+      "enabled": true,
+      "provider": "postgres",
+      "cluster": true,
+      "replicas": 3
+    },
+
+    "cache": {
+      "enabled": true,
+      "provider": "redis",
+      "cluster": true,
+      "replicas": 3
+    },
+
+    "artifactStore": {
+      "enabled": true,
+      "provider": "s3"
+    }
+  },
+
+  "execution": {
+    "maxConcurrentWorkflows": 10000,
+
+    "maxConcurrentTasks": 100000,
+
+    "queueSize": 5000000,
+
+    "taskDistribution": "least-loaded"
+  },
+
+  "providers": [
+    "openai",
+    "anthropic",
+    "gemini",
+    "qwen",
+    "deepseek"
+  ],
+
+  "multiTenant": {
+    "enabled": true,
+
+    "isolation": "workspace"
+  },
+
+  "observability": {
+    "logging": true,
+
+    "metrics": true,
+
+    "tracing": true,
+
+    "healthChecks": true,
+
+    "auditLog": true
+  },
+
+  "security": {
+    "authentication": true,
+
+    "authorization": true,
+
+    "tls": true,
+
+    "mTLS": true,
+
+    "encryptionAtRest": true,
+
+    "secretManager": true
+  },
+
+  "backup": {
+    "enabled": true,
+
+    "schedule": "0 */6 * * *",
+
+    "retention": "30d"
+  },
+
+  "resources": {
+    "gateway": {
+      "cpu": "4",
+      "memory": "8Gi"
+    },
+
+    "scheduler": {
+      "cpu": "4",
+      "memory": "8Gi"
+    },
+
+    "worker": {
+      "cpu": "8",
+      "memory": "16Gi"
+    }
+  }
+}

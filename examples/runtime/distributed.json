@@ -1,0 +1,96 @@
+{
+  "$schema": "../../schemas/runtime.schema.json",
+
+  "id": "runtime.distributed",
+
+  "name": "Distributed Runtime",
+
+  "description": "Distributed MMOS runtime deployed across multiple nodes with scalable services.",
+
+  "version": "1.0.0",
+
+  "mode": "distributed",
+
+  "environment": "staging",
+
+  "services": {
+    "gateway": {
+      "enabled": true,
+      "instances": 2
+    },
+
+    "scheduler": {
+      "enabled": true,
+      "instances": 2
+    },
+
+    "worker": {
+      "enabled": true,
+      "instances": 8
+    },
+
+    "eventBus": {
+      "enabled": true,
+      "provider": "nats"
+    },
+
+    "memory": {
+      "enabled": true,
+      "provider": "postgres"
+    },
+
+    "cache": {
+      "enabled": true,
+      "provider": "redis"
+    }
+  },
+
+  "execution": {
+    "maxConcurrentWorkflows": 500,
+
+    "maxConcurrentTasks": 5000,
+
+    "queueSize": 100000,
+
+    "taskDistribution": "round-robin"
+  },
+
+  "providers": [
+    "openai",
+    "anthropic",
+    "gemini"
+  ],
+
+  "observability": {
+    "logging": true,
+
+    "metrics": true,
+
+    "tracing": true
+  },
+
+  "security": {
+    "authentication": true,
+
+    "authorization": true,
+
+    "tls": true
+  },
+
+  "resources": {
+    "gateway": {
+      "cpu": "2",
+      "memory": "4Gi"
+    },
+
+    "scheduler": {
+      "cpu": "2",
+      "memory": "4Gi"
+    },
+
+    "worker": {
+      "cpu": "4",
+      "memory": "8Gi"
+    }
+  }
+}

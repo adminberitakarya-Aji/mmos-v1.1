@@ -1,0 +1,121 @@
+{
+  "$schema": "../../schemas/workflow.schema.json",
+
+  "id": "workflow.scheduled.daily-news-digest",
+  "name": "Scheduled Daily News Digest",
+  "description": "Generate and publish a daily news digest automatically based on a predefined schedule.",
+
+  "version": "1.0.0",
+
+  "type": "scheduled",
+
+  "trigger": {
+    "type": "schedule",
+
+    "schedule": {
+      "cron": "0 7 * * *",
+      "timezone": "Asia/Jakarta"
+    }
+  },
+
+  "input": {
+    "category": "technology",
+    "language": "en",
+    "period": "last-24-hours"
+  },
+
+  "tasks": [
+    {
+      "id": "collect-news",
+      "name": "Collect News",
+      "agent": "news-agent",
+      "capability": "news-search",
+      "dependsOn": []
+    },
+    {
+      "id": "summarize",
+      "name": "Summarize News",
+      "agent": "writer-agent",
+      "capability": "text-generation",
+      "dependsOn": [
+        "collect-news"
+      ]
+    },
+    {
+      "id": "thumbnail",
+      "name": "Generate Cover Image",
+      "agent": "image-agent",
+      "capability": "image-generation",
+      "dependsOn": [
+        "summarize"
+      ]
+    },
+    {
+      "id": "publish",
+      "name": "Publish Daily Digest",
+      "agent": "publisher-agent",
+      "capability": "cms-publish",
+      "dependsOn": [
+        "thumbnail"
+      ]
+    }
+  ],
+
+  "execution": {
+    "mode": "scheduled",
+    "allowConcurrentRuns": false,
+    "retry": {
+      "enabled": true,
+      "maxAttempts": 3
+    },
+    "timeout": "60m"
+  },
+
+  "runtime": {
+    "provider": "openai",
+    "model": "gpt-4.1",
+    "temperature": 0.5
+  },
+
+  "memory": {
+    "enabled": true,
+    "scope": "workflow"
+  },
+
+  "events": {
+    "produce": [
+      "workflow.scheduled.started",
+      "digest.generated",
+      "digest.published",
+      "workflow.completed",
+      "workflow.failed"
+    ]
+  },
+
+  "artifacts": [
+    {
+      "id": "news-collection",
+      "producedBy": "collect-news",
+      "type": "dataset"
+    },
+    {
+      "id": "daily-summary",
+      "producedBy": "summarize",
+      "type": "document"
+    },
+    {
+      "id": "cover-image",
+      "producedBy": "thumbnail",
+      "type": "image"
+    },
+    {
+      "id": "publication-url",
+      "producedBy": "publish",
+      "type": "url"
+    }
+  ],
+
+  "output": {
+    "primary": "publication-url"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "$schema": "../../schemas/provider.schema.json",
+
+  "id": "provider.openai.default",
+
+  "name": "OpenAI",
+
+  "description": "Example configuration for OpenAI provider.",
+
+  "version": "1.0.0",
+
+  "provider": "openai",
+
+  "enabled": true,
+
+  "authentication": {
+    "type": "api-key",
+    "apiKey": "${OPENAI_API_KEY}"
+  },
+
+  "endpoint": {
+    "baseUrl": "https://api.openai.com/v1",
+    "timeout": 60000
+  },
+
+  "models": {
+    "default": "gpt-4.1",
+
+    "chat": "gpt-4.1",
+
+    "reasoning": "o3",
+
+    "fast": "gpt-4.1-mini",
+
+    "embedding": "text-embedding-3-large",
+
+    "image": "gpt-image-1",
+
+    "speechToText": "gpt-4o-transcribe",
+
+    "textToSpeech": "gpt-4o-mini-tts"
+  },
+
+  "capabilities": {
+    "chat": true,
+    "reasoning": true,
+    "vision": true,
+    "imageGeneration": true,
+    "imageUnderstanding": true,
+    "embeddings": true,
+    "functionCalling": true,
+    "structuredOutput": true,
+    "streaming": true,
+    "audioInput": true,
+    "audioOutput": true
+  },
+
+  "limits": {
+    "maxTokens": 128000,
+    "maxRequestsPerMinute": 5000
+  },
+
+  "retry": {
+    "enabled": true,
+    "maxAttempts": 3,
+    "backoff": "exponential"
+  },
+
+  "metadata": {
+    "environment": "production"
+  }
+}

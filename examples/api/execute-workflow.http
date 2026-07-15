@@ -1,0 +1,101 @@
+### ============================================
+### MMOS API Example
+### Execute Workflow
+### ============================================
+
+@baseUrl = http://localhost:8080/api/v1
+@token = YOUR_ACCESS_TOKEN
+
+### ============================================
+### Execute Workflow
+### ============================================
+
+POST {{baseUrl}}/workflows/execute
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "workflowId": "workflow.pipeline.multimedia-content",
+
+  "runtime": {
+    "provider": "openai",
+    "model": "gpt-4.1"
+  },
+
+  "input": {
+    "topic": "Artificial Intelligence",
+    "language": "en"
+  }
+}
+
+###
+
+### ============================================
+### Get Execution Status
+### ============================================
+
+GET {{baseUrl}}/executions/{{executionId}}
+Authorization: Bearer {{token}}
+
+###
+
+### ============================================
+### Get Execution Logs
+### ============================================
+
+GET {{baseUrl}}/executions/{{executionId}}/logs
+Authorization: Bearer {{token}}
+
+###
+
+### ============================================
+### Pause Execution
+### ============================================
+
+POST {{baseUrl}}/executions/{{executionId}}/pause
+Authorization: Bearer {{token}}
+
+###
+
+### ============================================
+### Resume Execution
+### ============================================
+
+POST {{baseUrl}}/executions/{{executionId}}/resume
+Authorization: Bearer {{token}}
+
+###
+
+### ============================================
+### Cancel Execution
+### ============================================
+
+POST {{baseUrl}}/executions/{{executionId}}/cancel
+Authorization: Bearer {{token}}
+
+###
+
+### ============================================
+### List Executions
+### ============================================
+
+GET {{baseUrl}}/executions
+Authorization: Bearer {{token}}
+
+###
+
+### ============================================
+### Get Execution Artifacts
+### ============================================
+
+GET {{baseUrl}}/executions/{{executionId}}/artifacts
+Authorization: Bearer {{token}}
+
+###
+
+### ============================================
+### Retry Failed Execution
+### ============================================
+
+POST {{baseUrl}}/executions/{{executionId}}/retry
+Authorization: Bearer {{token}}

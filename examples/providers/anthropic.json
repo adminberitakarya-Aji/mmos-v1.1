@@ -1,0 +1,66 @@
+{
+  "$schema": "../../schemas/provider.schema.json",
+
+  "id": "provider.anthropic.default",
+
+  "name": "Anthropic",
+
+  "description": "Example configuration for Anthropic provider.",
+
+  "version": "1.0.0",
+
+  "provider": "anthropic",
+
+  "enabled": true,
+
+  "authentication": {
+    "type": "api-key",
+    "apiKey": "${ANTHROPIC_API_KEY}"
+  },
+
+  "endpoint": {
+    "baseUrl": "https://api.anthropic.com",
+    "timeout": 60000
+  },
+
+  "models": {
+    "default": "claude-sonnet-4",
+
+    "chat": "claude-sonnet-4",
+
+    "reasoning": "claude-opus-4",
+
+    "fast": "claude-haiku-4",
+
+    "vision": "claude-sonnet-4"
+  },
+
+  "capabilities": {
+    "chat": true,
+    "reasoning": true,
+    "vision": true,
+    "imageGeneration": false,
+    "imageUnderstanding": true,
+    "embeddings": false,
+    "functionCalling": true,
+    "structuredOutput": true,
+    "streaming": true,
+    "audioInput": false,
+    "audioOutput": false
+  },
+
+  "limits": {
+    "maxTokens": 200000,
+    "maxRequestsPerMinute": 5000
+  },
+
+  "retry": {
+    "enabled": true,
+    "maxAttempts": 3,
+    "backoff": "exponential"
+  },
+
+  "metadata": {
+    "environment": "production"
+  }
+}

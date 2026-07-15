@@ -1,0 +1,121 @@
+{
+  "$schema": "../../schemas/runtime.schema.json",
+
+  "id": "runtime.high-availability",
+
+  "name": "High Availability Runtime",
+
+  "description": "Highly available MMOS runtime with redundant services and automatic failover.",
+
+  "version": "1.0.0",
+
+  "mode": "high-availability",
+
+  "environment": "production",
+
+  "services": {
+    "gateway": {
+      "enabled": true,
+      "instances": 3,
+      "loadBalancer": true
+    },
+
+    "scheduler": {
+      "enabled": true,
+      "instances": 3,
+      "leaderElection": true
+    },
+
+    "worker": {
+      "enabled": true,
+      "instances": 16,
+      "autoScaling": true
+    },
+
+    "eventBus": {
+      "enabled": true,
+      "provider": "nats",
+      "cluster": true,
+      "replicas": 3
+    },
+
+    "memory": {
+      "enabled": true,
+      "provider": "postgres",
+      "cluster": true,
+      "replicas": 3
+    },
+
+    "cache": {
+      "enabled": true,
+      "provider": "redis",
+      "cluster": true,
+      "replicas": 3
+    }
+  },
+
+  "execution": {
+    "maxConcurrentWorkflows": 5000,
+
+    "maxConcurrentTasks": 50000,
+
+    "queueSize": 1000000,
+
+    "taskDistribution": "least-loaded"
+  },
+
+  "providers": [
+    "openai",
+    "anthropic",
+    "gemini",
+    "qwen",
+    "deepseek"
+  ],
+
+  "failover": {
+    "enabled": true,
+
+    "automatic": true,
+
+    "healthCheckInterval": "10s",
+
+    "maxRecoveryTime": "30s"
+  },
+
+  "observability": {
+    "logging": true,
+
+    "metrics": true,
+
+    "tracing": true,
+
+    "healthChecks": true
+  },
+
+  "security": {
+    "authentication": true,
+
+    "authorization": true,
+
+    "tls": true,
+
+    "mTLS": true
+  },
+
+  "resources": {
+    "gateway": {
+      "cpu": "4",
+      "memory": "8Gi"
+    },
+
+    "scheduler": {
+      "cpu": "4",
+      "memory": "8Gi"
+    },
+
+    "worker": {
+      "cpu": "8",
+      "memory": "16Gi"
+    }
+  }
+}

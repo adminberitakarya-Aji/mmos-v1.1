@@ -1,0 +1,91 @@
+{
+  "$schema": "../../schemas/memory.schema.json",
+
+  "id": "memory.episodic.default",
+
+  "name": "Episodic Memory",
+
+  "description": "Stores workflow execution history, agent experiences, decisions, and interaction context.",
+
+  "version": "1.0.0",
+
+  "type": "episodic",
+
+  "enabled": true,
+
+  "scope": "execution",
+
+  "storage": {
+    "provider": "postgres",
+    "collection": "episodic_memory"
+  },
+
+  "schema": {
+    "format": "json",
+
+    "fields": [
+      {
+        "name": "executionId",
+        "type": "string"
+      },
+      {
+        "name": "workflowId",
+        "type": "string"
+      },
+      {
+        "name": "agentId",
+        "type": "string"
+      },
+      {
+        "name": "event",
+        "type": "string"
+      },
+      {
+        "name": "input",
+        "type": "object"
+      },
+      {
+        "name": "output",
+        "type": "object"
+      },
+      {
+        "name": "status",
+        "type": "string"
+      },
+      {
+        "name": "timestamp",
+        "type": "datetime"
+      }
+    ]
+  },
+
+  "indexing": {
+    "enabled": true,
+
+    "fields": [
+      "executionId",
+      "workflowId",
+      "agentId",
+      "timestamp"
+    ]
+  },
+
+  "retention": {
+    "policy": "90d"
+  },
+
+  "access": {
+    "read": [
+      "agent",
+      "workflow",
+      "execution"
+    ],
+    "write": [
+      "execution"
+    ]
+  },
+
+  "metadata": {
+    "environment": "production"
+  }
+}

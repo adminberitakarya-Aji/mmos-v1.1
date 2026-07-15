@@ -1,0 +1,92 @@
+### ============================================
+### MMOS API Example
+### Artifact Management
+### ============================================
+
+@baseUrl = http://localhost:8080/api/v1
+@token = YOUR_ACCESS_TOKEN
+
+### ============================================
+### Upload Artifact
+### ============================================
+
+POST {{baseUrl}}/artifacts
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=MMOS
+
+--MMOS
+Content-Disposition: form-data; name="file"; filename="article.md"
+Content-Type: text/markdown
+
+< ./article.md
+
+--MMOS
+Content-Disposition: form-data; name="type"
+
+document
+
+--MMOS
+Content-Disposition: form-data; name="workspaceId"
+
+workspace-demo
+
+--MMOS--
+
+###
+
+### ============================================
+### Upload Artifact for Execution
+### ============================================
+
+POST {{baseUrl}}/executions/{{executionId}}/artifacts
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=MMOS
+
+--MMOS
+Content-Disposition: form-data; name="file"; filename="thumbnail.png"
+Content-Type: image/png
+
+< ./thumbnail.png
+
+--MMOS
+Content-Disposition: form-data; name="type"
+
+image
+
+--MMOS--
+
+###
+
+### ============================================
+### Get Artifact Metadata
+### ============================================
+
+GET {{baseUrl}}/artifacts/{{artifactId}}
+Authorization: Bearer {{token}}
+
+###
+
+### ============================================
+### Download Artifact
+### ============================================
+
+GET {{baseUrl}}/artifacts/{{artifactId}}/download
+Authorization: Bearer {{token}}
+
+###
+
+### ============================================
+### List Execution Artifacts
+### ============================================
+
+GET {{baseUrl}}/executions/{{executionId}}/artifacts
+Authorization: Bearer {{token}}
+
+###
+
+### ============================================
+### Delete Artifact
+### ============================================
+
+DELETE {{baseUrl}}/artifacts/{{artifactId}}
+Authorization: Bearer {{token}}

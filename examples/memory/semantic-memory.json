@@ -1,0 +1,85 @@
+{
+  "$schema": "../../schemas/memory.schema.json",
+
+  "id": "memory.semantic.default",
+
+  "name": "Semantic Memory",
+
+  "description": "Long-term structured knowledge shared across workflows and agents.",
+
+  "version": "1.0.0",
+
+  "type": "semantic",
+
+  "enabled": true,
+
+  "scope": "workspace",
+
+  "storage": {
+    "provider": "postgres",
+    "collection": "semantic_memory"
+  },
+
+  "schema": {
+    "format": "json",
+
+    "fields": [
+      {
+        "name": "subject",
+        "type": "string"
+      },
+      {
+        "name": "predicate",
+        "type": "string"
+      },
+      {
+        "name": "object",
+        "type": "string"
+      },
+      {
+        "name": "confidence",
+        "type": "number"
+      },
+      {
+        "name": "source",
+        "type": "string"
+      },
+      {
+        "name": "createdAt",
+        "type": "datetime"
+      },
+      {
+        "name": "updatedAt",
+        "type": "datetime"
+      }
+    ]
+  },
+
+  "indexing": {
+    "enabled": true,
+
+    "fields": [
+      "subject",
+      "predicate"
+    ]
+  },
+
+  "retention": {
+    "policy": "permanent"
+  },
+
+  "access": {
+    "read": [
+      "agent",
+      "workflow"
+    ],
+    "write": [
+      "agent",
+      "workflow"
+    ]
+  },
+
+  "metadata": {
+    "environment": "production"
+  }
+}

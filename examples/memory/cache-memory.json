@@ -1,0 +1,82 @@
+{
+  "$schema": "../../schemas/memory.schema.json",
+
+  "id": "memory.cache.default",
+
+  "name": "Cache Memory",
+
+  "description": "Temporary in-memory cache for runtime execution, provider responses, and frequently accessed data.",
+
+  "version": "1.0.0",
+
+  "type": "cache",
+
+  "enabled": true,
+
+  "scope": "runtime",
+
+  "storage": {
+    "provider": "redis",
+    "collection": "runtime_cache"
+  },
+
+  "schema": {
+    "format": "key-value",
+
+    "fields": [
+      {
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "name": "value",
+        "type": "object"
+      },
+      {
+        "name": "ttl",
+        "type": "integer"
+      },
+      {
+        "name": "createdAt",
+        "type": "datetime"
+      },
+      {
+        "name": "expiresAt",
+        "type": "datetime"
+      }
+    ]
+  },
+
+  "cache": {
+    "strategy": "lru",
+
+    "defaultTTL": 3600,
+
+    "maxEntries": 100000,
+
+    "compression": true
+  },
+
+  "eviction": {
+    "enabled": true,
+
+    "policy": "least-recently-used"
+  },
+
+  "access": {
+    "read": [
+      "runtime",
+      "workflow",
+      "agent",
+      "provider"
+    ],
+    "write": [
+      "runtime",
+      "provider"
+    ]
+  },
+
+  "metadata": {
+    "environment": "production"
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "$schema": "../../schemas/workflow.schema.json",
+
+  "id": "workflow.long-running.enterprise-document-approval",
+
+  "name": "Enterprise Document Approval",
+
+  "description": "Long-running workflow involving multiple approval stages, external events, and persistent execution state.",
+
+  "version": "1.0.0",
+
+  "type": "long-running",
+
+  "input": {
+    "documentId": "DOC-2026-000123",
+    "department": "Finance",
+    "requestedBy": "user-001"
+  },
+
+  "trigger": {
+    "type": "manual"
+  },
+
+  "tasks": [
+    {
+      "id": "validate-document",
+      "name": "Validate Document",
+      "agent": "validator-agent",
+      "capability": "document-validation",
+      "dependsOn": []
+    },
+    {
+      "id": "manager-approval",
+      "name": "Manager Approval",
+      "type": "human-task",
+      "dependsOn": [
+        "validate-document"
+      ]
+    },
+    {
+      "id": "legal-review",
+      "name": "Legal Review",
+      "type": "human-task",
+      "dependsOn": [
+        "manager-approval"
+      ]
+    },
+    {
+      "id": "finance-approval",
+      "name": "Finance Approval",
+      "type": "human-task",
+      "dependsOn": [
+        "legal-review"
+      ]
+    },
+    {
+      "id": "archive",
+      "name": "Archive Document",
+      "agent": "document-agent",
+      "capability": "document-archive",
+      "dependsOn": [
+        "finance-approval"
+      ]
+    },
+    {
+      "id": "notify",
+      "name": "Notify Stakeholders",
+      "agent": "notification-agent",
+      "capability": "notification",
+      "dependsOn": [
+        "archive"
+      ]
+    }
+  ],
+
+  "execution": {
+    "mode": "long-running",
+
+    "persistentState": true,
+
+    "checkpoint": {
+      "enabled": true,
+      "strategy": "after-task"
+    },
+
+    "resumePolicy": "automatic",
+
+    "retry": {
+      "enabled": true,
+      "maxAttempts": 5
+    },
+
+    "timeout": "30d"
+  },
+
+  "waiting": {
+    "supported": true,
+
+    "externalEvents": [
+      "approval.manager.completed",
+      "approval.legal.completed",
+      "approval.finance.completed"
+    ]
+  },
+
+  "runtime": {
+    "provider": "openai",
+    "model": "gpt-4.1"
+  },
+
+  "memory": {
+    "enabled": true,
+    "scope": "execution",
+
+    "persistent": true
+  },
+
+  "events": {
+    "consume": [
+      "approval.manager.completed",
+      "approval.legal.completed",
+      "approval.finance.completed"
+    ],
+
+    "produce": [
+      "workflow.started",
+      "workflow.paused",
+      "workflow.resumed",
+      "checkpoint.created",
+      "workflow.completed",
+      "workflow.failed"
+    ]
+  },
+
+  "artifacts": [
+    {
+      "id": "validated-document",
+      "producedBy": "validate-document",
+      "type": "document"
+    },
+    {
+      "id": "archived-document",
+      "producedBy": "archive",
+      "type": "document"
+    },
+    {
+      "id": "notification-log",
+      "producedBy": "notify",
+      "type": "log"
+    }
+  ],
+
+  "output": {
+    "primary": "archived-document"
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "$schema": "../../schemas/workflow.schema.json",
+
+  "id": "workflow.loop.content-improvement",
+  "name": "Loop Content Improvement Workflow",
+  "description": "Continuously improve generated content until quality requirements are satisfied.",
+
+  "version": "1.0.0",
+
+  "type": "loop",
+
+  "input": {
+    "topic": "Artificial Intelligence for Small Business",
+    "language": "en",
+    "targetScore": 90
+  },
+
+  "tasks": [
+    {
+      "id": "draft",
+      "name": "Generate Draft",
+      "agent": "writer-agent",
+      "capability": "text-generation",
+      "dependsOn": []
+    },
+    {
+      "id": "review",
+      "name": "Review Draft",
+      "agent": "review-agent",
+      "capability": "quality-review",
+      "dependsOn": [
+        "draft"
+      ]
+    },
+    {
+      "id": "improve",
+      "name": "Improve Draft",
+      "agent": "writer-agent",
+      "capability": "text-generation",
+      "dependsOn": [
+        "review"
+      ]
+    },
+    {
+      "id": "publish",
+      "name": "Publish Content",
+      "agent": "publisher-agent",
+      "capability": "cms-publish",
+      "dependsOn": [
+        "review",
+        "improve"
+      ]
+    }
+  ],
+
+  "loop": {
+    "id": "quality-improvement",
+
+    "startTask": "review",
+
+    "repeat": [
+      "improve",
+      "review"
+    ],
+
+    "condition": {
+      "expression": "review.score < input.targetScore"
+    },
+
+    "maxIterations": 5,
+
+    "onComplete": [
+      "publish"
+    ]
+  },
+
+  "execution": {
+    "mode": "loop",
+    "retry": {
+      "enabled": true,
+      "maxAttempts": 3
+    },
+    "timeout": "90m"
+  },
+
+  "runtime": {
+    "provider": "openai",
+    "model": "gpt-4.1",
+    "temperature": 0.7
+  },
+
+  "memory": {
+    "enabled": true,
+    "scope": "workflow"
+  },
+
+  "artifacts": [
+    {
+      "id": "draft",
+      "producedBy": "draft",
+      "type": "document"
+    },
+    {
+      "id": "review-report",
+      "producedBy": "review",
+      "type": "review"
+    },
+    {
+      "id": "improved-draft",
+      "producedBy": "improve",
+      "type": "document"
+    },
+    {
+      "id": "published-url",
+      "producedBy": "publish",
+      "type": "url"
+    }
+  ],
+
+  "output": {
+    "primary": "published-url"
+  }
+}

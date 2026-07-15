@@ -1,0 +1,89 @@
+{
+  "$schema": "../../schemas/memory.schema.json",
+
+  "id": "memory.vector.default",
+
+  "name": "Vector Memory",
+
+  "description": "Stores vector embeddings for semantic search and retrieval.",
+
+  "version": "1.0.0",
+
+  "type": "vector",
+
+  "enabled": true,
+
+  "scope": "workspace",
+
+  "storage": {
+    "provider": "qdrant",
+    "collection": "vector_memory"
+  },
+
+  "embedding": {
+    "provider": "openai",
+    "model": "text-embedding-3-large",
+    "dimensions": 3072
+  },
+
+  "schema": {
+    "format": "vector",
+
+    "fields": [
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "content",
+        "type": "string"
+      },
+      {
+        "name": "embedding",
+        "type": "vector"
+      },
+      {
+        "name": "metadata",
+        "type": "object"
+      },
+      {
+        "name": "createdAt",
+        "type": "datetime"
+      }
+    ]
+  },
+
+  "indexing": {
+    "enabled": true,
+
+    "algorithm": "hnsw",
+
+    "distance": "cosine"
+  },
+
+  "retrieval": {
+    "topK": 10,
+
+    "minScore": 0.75
+  },
+
+  "retention": {
+    "policy": "permanent"
+  },
+
+  "access": {
+    "read": [
+      "agent",
+      "workflow",
+      "retriever"
+    ],
+    "write": [
+      "ingestion",
+      "agent"
+    ]
+  },
+
+  "metadata": {
+    "environment": "production"
+  }
+}

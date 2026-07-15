@@ -1,0 +1,169 @@
+{
+  "$schema": "../../schemas/workflow.schema.json",
+
+  "id": "workflow.pipeline.multimedia-content",
+
+  "name": "Multimedia Content Pipeline",
+
+  "description": "Process content through multiple transformation stages from raw input into publishable multimedia assets.",
+
+  "version": "1.0.0",
+
+  "type": "pipeline",
+
+  "input": {
+    "topic": "Artificial Intelligence for Small Business",
+    "language": "en"
+  },
+
+  "stages": [
+    {
+      "id": "ingestion",
+      "name": "Content Ingestion"
+    },
+    {
+      "id": "processing",
+      "name": "Content Processing"
+    },
+    {
+      "id": "enrichment",
+      "name": "Content Enrichment"
+    },
+    {
+      "id": "validation",
+      "name": "Quality Validation"
+    },
+    {
+      "id": "publication",
+      "name": "Publication"
+    }
+  ],
+
+  "tasks": [
+    {
+      "id": "collect",
+      "stage": "ingestion",
+      "agent": "research-agent",
+      "capability": "web-search",
+      "dependsOn": []
+    },
+    {
+      "id": "write",
+      "stage": "processing",
+      "agent": "writer-agent",
+      "capability": "text-generation",
+      "dependsOn": [
+        "collect"
+      ]
+    },
+    {
+      "id": "thumbnail",
+      "stage": "enrichment",
+      "agent": "image-agent",
+      "capability": "image-generation",
+      "dependsOn": [
+        "write"
+      ]
+    },
+    {
+      "id": "seo",
+      "stage": "enrichment",
+      "agent": "seo-agent",
+      "capability": "seo-analysis",
+      "dependsOn": [
+        "write"
+      ]
+    },
+    {
+      "id": "review",
+      "stage": "validation",
+      "agent": "review-agent",
+      "capability": "quality-review",
+      "dependsOn": [
+        "thumbnail",
+        "seo"
+      ]
+    },
+    {
+      "id": "publish",
+      "stage": "publication",
+      "agent": "publisher-agent",
+      "capability": "cms-publish",
+      "dependsOn": [
+        "review"
+      ]
+    }
+  ],
+
+  "pipeline": {
+    "artifactFlow": true,
+    "stageExecution": "sequential",
+    "taskExecution": "parallel",
+    "buffering": false
+  },
+
+  "execution": {
+    "mode": "pipeline",
+    "retry": {
+      "enabled": true,
+      "maxAttempts": 3
+    },
+    "timeout": "120m"
+  },
+
+  "runtime": {
+    "provider": "openai",
+    "model": "gpt-4.1"
+  },
+
+  "memory": {
+    "enabled": true,
+    "scope": "workflow"
+  },
+
+  "events": {
+    "produce": [
+      "stage.started",
+      "stage.completed",
+      "artifact.created",
+      "pipeline.completed"
+    ]
+  },
+
+  "artifacts": [
+    {
+      "id": "raw-content",
+      "producedBy": "collect",
+      "type": "dataset"
+    },
+    {
+      "id": "article",
+      "producedBy": "write",
+      "type": "document"
+    },
+    {
+      "id": "thumbnail-image",
+      "producedBy": "thumbnail",
+      "type": "image"
+    },
+    {
+      "id": "seo-metadata",
+      "producedBy": "seo",
+      "type": "metadata"
+    },
+    {
+      "id": "quality-report",
+      "producedBy": "review",
+      "type": "review"
+    },
+    {
+      "id": "publication-url",
+      "producedBy": "publish",
+      "type": "url"
+    }
+  ],
+
+  "output": {
+    "primary": "publication-url"
+  }
+}

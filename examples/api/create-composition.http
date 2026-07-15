@@ -1,0 +1,43 @@
+### ============================================
+### MMOS API Example
+### Create Composition
+### ============================================
+
+@baseUrl = http://localhost:8080/api/v1
+@token = YOUR_ACCESS_TOKEN
+
+POST {{baseUrl}}/compositions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "AI Blog Production",
+  "description": "Generate and publish AI blog content",
+
+  "workflow": "workflow.pipeline.multimedia-content",
+
+  "runtime": {
+    "provider": "openai",
+    "model": "gpt-4.1"
+  },
+
+  "input": {
+    "topic": "Artificial Intelligence",
+    "language": "en"
+  }
+}
+
+###
+
+GET {{baseUrl}}/compositions
+Authorization: Bearer {{token}}
+
+###
+
+GET {{baseUrl}}/compositions/{{compositionId}}
+Authorization: Bearer {{token}}
+
+###
+
+DELETE {{baseUrl}}/compositions/{{compositionId}}
+Authorization: Bearer {{token}}

@@ -1,0 +1,134 @@
+{
+  "$schema": "../../schemas/workflow.schema.json",
+
+  "id": "workflow.event.news-publication",
+  "name": "Event Driven News Publication",
+  "description": "Automatically execute workflow when a news article is submitted.",
+
+  "version": "1.0.0",
+
+  "type": "event-driven",
+
+  "trigger": {
+    "type": "event",
+    "event": "news.article.submitted"
+  },
+
+  "input": {
+    "source": "event.payload"
+  },
+
+  "tasks": [
+    {
+      "id": "validate",
+      "name": "Validate Submission",
+      "agent": "validator-agent",
+      "capability": "content-validation",
+      "dependsOn": []
+    },
+    {
+      "id": "categorize",
+      "name": "Categorize Article",
+      "agent": "classification-agent",
+      "capability": "classification",
+      "dependsOn": [
+        "validate"
+      ]
+    },
+    {
+      "id": "seo",
+      "name": "Generate SEO Metadata",
+      "agent": "seo-agent",
+      "capability": "seo-analysis",
+      "dependsOn": [
+        "categorize"
+      ]
+    },
+    {
+      "id": "thumbnail",
+      "name": "Generate Thumbnail",
+      "agent": "image-agent",
+      "capability": "image-generation",
+      "dependsOn": [
+        "categorize"
+      ]
+    },
+    {
+      "id": "publish",
+      "name": "Publish Article",
+      "agent": "publisher-agent",
+      "capability": "cms-publish",
+      "dependsOn": [
+        "seo",
+        "thumbnail"
+      ]
+    }
+  ],
+
+  "events": {
+    "consume": [
+      "news.article.submitted"
+    ],
+    "produce": [
+      "workflow.started",
+      "article.validated",
+      "article.categorized",
+      "seo.generated",
+      "thumbnail.generated",
+      "article.published",
+      "workflow.completed",
+      "workflow.failed"
+    ]
+  },
+
+  "execution": {
+    "mode": "event-driven",
+    "retry": {
+      "enabled": true,
+      "maxAttempts": 5
+    },
+    "timeout": "60m"
+  },
+
+  "runtime": {
+    "provider": "openai",
+    "model": "gpt-4.1"
+  },
+
+  "memory": {
+    "enabled": true,
+    "scope": "workflow"
+  },
+
+  "artifacts": [
+    {
+      "id": "validated-article",
+      "producedBy": "validate",
+      "type": "document"
+    },
+    {
+      "id": "category",
+      "producedBy": "categorize",
+      "type": "metadata"
+    },
+    {
+      "id": "seo-metadata",
+      "producedBy": "seo",
+      "type": "metadata"
+    },
+    {
+      "id": "thumbnail-image",
+      "producedBy": "thumbnail",
+      "type": "image"
+    },
+    {
+      "id": "published-url",
+      "producedBy": "publish",
+      "type": "url"
+    }
+  ],
+
+  "output": {
+    "primary": "published-url"
+  }
+}

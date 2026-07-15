@@ -1,0 +1,74 @@
+{
+  "$schema": "../../schemas/provider.schema.json",
+
+  "id": "provider.gemini.default",
+
+  "name": "Google Gemini",
+
+  "description": "Example configuration for Google Gemini provider.",
+
+  "version": "1.0.0",
+
+  "provider": "gemini",
+
+  "enabled": true,
+
+  "authentication": {
+    "type": "api-key",
+    "apiKey": "${GEMINI_API_KEY}"
+  },
+
+  "endpoint": {
+    "baseUrl": "https://generativelanguage.googleapis.com",
+    "timeout": 60000
+  },
+
+  "models": {
+    "default": "gemini-2.5-pro",
+
+    "chat": "gemini-2.5-pro",
+
+    "reasoning": "gemini-2.5-pro",
+
+    "fast": "gemini-2.5-flash",
+
+    "vision": "gemini-2.5-pro",
+
+    "embedding": "text-embedding-004",
+
+    "imageGeneration": "imagen-4",
+
+    "speechToText": "gemini-2.5-flash",
+
+    "textToSpeech": "gemini-2.5-flash-preview-tts"
+  },
+
+  "capabilities": {
+    "chat": true,
+    "reasoning": true,
+    "vision": true,
+    "imageGeneration": true,
+    "imageUnderstanding": true,
+    "embeddings": true,
+    "functionCalling": true,
+    "structuredOutput": true,
+    "streaming": true,
+    "audioInput": true,
+    "audioOutput": true
+  },
+
+  "limits": {
+    "maxTokens": 1048576,
+    "maxRequestsPerMinute": 5000
+  },
+
+  "retry": {
+    "enabled": true,
+    "maxAttempts": 3,
+    "backoff": "exponential"
+  },
+
+  "metadata": {
+    "environment": "production"
+  }
+}
