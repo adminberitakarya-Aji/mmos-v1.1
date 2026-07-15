@@ -1,0 +1,150 @@
+{
+  "$schema": "../../../schemas/memory.schema.json",
+
+  "id": "memory.multimodal-content",
+
+  "type": "working",
+
+  "scope": "workflow",
+
+  "name": "Multimodal Content Working Memory",
+
+  "description": "Working memory used throughout the Multimodal Content composition to maintain execution context, generated multimedia assets, publishing state, and orchestration metadata.",
+
+  "status": "active",
+
+  "metadata": {
+    "name": "Multimodal Content Working Memory",
+    "description": "Stores content planning, generated text, images, videos, audio, metadata, social posts, and execution information.",
+    "version": "1.0.0",
+    "tags": [
+      "memory",
+      "working",
+      "multimodal-content",
+      "multimedia",
+      "creative",
+      "example"
+    ]
+  },
+
+  "content": {
+    "topic": "",
+
+    "language": "en",
+
+    "targetAudience": "",
+
+    "contentPlan": {
+      "title": "",
+      "summary": "",
+      "keywords": [],
+      "channels": [
+        "blog",
+        "social-media",
+        "image",
+        "video",
+        "podcast"
+      ]
+    },
+
+    "article": {
+      "title": "",
+      "content": "",
+      "seo": {}
+    },
+
+    "socialMedia": [],
+
+    "images": [],
+
+    "video": {
+      "file": "",
+      "thumbnail": "",
+      "duration": 60,
+      "format": "mp4"
+    },
+
+    "podcast": {
+      "audioFile": "",
+      "transcript": ""
+    },
+
+    "metadata": {
+      "tags": [],
+      "description": "",
+      "author": ""
+    },
+
+    "qualityReview": {
+      "approved": false,
+      "score": 0,
+      "comments": []
+    },
+
+    "artifacts": {
+      "article": "",
+      "images": [],
+      "video": "",
+      "podcast": "",
+      "socialPosts": "",
+      "thumbnail": "",
+      "metadata": ""
+    },
+
+    "execution": {
+      "status": "running",
+      "provider": "openai",
+      "model": "gpt-5"
+    }
+  },
+
+  "embedding": [],
+
+  "provider": {
+    "id": "provider.openai",
+    "name": "openai",
+    "type": "openai"
+  },
+
+  "index": "multimodal-content-memory",
+
+  "namespace": "examples.multimodal-content",
+
+  "ttl": 604800,
+
+  "owner": {
+    "id": "workflow.multimodal-content",
+    "type": "workflow",
+    "name": "Multimodal Content Workflow"
+  },
+
+  "references": [
+    {
+      "id": "composition.multimodal-content",
+      "type": "composition"
+    },
+    {
+      "id": "workflow.multimodal-content",
+      "type": "workflow"
+    }
+  ],
+
+  "createdAt": "2026-01-01T00:00:00Z",
+
+  "updatedAt": "2026-01-01T00:00:00Z",
+
+  "expiresAt": "2026-01-08T00:00:00Z",
+
+  "tags": [
+    "working-memory",
+    "multimodal-content",
+    "multimedia",
+    "example"
+  ],
+
+  "labels": {
+    "environment": "development",
+    "retention": "7d",
+    "domain": "multimodal-content"
+  }
+}

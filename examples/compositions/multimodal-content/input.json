@@ -1,0 +1,123 @@
+{
+  "topic": "Introducing the MMOS AI Orchestration Platform",
+
+  "objective": "Produce a complete multimedia content package introducing the MMOS platform for software developers, AI engineers, technology companies, and enterprise architects.",
+
+  "language": "en",
+
+  "targetAudience": [
+    "Software Developers",
+    "AI Engineers",
+    "Technology Companies",
+    "Enterprise Architects"
+  ],
+
+  "contentTypes": [
+    "article",
+    "social-media",
+    "image",
+    "video",
+    "podcast"
+  ],
+
+  "content": {
+    "summary": "MMOS is an AI Orchestration Platform that coordinates workflows, intelligent agents, runtime execution, memory, events, capabilities, and multiple AI providers through a unified architecture.",
+
+    "keyMessages": [
+      "Build complex AI workflows visually.",
+      "Coordinate specialized AI agents.",
+      "Support multiple AI providers.",
+      "Manage memory and events automatically.",
+      "Deploy from development to enterprise production."
+    ],
+
+    "keywords": [
+      "AI Orchestration",
+      "Workflow",
+      "AI Agents",
+      "Runtime",
+      "Memory",
+      "Event Bus",
+      "MMOS"
+    ],
+
+    "callToAction": "Build your next intelligent application with MMOS."
+  },
+
+  "branding": {
+    "company": "MMOS",
+    "primaryColor": "#2563EB",
+    "secondaryColor": "#0F172A",
+    "font": "Inter",
+    "logo": "mmos-logo.png"
+  },
+
+  "outputs": {
+    "article": {
+      "format": "markdown"
+    },
+    "socialMedia": {
+      "platforms": [
+        "linkedin",
+        "x",
+        "facebook"
+      ]
+    },
+    "image": {
+      "resolution": "1792x1024",
+      "format": "png",
+      "count": 3
+    },
+    "video": {
+      "resolution": "1080x1920",
+      "duration": 60,
+      "fps": 30,
+      "format": "mp4"
+    },
+    "podcast": {
+      "duration": 600,
+      "format": "mp3",
+      "sampleRate": 48000
+    }
+  },
+
+  "requirements": {
+    "generateArticle": true,
+    "generateImages": true,
+    "generateSocialPosts": true,
+    "generateVideo": true,
+    "generatePodcast": true,
+    "generateThumbnail": true,
+    "generateMetadata": true,
+    "performQualityReview": true
+  },
+
+  "provider": "openai",
+
+  "models": {
+    "reasoning": "gpt-5",
+    "imageGeneration": "gpt-image-1",
+    "audioGeneration": "gpt-4o-mini-tts"
+  },
+
+  "metadata": {
+    "project": "MMOS",
+    "composition": "multimodal-content",
+    "workflow": "workflow.multimodal-content",
+    "environment": "development"
+  },
+
+  "output": {
+    "article": "article.md",
+    "socialMedia": "social-posts.json",
+    "images": [
+      "image-001.png",
+      "image-002.png",
+      "image-003.png"
+    ],
+    "video": "video.mp4",
+    "podcast": "podcast.mp3",
+    "thumbnail": "thumbnail.png",
+    "metadata": "metadata.json"
+  }
+}
