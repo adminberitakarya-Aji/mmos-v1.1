@@ -1,0 +1,290 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/core/task.schema.json",
+  "title": "MMOS Task",
+  "description": "Task definition for MMOS AI Orchestration Platform",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "mmos/v1",
+      "description": "MMOS API version"
+    },
+
+    "kind": {
+      "type": "string",
+      "const": "Task",
+      "description": "Resource kind"
+    },
+
+    "metadata": {
+      "$ref": "#/$defs/Metadata"
+    },
+
+    "spec": {
+      "$ref": "#/$defs/Spec"
+    },
+
+    "status": {
+      "$ref": "#/$defs/Status"
+    }
+  },
+
+  "$defs": {
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "name",
+        "version"
+      ],
+
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9._-]+$"
+        },
+
+        "displayName": {
+          "type": "string",
+          "maxLength": 255
+        },
+
+        "description": {
+          "type": "string",
+          "maxLength": 2000
+        },
+
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+
+        "author": {
+          "type": "string",
+          "maxLength": 255
+        },
+
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+
+    "Spec": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "id",
+        "type",
+        "action"
+      ],
+
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique task identifier"
+        },
+
+        "type": {
+          "type": "string",
+          "enum": [
+            "agent",
+            "capability",
+            "tool",
+            "prompt",
+            "human",
+            "event",
+            "condition",
+            "loop",
+            "parallel",
+            "subworkflow"
+          ]
+        },
+
+        "action": {
+          "type": "string",
+          "description": "Task action or capability name"
+        },
+
+        "dependsOn": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+
+        "inputs": {
+          "type": "object",
+          "additionalProperties": true
+        },
+
+        "outputs": {
+          "type": "object",
+          "additionalProperties": true
+        },
+
+        "parameters": {
+          "type": "object",
+          "additionalProperties": true
+        },
+
+        "retry": {
+          "$ref": "#/$defs/RetryPolicy"
+        },
+
+        "timeout": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Timeout in milliseconds"
+        },
+
+        "condition": {
+          "type": "string"
+        },
+
+        "onSuccess": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+
+        "onFailure": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+
+    "RetryPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "maxAttempts": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+
+        "backoff": {
+          "type": "string",
+          "enum": [
+            "fixed",
+            "linear",
+            "exponential"
+          ],
+          "default": "fixed"
+        },
+
+        "delay": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Delay in milliseconds"
+        }
+      }
+    },
+
+    "Status": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "state"
+      ],
+
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "validated",
+            "compiled",
+            "ready",
+            "deprecated"
+          ]
+        }
+      }
+    }
+  },
+
+  "examples": [
+    {
+      "apiVersion": "mmos/v1",
+      "kind": "Task",
+      "metadata": {
+        "name": "generate-article",
+        "version": "1.0.0",
+        "author": "MMOS Team"
+      },
+      "spec": {
+        "id": "generate-article",
+        "type": "agent",
+        "action": "writer.generate",
+        "dependsOn": [
+          "collect-news"
+        ],
+        "inputs": {
+          "topic": "{{workflow.topic}}"
+        },
+        "outputs": {
+          "article": "{{task.output}}"
+        },
+        "retry": {
+          "maxAttempts": 3,
+          "backoff": "exponential",
+          "delay": 1000
+        },
+        "timeout": 60000
+      },
+      "status": {
+        "state": "draft"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+PlannerError
+
+PlanningValidationError
+
+DependencyResolutionError
+
+CircularDependencyError
+
+AgentResolutionError
+
+CapabilityResolutionError
+
+WorkflowExpansionError
+
+OptimizationError
+
+ExecutionPlanError

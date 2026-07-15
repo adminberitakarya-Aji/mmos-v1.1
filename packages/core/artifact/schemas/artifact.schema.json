@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/core/artifact.schema.json",
+  "title": "MMOS Artifact",
+  "description": "Artifact definition for MMOS AI Orchestration Platform",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "mmos/v1"
+    },
+
+    "kind": {
+      "type": "string",
+      "const": "Artifact"
+    },
+
+    "metadata": {
+      "$ref": "#/$defs/Metadata"
+    },
+
+    "spec": {
+      "$ref": "#/$defs/Spec"
+    },
+
+    "status": {
+      "$ref": "#/$defs/Status"
+    }
+  },
+
+  "$defs": {
+
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "name",
+        "version"
+      ],
+
+      "properties": {
+
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9._-]+$"
+        },
+
+        "displayName": {
+          "type": "string"
+        },
+
+        "description": {
+          "type": "string"
+        },
+
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+
+        "author": {
+          "type": "string"
+        },
+
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+
+    "Spec": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "type",
+        "mimeType",
+        "uri"
+      ],
+
+      "properties": {
+
+        "type": {
+          "type": "string",
+          "enum": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "document",
+            "dataset",
+            "json",
+            "binary",
+            "archive"
+          ]
+        },
+
+        "mimeType": {
+          "type": "string"
+        },
+
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        },
+
+        "checksum": {
+          "$ref": "#/$defs/Checksum"
+        },
+
+        "encoding": {
+          "type": "string"
+        },
+
+        "language": {
+          "type": "string"
+        },
+
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "Checksum": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "algorithm",
+        "value"
+      ],
+
+      "properties": {
+
+        "algorithm": {
+          "type": "string",
+          "enum": [
+            "md5",
+            "sha1",
+            "sha256",
+            "sha512"
+          ]
+        },
+
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+
+    "Status": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "state"
+      ],
+
+      "properties": {
+
+        "state": {
+          "type": "string",
+          "enum": [
+            "created",
+            "registered",
+            "available",
+            "archived",
+            "deleted"
+          ]
+        }
+      }
+    }
+  },
+
+  "examples": [
+    {
+      "apiVersion": "mmos/v1",
+      "kind": "Artifact",
+      "metadata": {
+        "name": "generated-article",
+        "version": "1.0.0",
+        "author": "writer-agent"
+      },
+      "spec": {
+        "type": "text",
+        "mimeType": "text/markdown",
+        "uri": "artifact://workspace/articles/generated.md",
+        "size": 4096,
+        "checksum": {
+          "algorithm": "sha256",
+          "value": "2cf24dba5fb0a..."
+        },
+        "language": "id"
+      },
+      "status": {
+        "state": "available"
+      }
+    }
+  ]
+}

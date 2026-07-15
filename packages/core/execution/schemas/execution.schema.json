@@ -1,0 +1,283 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/core/execution.schema.json",
+  "title": "MMOS Execution",
+  "description": "Execution runtime instance for MMOS AI Orchestration Platform",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec",
+    "status"
+  ],
+
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "mmos/v1"
+    },
+
+    "kind": {
+      "type": "string",
+      "const": "Execution"
+    },
+
+    "metadata": {
+      "$ref": "#/$defs/Metadata"
+    },
+
+    "spec": {
+      "$ref": "#/$defs/Spec"
+    },
+
+    "status": {
+      "$ref": "#/$defs/Status"
+    }
+  },
+
+  "$defs": {
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "id",
+        "workflowId",
+        "compositionId",
+        "createdAt"
+      ],
+
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+
+        "workflowId": {
+          "type": "string"
+        },
+
+        "compositionId": {
+          "type": "string"
+        },
+
+        "parentExecutionId": {
+          "type": "string"
+        },
+
+        "trigger": {
+          "type": "string",
+          "enum": [
+            "manual",
+            "api",
+            "schedule",
+            "event",
+            "webhook",
+            "system"
+          ]
+        },
+
+        "createdBy": {
+          "type": "string"
+        },
+
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+
+    "Spec": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "inputs"
+      ],
+
+      "properties": {
+        "inputs": {
+          "type": "object",
+          "additionalProperties": true
+        },
+
+        "variables": {
+          "type": "object",
+          "additionalProperties": true
+        },
+
+        "context": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "TaskRun": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "taskId",
+        "state"
+      ],
+
+      "properties": {
+        "taskId": {
+          "type": "string"
+        },
+
+        "state": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "queued",
+            "running",
+            "completed",
+            "failed",
+            "cancelled",
+            "timeout",
+            "skipped"
+          ]
+        },
+
+        "attempt": {
+          "type": "integer",
+          "minimum": 1
+        },
+
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "finishedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "duration": {
+          "type": "integer",
+          "minimum": 0
+        },
+
+        "input": {
+          "type": "object",
+          "additionalProperties": true
+        },
+
+        "output": {
+          "type": "object",
+          "additionalProperties": true
+        },
+
+        "error": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "Status": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "state",
+        "taskRuns"
+      ],
+
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "created",
+            "queued",
+            "running",
+            "paused",
+            "completed",
+            "failed",
+            "cancelled",
+            "timeout"
+          ]
+        },
+
+        "progress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "finishedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "duration": {
+          "type": "integer",
+          "minimum": 0
+        },
+
+        "taskRuns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TaskRun"
+          }
+        }
+      }
+    }
+  },
+
+  "examples": [
+    {
+      "apiVersion": "mmos/v1",
+      "kind": "Execution",
+      "metadata": {
+        "id": "exec-001",
+        "workflowId": "news-production",
+        "compositionId": "news-platform",
+        "trigger": "api",
+        "createdBy": "admin",
+        "createdAt": "2026-07-15T10:00:00Z"
+      },
+      "spec": {
+        "inputs": {
+          "topic": "Artificial Intelligence"
+        },
+        "variables": {
+          "language": "id"
+        }
+      },
+      "status": {
+        "state": "running",
+        "progress": 45,
+        "startedAt": "2026-07-15T10:00:05Z",
+        "taskRuns": [
+          {
+            "taskId": "collect-news",
+            "state": "completed",
+            "attempt": 1
+          },
+          {
+            "taskId": "generate-article",
+            "state": "running",
+            "attempt": 1
+          }
+        ]
+      }
+    }
+  ]
+}

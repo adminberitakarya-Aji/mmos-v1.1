@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/core/composition.schema.json",
+  "title": "MMOS Composition",
+  "description": "Root object for MMOS AI Orchestration Platform",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "mmos/v1",
+      "description": "MMOS API version"
+    },
+
+    "kind": {
+      "type": "string",
+      "const": "Composition",
+      "description": "Resource kind"
+    },
+
+    "metadata": {
+      "$ref": "#/$defs/Metadata"
+    },
+
+    "spec": {
+      "$ref": "#/$defs/Spec"
+    },
+
+    "status": {
+      "$ref": "#/$defs/Status"
+    }
+  },
+
+  "$defs": {
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "name",
+        "version"
+      ],
+
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9._-]+$"
+        },
+
+        "displayName": {
+          "type": "string",
+          "maxLength": 255
+        },
+
+        "description": {
+          "type": "string",
+          "maxLength": 2000
+        },
+
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+
+        "author": {
+          "type": "string",
+          "maxLength": 255
+        },
+
+        "license": {
+          "type": "string",
+          "maxLength": 100
+        },
+
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+
+    "Spec": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "workflow"
+      ],
+
+      "properties": {
+        "workflow": {
+          "type": "string",
+          "description": "Workflow identifier"
+        },
+
+        "inputs": {
+          "type": "object",
+          "additionalProperties": true
+        },
+
+        "variables": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "Status": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "state"
+      ],
+
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "published",
+            "deprecated"
+          ]
+        },
+
+        "publishedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+
+  "examples": [
+    {
+      "apiVersion": "mmos/v1",
+      "kind": "Composition",
+      "metadata": {
+        "name": "news-production",
+        "version": "1.0.0",
+        "author": "MMOS Team",
+        "tags": [
+          "news",
+          "production"
+        ]
+      },
+      "spec": {
+        "workflow": "news-workflow",
+        "inputs": {
+          "topic": "Artificial Intelligence"
+        },
+        "variables": {
+          "language": "id"
+        }
+      },
+      "status": {
+        "state": "draft"
+      }
+    }
+  ]
+}

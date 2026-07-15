@@ -1,0 +1,300 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/core/agent.schema.json",
+  "title": "MMOS Agent",
+  "description": "Agent definition for MMOS AI Orchestration Platform",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "mmos/v1"
+    },
+
+    "kind": {
+      "type": "string",
+      "const": "Agent"
+    },
+
+    "metadata": {
+      "$ref": "#/$defs/Metadata"
+    },
+
+    "spec": {
+      "$ref": "#/$defs/Spec"
+    },
+
+    "status": {
+      "$ref": "#/$defs/Status"
+    }
+  },
+
+  "$defs": {
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "name",
+        "version"
+      ],
+
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9._-]+$"
+        },
+
+        "displayName": {
+          "type": "string",
+          "maxLength": 255
+        },
+
+        "description": {
+          "type": "string",
+          "maxLength": 2000
+        },
+
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+
+        "author": {
+          "type": "string"
+        },
+
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+
+    "Spec": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "role",
+        "provider",
+        "model"
+      ],
+
+      "properties": {
+        "role": {
+          "type": "string"
+        },
+
+        "description": {
+          "type": "string"
+        },
+
+        "provider": {
+          "type": "string"
+        },
+
+        "model": {
+          "type": "string"
+        },
+
+        "systemPrompt": {
+          "type": "string"
+        },
+
+        "temperature": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2,
+          "default": 0.7
+        },
+
+        "maxTokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+
+        "planning": {
+          "$ref": "#/$defs/Planning"
+        },
+
+        "memory": {
+          "$ref": "#/$defs/Memory"
+        },
+
+        "capabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+
+        "tools": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+
+    "Planning": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": [
+            "reactive",
+            "planning",
+            "reasoning",
+            "reflection",
+            "self-improvement"
+          ]
+        },
+
+        "maxIterations": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 10
+        }
+      }
+    },
+
+    "Memory": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "working": {
+          "type": "boolean",
+          "default": true
+        },
+
+        "semantic": {
+          "type": "boolean",
+          "default": true
+        },
+
+        "episodic": {
+          "type": "boolean",
+          "default": false
+        },
+
+        "vector": {
+          "type": "boolean",
+          "default": true
+        },
+
+        "cache": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+
+    "Status": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "state"
+      ],
+
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "validated",
+            "registered",
+            "available",
+            "deprecated"
+          ]
+        }
+      }
+    }
+  },
+
+  "examples": [
+    {
+      "apiVersion": "mmos/v1",
+      "kind": "Agent",
+      "metadata": {
+        "name": "writer",
+        "version": "1.0.0",
+        "author": "MMOS Team"
+      },
+      "spec": {
+        "role": "content-writer",
+        "description": "Generate high-quality articles.",
+        "provider": "openai",
+        "model": "gpt-5",
+        "temperature": 0.7,
+        "planning": {
+          "strategy": "reasoning",
+          "maxIterations": 5
+        },
+        "memory": {
+          "working": true,
+          "semantic": true,
+          "episodic": true,
+          "vector": true,
+          "cache": true
+        },
+        "capabilities": [
+          "generate-text",
+          "search",
+          "summarize"
+        ],
+        "tools": [
+          "web-search",
+          "document-reader"
+        ]
+      },
+      "status": {
+        "state": "available"
+      }
+    }
+  ]
+}

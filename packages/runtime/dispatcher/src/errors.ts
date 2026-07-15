@@ -1,0 +1,17 @@
+DispatcherError
+
+DispatchError
+
+RoutingError
+
+WorkerNotFoundError
+
+WorkerUnavailableError
+
+LoadBalancingError
+
+WorkerSelectionError
+
+DispatchTimeoutError
+
+FailoverError

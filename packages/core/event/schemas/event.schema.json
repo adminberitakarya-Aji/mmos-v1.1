@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/core/event.schema.json",
+  "title": "MMOS Event",
+  "description": "Event definition for MMOS AI Orchestration Platform",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "mmos/v1"
+    },
+
+    "kind": {
+      "type": "string",
+      "const": "Event"
+    },
+
+    "metadata": {
+      "$ref": "#/$defs/Metadata"
+    },
+
+    "spec": {
+      "$ref": "#/$defs/Spec"
+    },
+
+    "status": {
+      "$ref": "#/$defs/Status"
+    }
+  },
+
+  "$defs": {
+
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "id",
+        "topic",
+        "version"
+      ],
+
+      "properties": {
+
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+
+        "topic": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(\\.[a-z0-9_-]+)+$"
+        },
+
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+
+        "correlationId": {
+          "type": "string"
+        },
+
+        "causationId": {
+          "type": "string"
+        },
+
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+
+    "Spec": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "source",
+        "type",
+        "payload"
+      ],
+
+      "properties": {
+
+        "source": {
+          "type": "string"
+        },
+
+        "type": {
+          "type": "string"
+        },
+
+        "payload": {},
+
+        "contentType": {
+          "type": "string",
+          "default": "application/json"
+        },
+
+        "priority": {
+          "type": "string",
+          "enum": [
+            "low",
+            "normal",
+            "high",
+            "critical"
+          ],
+          "default": "normal"
+        },
+
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+
+    "Status": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "state"
+      ],
+
+      "properties": {
+
+        "state": {
+          "type": "string",
+          "enum": [
+            "created",
+            "published",
+            "delivered",
+            "processed",
+            "failed",
+            "archived"
+          ]
+        }
+      }
+    }
+  },
+
+  "examples": [
+    {
+      "apiVersion": "mmos/v1",
+      "kind": "Event",
+      "metadata": {
+        "id": "evt-001",
+        "topic": "workflow.completed",
+        "version": "1.0.0",
+        "correlationId": "exec-001",
+        "timestamp": "2026-01-01T10:00:00Z"
+      },
+      "spec": {
+        "source": "runtime",
+        "type": "workflow.completed",
+        "payload": {
+          "workflowId": "wf-001",
+          "executionId": "exec-001",
+          "status": "completed"
+        },
+        "contentType": "application/json",
+        "priority": "normal"
+      },
+      "status": {
+        "state": "published"
+      }
+    }
+  ]
+}

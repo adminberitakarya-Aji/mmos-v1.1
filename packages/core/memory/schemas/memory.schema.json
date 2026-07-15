@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mmos.dev/core/memory.schema.json",
+  "title": "MMOS Memory",
+  "description": "Memory definition for MMOS AI Orchestration Platform",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "mmos/v1"
+    },
+
+    "kind": {
+      "type": "string",
+      "const": "Memory"
+    },
+
+    "metadata": {
+      "$ref": "#/$defs/Metadata"
+    },
+
+    "spec": {
+      "$ref": "#/$defs/Spec"
+    },
+
+    "status": {
+      "$ref": "#/$defs/Status"
+    }
+  },
+
+  "$defs": {
+
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "key",
+        "namespace",
+        "version"
+      ],
+
+      "properties": {
+
+        "key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+
+        "namespace": {
+          "type": "string",
+          "minLength": 1
+        },
+
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+
+        "description": {
+          "type": "string"
+        },
+
+        "author": {
+          "type": "string"
+        },
+
+        "tags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+
+    "Spec": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "type",
+        "value"
+      ],
+
+      "properties": {
+
+        "type": {
+          "type": "string",
+          "enum": [
+            "working",
+            "semantic",
+            "episodic",
+            "vector",
+            "cache",
+            "session"
+          ]
+        },
+
+        "value": {},
+
+        "contentType": {
+          "type": "string"
+        },
+
+        "embedding": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+
+        "ttl": {
+          "type": "integer",
+          "minimum": 0
+        },
+
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "Status": {
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "state"
+      ],
+
+      "properties": {
+
+        "state": {
+          "type": "string",
+          "enum": [
+            "created",
+            "stored",
+            "available",
+            "updated",
+            "expired",
+            "deleted"
+          ]
+        }
+      }
+    }
+  },
+
+  "examples": [
+    {
+      "apiVersion": "mmos/v1",
+      "kind": "Memory",
+      "metadata": {
+        "key": "customer-profile",
+        "namespace": "workspace",
+        "version": "1.0.0",
+        "author": "writer-agent"
+      },
+      "spec": {
+        "type": "semantic",
+        "value": {
+          "name": "John Doe",
+          "company": "Example Inc.",
+          "language": "id"
+        },
+        "contentType": "application/json",
+        "ttl": 86400
+      },
+      "status": {
+        "state": "available"
+      }
+    }
+  ]
+}
