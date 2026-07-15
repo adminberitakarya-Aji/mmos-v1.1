@@ -1,0 +1,7 @@
+SDKError
+
+ClientError
+
+ConnectionError
+
+StreamingError

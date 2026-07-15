@@ -1,0 +1,7 @@
+CLIError
+
+CommandError
+
+ParserError
+
+ConfigurationError

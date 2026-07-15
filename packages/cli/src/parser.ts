@@ -1,0 +1,7 @@
+parse()
+
+validate()
+
+normalize()
+
+usage()
