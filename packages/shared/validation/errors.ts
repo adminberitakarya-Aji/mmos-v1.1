@@ -1,0 +1,7 @@
+ValidationException
+
+SchemaValidationException
+
+RuleValidationException
+
+RuleRegistrationException

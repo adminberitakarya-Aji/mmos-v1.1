@@ -1,0 +1,7 @@
+emit()
+
+publish()
+
+attach()
+
+serialize()

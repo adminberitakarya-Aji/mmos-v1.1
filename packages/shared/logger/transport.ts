@@ -1,0 +1,7 @@
+write()
+
+flush()
+
+close()
+
+isAvailable()

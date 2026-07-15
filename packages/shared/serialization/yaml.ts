@@ -1,0 +1,7 @@
+encode()
+
+decode()
+
+parse()
+
+stringify()
