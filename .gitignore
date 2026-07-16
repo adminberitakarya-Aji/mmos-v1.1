@@ -192,7 +192,9 @@ gen/
 
 package-lock.json
 yarn.lock
-pnpm-lock.yaml
+
+# pnpm-lock.yaml intentionally NOT ignored - this is a pnpm workspace,
+# the lockfile must be committed for reproducible installs and CI
 
 # Keep Go dependency lock file
 
