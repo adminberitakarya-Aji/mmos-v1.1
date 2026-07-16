@@ -5,17 +5,11 @@
 
 import type { Reference } from "./reference";
 
-export interface Labels {
-  [key: string]: string;
-}
+export type Labels = Record<string, string>;
 
-export interface Annotations {
-  [key: string]: string;
-}
+export type Annotations = Record<string, string>;
 
-export interface Attributes {
-  [key: string]: unknown;
-}
+export type Attributes = Record<string, unknown>;
 
 export interface ObjectMetadata {
   name?: string;

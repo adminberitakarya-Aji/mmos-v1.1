@@ -32,7 +32,7 @@ export interface CapabilityInput {
   validation?: Record<string, unknown>;
 }
 
-export interface CapabilityOutput extends CapabilityInput {}
+export type CapabilityOutput = CapabilityInput;
 
 export interface Capability {
   id: string;

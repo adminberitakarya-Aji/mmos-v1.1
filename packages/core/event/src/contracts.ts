@@ -1,4 +1,4 @@
-import { Event } from "./types";
+import type { Event } from "./types";
 
 export type EventHandler =
     (event: Event) => Promise<void>;

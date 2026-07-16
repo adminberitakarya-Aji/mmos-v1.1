@@ -107,7 +107,7 @@ export class OptimizerImpl implements Optimizer {
   }
 
   async optimizeParallelism(plan: ExecutionPlan, _options?: OptimizationOptions): Promise<ExecutionPlan> {
-    let optimizedPlan = { ...plan };
+    const optimizedPlan = { ...plan };
     const graph = { ...plan.graph };
 
     // Find independent nodes that can be parallelized
@@ -329,7 +329,7 @@ export class OptimizerImpl implements Optimizer {
     const nodes = new Map(plan.graph.nodes);
     let cachedCount = 0;
 
-    for (const [_id, node] of nodes) {
+    for (const node of nodes.values()) {
       if (node.type === "agent" || node.type === "capability") {
         node.configuration.cacheHint = true;
         cachedCount++;

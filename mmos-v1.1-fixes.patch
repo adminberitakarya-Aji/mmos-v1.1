@@ -1,0 +1,588 @@
+diff --git a/eslint.config.js b/eslint.config.js
+index eda6c14..657920f 100644
+--- a/eslint.config.js
++++ b/eslint.config.js
+@@ -31,6 +31,20 @@ export default tseslint.config(
+   ...tseslint.configs.recommended,
+   ...tseslint.configs.stylistic,
+ 
++  // Type-aware linting: required for rules like no-floating-promises and
++  // await-thenable below, which need real type information (not just
++  // syntax) to work. `projectService: true` tells typescript-eslint to
++  // find and use each file's own nearest tsconfig.json automatically,
++  // instead of us listing every package's tsconfig by hand here.
++  {
++    languageOptions: {
++      parserOptions: {
++        projectService: true,
++        tsconfigRootDir: import.meta.dirname,
++      },
++    },
++  },
++
+   // Prettier config (must be last to override conflicting rules)
+   prettier,
+ 
+@@ -41,7 +55,13 @@ export default tseslint.config(
+       eqeqeq: ["error", "always"],
+ 
+       // Disallow unused variables (with some exceptions for _ prefixes)
+-      "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
++      // NOTE: the base rule is turned off in favor of the TS-aware
++      // version below - it doesn't understand TS-only constructs like
++      // interface method signatures (`interface X { get(id: string):
++      // void }`), where `id` is never "used" because it's just a type
++      // signature, not an implementation. Leaving both on false-positives
++      // on every interface/contracts.ts file in the monorepo.
++      "no-unused-vars": "off",
+ 
+       // Require JSDoc comments for public APIs
+       "require-jsdoc": "off",
+diff --git a/package.json b/package.json
+index 1090bce..f01b764 100644
+--- a/package.json
++++ b/package.json
+@@ -30,7 +30,11 @@
+     "@types/node": "^26.1.1",
+     "prettier": "^3.3.3",
+     "tsup": "^8.5.1",
+-    "typescript": "^5.9.3"
++    "typescript": "^5.9.3",
++    "eslint": "^9.0.0",
++    "@eslint/js": "^9.0.0",
++    "typescript-eslint": "^8.0.0",
++    "eslint-config-prettier": "^9.1.0"
+   },
+   "dependencies": {
+     "ajv": "^8.20.0",
+diff --git a/packages/core/agent/package.json b/packages/core/agent/package.json
+index 8e43fc0..8afd2aa 100644
+--- a/packages/core/agent/package.json
++++ b/packages/core/agent/package.json
+@@ -21,8 +21,8 @@
+   ],
+   "scripts": {
+     "clean": "rimraf dist",
+-    "build": "tsup index.ts --format esm --dts",
+-    "dev": "tsup index.ts --watch --format esm --dts",
++    "build": "tsup src/index.ts --format esm --dts",
++    "dev": "tsup src/index.ts --watch --format esm --dts",
+     "lint": "eslint \"src/**/*.ts\"",
+     "format": "prettier --write .",
+     "test": "vitest",
+diff --git a/packages/core/agent/tsconfig.json b/packages/core/agent/tsconfig.json
+index b4f08f5..6995a26 100644
+--- a/packages/core/agent/tsconfig.json
++++ b/packages/core/agent/tsconfig.json
+@@ -4,22 +4,14 @@
+   "compilerOptions": {
+     "rootDir": "src",
+     "outDir": "./dist",
+-
+-    "composite": true,
+     "declaration": true,
+     "declarationMap": true,
+-
+     "sourceMap": true,
+-
+     "noEmit": false,
+-
+     "tsBuildInfoFile": "./dist/.tsbuildinfo",
+-    "types": ["node"],
+-    "baseUrl": ".",
+-    "paths": {
+-      "@mmos/shared": ["../../../packages/shared"],
+-      "@mmos/shared/*": ["../../../packages/shared/*"]
+-    }
++    "types": [
++      "node"
++    ]
+   },
+   "include": [
+     "src/**/*.ts"
+@@ -30,6 +22,8 @@
+     "test"
+   ],
+   "references": [
+-    { "path": "../../../packages/shared" }
++    {
++      "path": "../../../packages/shared"
++    }
+   ]
+ }
+diff --git a/packages/core/artifact/tsconfig.json b/packages/core/artifact/tsconfig.json
+index b4f08f5..6995a26 100644
+--- a/packages/core/artifact/tsconfig.json
++++ b/packages/core/artifact/tsconfig.json
+@@ -4,22 +4,14 @@
+   "compilerOptions": {
+     "rootDir": "src",
+     "outDir": "./dist",
+-
+-    "composite": true,
+     "declaration": true,
+     "declarationMap": true,
+-
+     "sourceMap": true,
+-
+     "noEmit": false,
+-
+     "tsBuildInfoFile": "./dist/.tsbuildinfo",
+-    "types": ["node"],
+-    "baseUrl": ".",
+-    "paths": {
+-      "@mmos/shared": ["../../../packages/shared"],
+-      "@mmos/shared/*": ["../../../packages/shared/*"]
+-    }
++    "types": [
++      "node"
++    ]
+   },
+   "include": [
+     "src/**/*.ts"
+@@ -30,6 +22,8 @@
+     "test"
+   ],
+   "references": [
+-    { "path": "../../../packages/shared" }
++    {
++      "path": "../../../packages/shared"
++    }
+   ]
+ }
+diff --git a/packages/core/capability/src/types.ts b/packages/core/capability/src/types.ts
+index 8e857a0..606e1e9 100644
+--- a/packages/core/capability/src/types.ts
++++ b/packages/core/capability/src/types.ts
+@@ -32,7 +32,7 @@ export interface CapabilityInput {
+   validation?: Record<string, unknown>;
+ }
+ 
+-export interface CapabilityOutput extends CapabilityInput {}
++export type CapabilityOutput = CapabilityInput;
+ 
+ export interface Capability {
+   id: string;
+diff --git a/packages/core/capability/tsconfig.json b/packages/core/capability/tsconfig.json
+index b4f08f5..6995a26 100644
+--- a/packages/core/capability/tsconfig.json
++++ b/packages/core/capability/tsconfig.json
+@@ -4,22 +4,14 @@
+   "compilerOptions": {
+     "rootDir": "src",
+     "outDir": "./dist",
+-
+-    "composite": true,
+     "declaration": true,
+     "declarationMap": true,
+-
+     "sourceMap": true,
+-
+     "noEmit": false,
+-
+     "tsBuildInfoFile": "./dist/.tsbuildinfo",
+-    "types": ["node"],
+-    "baseUrl": ".",
+-    "paths": {
+-      "@mmos/shared": ["../../../packages/shared"],
+-      "@mmos/shared/*": ["../../../packages/shared/*"]
+-    }
++    "types": [
++      "node"
++    ]
+   },
+   "include": [
+     "src/**/*.ts"
+@@ -30,6 +22,8 @@
+     "test"
+   ],
+   "references": [
+-    { "path": "../../../packages/shared" }
++    {
++      "path": "../../../packages/shared"
++    }
+   ]
+ }
+diff --git a/packages/core/composition/tsconfig.json b/packages/core/composition/tsconfig.json
+index b4f08f5..6995a26 100644
+--- a/packages/core/composition/tsconfig.json
++++ b/packages/core/composition/tsconfig.json
+@@ -4,22 +4,14 @@
+   "compilerOptions": {
+     "rootDir": "src",
+     "outDir": "./dist",
+-
+-    "composite": true,
+     "declaration": true,
+     "declarationMap": true,
+-
+     "sourceMap": true,
+-
+     "noEmit": false,
+-
+     "tsBuildInfoFile": "./dist/.tsbuildinfo",
+-    "types": ["node"],
+-    "baseUrl": ".",
+-    "paths": {
+-      "@mmos/shared": ["../../../packages/shared"],
+-      "@mmos/shared/*": ["../../../packages/shared/*"]
+-    }
++    "types": [
++      "node"
++    ]
+   },
+   "include": [
+     "src/**/*.ts"
+@@ -30,6 +22,8 @@
+     "test"
+   ],
+   "references": [
+-    { "path": "../../../packages/shared" }
++    {
++      "path": "../../../packages/shared"
++    }
+   ]
+ }
+diff --git a/packages/core/event/src/contracts.ts b/packages/core/event/src/contracts.ts
+index 0d69b28..9a09fea 100644
+--- a/packages/core/event/src/contracts.ts
++++ b/packages/core/event/src/contracts.ts
+@@ -1,4 +1,4 @@
+-import { Event } from "./types";
++import type { Event } from "./types";
+ 
+ export type EventHandler =
+     (event: Event) => Promise<void>;
+diff --git a/packages/core/event/tsconfig.json b/packages/core/event/tsconfig.json
+index b4f08f5..6995a26 100644
+--- a/packages/core/event/tsconfig.json
++++ b/packages/core/event/tsconfig.json
+@@ -4,22 +4,14 @@
+   "compilerOptions": {
+     "rootDir": "src",
+     "outDir": "./dist",
+-
+-    "composite": true,
+     "declaration": true,
+     "declarationMap": true,
+-
+     "sourceMap": true,
+-
+     "noEmit": false,
+-
+     "tsBuildInfoFile": "./dist/.tsbuildinfo",
+-    "types": ["node"],
+-    "baseUrl": ".",
+-    "paths": {
+-      "@mmos/shared": ["../../../packages/shared"],
+-      "@mmos/shared/*": ["../../../packages/shared/*"]
+-    }
++    "types": [
++      "node"
++    ]
+   },
+   "include": [
+     "src/**/*.ts"
+@@ -30,6 +22,8 @@
+     "test"
+   ],
+   "references": [
+-    { "path": "../../../packages/shared" }
++    {
++      "path": "../../../packages/shared"
++    }
+   ]
+ }
+diff --git a/packages/core/execution/tsconfig.json b/packages/core/execution/tsconfig.json
+index b4f08f5..6995a26 100644
+--- a/packages/core/execution/tsconfig.json
++++ b/packages/core/execution/tsconfig.json
+@@ -4,22 +4,14 @@
+   "compilerOptions": {
+     "rootDir": "src",
+     "outDir": "./dist",
+-
+-    "composite": true,
+     "declaration": true,
+     "declarationMap": true,
+-
+     "sourceMap": true,
+-
+     "noEmit": false,
+-
+     "tsBuildInfoFile": "./dist/.tsbuildinfo",
+-    "types": ["node"],
+-    "baseUrl": ".",
+-    "paths": {
+-      "@mmos/shared": ["../../../packages/shared"],
+-      "@mmos/shared/*": ["../../../packages/shared/*"]
+-    }
++    "types": [
++      "node"
++    ]
+   },
+   "include": [
+     "src/**/*.ts"
+@@ -30,6 +22,8 @@
+     "test"
+   ],
+   "references": [
+-    { "path": "../../../packages/shared" }
++    {
++      "path": "../../../packages/shared"
++    }
+   ]
+ }
+diff --git a/packages/core/memory/tsconfig.json b/packages/core/memory/tsconfig.json
+index b4f08f5..6995a26 100644
+--- a/packages/core/memory/tsconfig.json
++++ b/packages/core/memory/tsconfig.json
+@@ -4,22 +4,14 @@
+   "compilerOptions": {
+     "rootDir": "src",
+     "outDir": "./dist",
+-
+-    "composite": true,
+     "declaration": true,
+     "declarationMap": true,
+-
+     "sourceMap": true,
+-
+     "noEmit": false,
+-
+     "tsBuildInfoFile": "./dist/.tsbuildinfo",
+-    "types": ["node"],
+-    "baseUrl": ".",
+-    "paths": {
+-      "@mmos/shared": ["../../../packages/shared"],
+-      "@mmos/shared/*": ["../../../packages/shared/*"]
+-    }
++    "types": [
++      "node"
++    ]
+   },
+   "include": [
+     "src/**/*.ts"
+@@ -30,6 +22,8 @@
+     "test"
+   ],
+   "references": [
+-    { "path": "../../../packages/shared" }
++    {
++      "path": "../../../packages/shared"
++    }
+   ]
+ }
+diff --git a/packages/core/task/src/types.ts b/packages/core/task/src/types.ts
+index 1e84516..138cf8f 100644
+--- a/packages/core/task/src/types.ts
++++ b/packages/core/task/src/types.ts
+@@ -40,7 +40,7 @@ export interface TaskInput {
+   description?: string;
+ }
+ 
+-export interface TaskOutput extends TaskInput {}
++export type TaskOutput = TaskInput;
+ 
+ export interface TaskResourceRequirements {
+   cpu?: string;
+diff --git a/packages/core/task/tsconfig.json b/packages/core/task/tsconfig.json
+index b4f08f5..6995a26 100644
+--- a/packages/core/task/tsconfig.json
++++ b/packages/core/task/tsconfig.json
+@@ -4,22 +4,14 @@
+   "compilerOptions": {
+     "rootDir": "src",
+     "outDir": "./dist",
+-
+-    "composite": true,
+     "declaration": true,
+     "declarationMap": true,
+-
+     "sourceMap": true,
+-
+     "noEmit": false,
+-
+     "tsBuildInfoFile": "./dist/.tsbuildinfo",
+-    "types": ["node"],
+-    "baseUrl": ".",
+-    "paths": {
+-      "@mmos/shared": ["../../../packages/shared"],
+-      "@mmos/shared/*": ["../../../packages/shared/*"]
+-    }
++    "types": [
++      "node"
++    ]
+   },
+   "include": [
+     "src/**/*.ts"
+@@ -30,6 +22,8 @@
+     "test"
+   ],
+   "references": [
+-    { "path": "../../../packages/shared" }
++    {
++      "path": "../../../packages/shared"
++    }
+   ]
+ }
+diff --git a/packages/core/workflow/src/types.ts b/packages/core/workflow/src/types.ts
+index bb58604..fe23158 100644
+--- a/packages/core/workflow/src/types.ts
++++ b/packages/core/workflow/src/types.ts
+@@ -23,9 +23,9 @@ export interface WorkflowVariable {
+   description?: string;
+ }
+ 
+-export interface WorkflowInput extends WorkflowVariable {}
++export type WorkflowInput = WorkflowVariable;
+ 
+-export interface WorkflowOutput extends WorkflowVariable {}
++export type WorkflowOutput = WorkflowVariable;
+ 
+ export interface WorkflowAction {
+   id: string;
+diff --git a/packages/core/workflow/tsconfig.json b/packages/core/workflow/tsconfig.json
+index b4f08f5..6995a26 100644
+--- a/packages/core/workflow/tsconfig.json
++++ b/packages/core/workflow/tsconfig.json
+@@ -4,22 +4,14 @@
+   "compilerOptions": {
+     "rootDir": "src",
+     "outDir": "./dist",
+-
+-    "composite": true,
+     "declaration": true,
+     "declarationMap": true,
+-
+     "sourceMap": true,
+-
+     "noEmit": false,
+-
+     "tsBuildInfoFile": "./dist/.tsbuildinfo",
+-    "types": ["node"],
+-    "baseUrl": ".",
+-    "paths": {
+-      "@mmos/shared": ["../../../packages/shared"],
+-      "@mmos/shared/*": ["../../../packages/shared/*"]
+-    }
++    "types": [
++      "node"
++    ]
+   },
+   "include": [
+     "src/**/*.ts"
+@@ -30,6 +22,8 @@
+     "test"
+   ],
+   "references": [
+-    { "path": "../../../packages/shared" }
++    {
++      "path": "../../../packages/shared"
++    }
+   ]
+ }
+diff --git a/packages/runtime/planner/src/builder.ts b/packages/runtime/planner/src/builder.ts
+index be9ca17..5a3d037 100644
+--- a/packages/runtime/planner/src/builder.ts
++++ b/packages/runtime/planner/src/builder.ts
+@@ -23,7 +23,7 @@ import { PlannerStage } from "./constants";
+ import { randomUUID } from "crypto";
+ 
+ export class ExecutionPlanBuilderImpl implements ExecutionPlanBuilder {
+-  private nodes: Map<string, ExecutionNode> = new Map();
++  private nodes = new Map<string, ExecutionNode>();
+   private edges: ExecutionEdge[] = [];
+   private metadata: PlanningMetadata | undefined;
+   private statistics: PlanningStatistics | undefined;
+@@ -368,7 +368,7 @@ export class ExecutionPlanBuilderImpl implements ExecutionPlanBuilder {
+   }
+ 
+   private findParallelGroups(graph: DependencyGraph): ParallelGroup[] {
+-    const groups: Map<string, ParallelGroup> = new Map();
++    const groups = new Map<string, ParallelGroup>();
+ 
+     for (const node of graph.nodes.values()) {
+       if (node.parallelGroup) {
+diff --git a/packages/runtime/planner/src/errors.ts b/packages/runtime/planner/src/errors.ts
+index cc2f08e..b84feb3 100644
+--- a/packages/runtime/planner/src/errors.ts
++++ b/packages/runtime/planner/src/errors.ts
+@@ -9,7 +9,7 @@ export class PlannerError extends Error {
+     message: string,
+     public readonly code: string,
+     public readonly nodeId?: string,
+-    public readonly recoverable: boolean = false,
++    public readonly recoverable = false,
+     public readonly details?: Record<string, unknown>,
+   ) {
+     super(message);
+diff --git a/packages/runtime/planner/src/optimizer.ts b/packages/runtime/planner/src/optimizer.ts
+index 7bbfd59..b3c2c46 100644
+--- a/packages/runtime/planner/src/optimizer.ts
++++ b/packages/runtime/planner/src/optimizer.ts
+@@ -107,7 +107,7 @@ export class OptimizerImpl implements Optimizer {
+   }
+ 
+   async optimizeParallelism(plan: ExecutionPlan, _options?: OptimizationOptions): Promise<ExecutionPlan> {
+-    let optimizedPlan = { ...plan };
++    const optimizedPlan = { ...plan };
+     const graph = { ...plan.graph };
+ 
+     // Find independent nodes that can be parallelized
+@@ -329,7 +329,7 @@ export class OptimizerImpl implements Optimizer {
+     const nodes = new Map(plan.graph.nodes);
+     let cachedCount = 0;
+ 
+-    for (const [_id, node] of nodes) {
++    for (const node of nodes.values()) {
+       if (node.type === "agent" || node.type === "capability") {
+         node.configuration.cacheHint = true;
+         cachedCount++;
+diff --git a/packages/shared/types/common.ts b/packages/shared/types/common.ts
+index 86b2f1f..ab013e6 100644
+--- a/packages/shared/types/common.ts
++++ b/packages/shared/types/common.ts
+@@ -10,15 +10,13 @@ export type Nullable<T> = T | null;
+ 
+ export type Optional<T> = T | undefined;
+ 
+-export type Dictionary<T> = { [key: string]: T };
++export type Dictionary<T> = Record<string, T>;
+ 
+ export type Primitive = string | number | boolean | bigint | symbol | null | undefined;
+ 
+ export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+ 
+-export interface JsonObject {
+-  [key: string]: JsonValue;
+-}
++export type JsonObject = Record<string, JsonValue>;
+ 
+ export type JsonArray = JsonValue[];
+ 
+diff --git a/packages/shared/types/metadata.ts b/packages/shared/types/metadata.ts
+index 89e6e34..e64035f 100644
+--- a/packages/shared/types/metadata.ts
++++ b/packages/shared/types/metadata.ts
+@@ -5,17 +5,11 @@
+ 
+ import type { Reference } from "./reference";
+ 
+-export interface Labels {
+-  [key: string]: string;
+-}
++export type Labels = Record<string, string>;
+ 
+-export interface Annotations {
+-  [key: string]: string;
+-}
++export type Annotations = Record<string, string>;
+ 
+-export interface Attributes {
+-  [key: string]: unknown;
+-}
++export type Attributes = Record<string, unknown>;
+ 
+ export interface ObjectMetadata {
+   name?: string;

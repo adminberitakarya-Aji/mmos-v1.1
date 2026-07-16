@@ -31,6 +31,20 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   ...tseslint.configs.stylistic,
 
+  // Type-aware linting: required for rules like no-floating-promises and
+  // await-thenable below, which need real type information (not just
+  // syntax) to work. `projectService: true` tells typescript-eslint to
+  // find and use each file's own nearest tsconfig.json automatically,
+  // instead of us listing every package's tsconfig by hand here.
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+
   // Prettier config (must be last to override conflicting rules)
   prettier,
 
@@ -41,7 +55,13 @@ export default tseslint.config(
       eqeqeq: ["error", "always"],
 
       // Disallow unused variables (with some exceptions for _ prefixes)
-      "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      // NOTE: the base rule is turned off in favor of the TS-aware
+      // version below - it doesn't understand TS-only constructs like
+      // interface method signatures (`interface X { get(id: string):
+      // void }`), where `id` is never "used" because it's just a type
+      // signature, not an implementation. Leaving both on false-positives
+      // on every interface/contracts.ts file in the monorepo.
+      "no-unused-vars": "off",
 
       // Require JSDoc comments for public APIs
       "require-jsdoc": "off",

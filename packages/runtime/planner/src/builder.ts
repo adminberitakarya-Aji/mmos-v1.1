@@ -23,7 +23,7 @@ import { PlannerStage } from "./constants";
 import { randomUUID } from "crypto";
 
 export class ExecutionPlanBuilderImpl implements ExecutionPlanBuilder {
-  private nodes: Map<string, ExecutionNode> = new Map();
+  private nodes = new Map<string, ExecutionNode>();
   private edges: ExecutionEdge[] = [];
   private metadata: PlanningMetadata | undefined;
   private statistics: PlanningStatistics | undefined;
@@ -368,7 +368,7 @@ export class ExecutionPlanBuilderImpl implements ExecutionPlanBuilder {
   }
 
   private findParallelGroups(graph: DependencyGraph): ParallelGroup[] {
-    const groups: Map<string, ParallelGroup> = new Map();
+    const groups = new Map<string, ParallelGroup>();
 
     for (const node of graph.nodes.values()) {
       if (node.parallelGroup) {

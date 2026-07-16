@@ -40,7 +40,7 @@ export interface TaskInput {
   description?: string;
 }
 
-export interface TaskOutput extends TaskInput {}
+export type TaskOutput = TaskInput;
 
 export interface TaskResourceRequirements {
   cpu?: string;

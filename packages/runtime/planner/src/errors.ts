@@ -9,7 +9,7 @@ export class PlannerError extends Error {
     message: string,
     public readonly code: string,
     public readonly nodeId?: string,
-    public readonly recoverable: boolean = false,
+    public readonly recoverable = false,
     public readonly details?: Record<string, unknown>,
   ) {
     super(message);

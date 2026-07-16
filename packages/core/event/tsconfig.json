@@ -4,22 +4,14 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "./dist",
-
-    "composite": true,
     "declaration": true,
     "declarationMap": true,
-
     "sourceMap": true,
-
     "noEmit": false,
-
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
-    "types": ["node"],
-    "baseUrl": ".",
-    "paths": {
-      "@mmos/shared": ["../../../packages/shared"],
-      "@mmos/shared/*": ["../../../packages/shared/*"]
-    }
+    "types": [
+      "node"
+    ]
   },
   "include": [
     "src/**/*.ts"
@@ -30,6 +22,8 @@
     "test"
   ],
   "references": [
-    { "path": "../../../packages/shared" }
+    {
+      "path": "../../../packages/shared"
+    }
   ]
 }

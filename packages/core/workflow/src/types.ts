@@ -23,9 +23,9 @@ export interface WorkflowVariable {
   description?: string;
 }
 
-export interface WorkflowInput extends WorkflowVariable {}
+export type WorkflowInput = WorkflowVariable;
 
-export interface WorkflowOutput extends WorkflowVariable {}
+export type WorkflowOutput = WorkflowVariable;
 
 export interface WorkflowAction {
   id: string;
