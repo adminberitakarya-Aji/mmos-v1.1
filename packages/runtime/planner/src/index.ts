@@ -1,9 +1,27 @@
-export * from "./types";
-export * from "./contracts";
+// Re-export constants
 export * from "./constants";
 
-export * from "./planner";
-export * from "./optimizer";
-export * from "./resolver";
+// Re-export all types and contracts (contracts re-exports types)
+export * from "./contracts";
 
-export * from "./errors";
+// Re-export implementations
+export { PlannerImpl, createPlanner } from "./planner";
+export { OptimizerImpl } from "./optimizer";
+export { ResolverImpl } from "./resolver";
+export { PlanValidatorImpl } from "./validator";
+export { ExecutionPlanBuilderImpl } from "./builder";
+
+// Re-export errors (excluding ValidationViolation which conflicts)
+export {
+  PlannerError,
+  PlanningValidationError,
+  DependencyResolutionError,
+  CircularDependencyError,
+  AgentResolutionError,
+  CapabilityResolutionError,
+  WorkflowExpansionError,
+  OptimizationError,
+  ExecutionPlanError,
+} from "./errors";
+
+export type { ValidationViolation, ResolutionConflict } from "./errors";
