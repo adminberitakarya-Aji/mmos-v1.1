@@ -1,65 +1,53 @@
-import {
-    Agent,
-} from "./types";
+/**
+ * MMOS Agent — in-memory registry implementation.
+ *
+ * Production-grade persistence belongs in the SDK / services layer; this
+ * in-memory implementation is the canonical reference for tests and
+ * development environments.
+ */
 
-import {
-    AgentRegistry
-} from "./contracts";
+import type { Agent } from "./types";
+import type { AgentRegistry } from "./contracts";
+import { AgentNotFoundError } from "./errors";
 
-import {
-    AgentAlreadyExistsError,
-    AgentNotFoundError
-} from "./errors";
+export class InMemoryAgentRegistry implements AgentRegistry {
+  private readonly agents = new Map<string, Agent>();
 
-export class InMemoryAgentRegistry
-implements AgentRegistry {
+  async register(agent: Agent): Promise<void> {
+    this.agents.set(agent.id, agent);
+  }
 
-    private readonly agents =
-        new Map<string, Agent>();
+  async unregister(id: string): Promise<void> {
+    this.agents.delete(id);
+  }
 
-    async register(
-        agent: Agent
-    ): Promise<void> {
+  async get(id: string): Promise<Agent | null> {
+    return this.agents.get(id) ?? null;
+  }
 
-        if (this.agents.has(agent.metadata.name)) {
-
-            throw new AgentAlreadyExistsError(
-                agent.metadata.name
-            );
-
-        }
-
-        this.agents.set(
-            agent.metadata.name,
-            agent
-        );
-
+  async findByName(name: string): Promise<Agent | null> {
+    for (const agent of this.agents.values()) {
+      if (agent.name === name) return agent;
     }
+    return null;
+  }
 
-    async unregister(
-        name: string
-    ): Promise<void> {
-
-        if (!this.agents.delete(name)) {
-
-            throw new AgentNotFoundError(name);
-
-        }
-
+  async list(filter?: { providerId?: string; tag?: string }): Promise<Agent[]> {
+    let result = Array.from(this.agents.values());
+    if (filter?.providerId) {
+      const wanted = filter.providerId;
+      result = result.filter((a) => a.provider?.id === wanted);
     }
-
-    async get(
-        name: string
-    ): Promise<Agent | undefined> {
-
-        return this.agents.get(name);
-
+    if (filter?.tag) {
+      const wanted = filter.tag;
+      result = result.filter((a) => a.tags?.includes(wanted) ?? false);
     }
+    return result;
+  }
 
-    async list(): Promise<Agent[]> {
-
-        return [...this.agents.values()];
-
-    }
-
+  async requireById(id: string): Promise<Agent> {
+    const agent = await this.get(id);
+    if (!agent) throw new AgentNotFoundError(id);
+    return agent;
+  }
 }

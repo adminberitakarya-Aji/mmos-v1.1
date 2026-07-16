@@ -1,0 +1,44 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@mmos/shared": ["packages/shared"],
+      "@mmos/shared/*": ["packages/shared/*"],
+      "@mmos/core-composition": ["packages/core/composition/src"],
+      "@mmos/core-composition/*": ["packages/core/composition/src/*"],
+      "@mmos/core-workflow": ["packages/core/workflow/src"],
+      "@mmos/core-workflow/*": ["packages/core/workflow/src/*"],
+      "@mmos/core-task": ["packages/core/task/src"],
+      "@mmos/core-task/*": ["packages/core/task/src/*"],
+      "@mmos/core-agent": ["packages/core/agent/src"],
+      "@mmos/core-agent/*": ["packages/core/agent/src/*"],
+      "@mmos/core-capability": ["packages/core/capability/src"],
+      "@mmos/core-capability/*": ["packages/core/capability/src/*"],
+      "@mmos/core-artifact": ["packages/core/artifact/src"],
+      "@mmos/core-artifact/*": ["packages/core/artifact/src/*"],
+      "@mmos/core-memory": ["packages/core/memory/src"],
+      "@mmos/core-memory/*": ["packages/core/memory/src/*"],
+      "@mmos/core-event": ["packages/core/event/src"],
+      "@mmos/core-event/*": ["packages/core/event/src/*"],
+      "@mmos/core-execution": ["packages/core/execution/src"],
+      "@mmos/core-execution/*": ["packages/core/execution/src/*"]
+    },
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "typeRoots": ["C:/nvm4w/nodejs/node_modules/@types", "C:/nvm4w/nodejs/node_modules"]
+  },
+  "include": [
+    "packages/shared/**/*.ts",
+    "packages/core/composition/src/**/*.ts",
+    "packages/core/workflow/src/**/*.ts",
+    "packages/core/task/src/**/*.ts",
+    "packages/core/agent/src/**/*.ts",
+    "packages/core/capability/src/**/*.ts",
+    "packages/core/artifact/src/**/*.ts",
+    "packages/core/memory/src/**/*.ts",
+    "packages/core/event/src/**/*.ts",
+    "packages/core/execution/src/**/*.ts"
+  ]
+}

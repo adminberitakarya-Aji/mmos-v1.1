@@ -1,16 +1,10 @@
-import {
-    Event
-} from "./types";
+/**
+ * MMOS Event — base publisher.
+ */
 
-import {
-    EventPublisher
-} from "./contracts";
+import type { Event } from "./types";
+import type { EventPublisher } from "./contracts";
 
-export abstract class BaseEventPublisher
-implements EventPublisher {
-
-    abstract publish(
-        event: Event
-    ): Promise<void>;
-
+export abstract class BaseEventPublisher implements EventPublisher {
+  abstract publish(event: Event): Promise<void>;
 }

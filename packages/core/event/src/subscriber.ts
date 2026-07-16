@@ -1,19 +1,10 @@
-import {
-    EventHandler,
-    EventSubscriber
-} from "./contracts";
+/**
+ * MMOS Event — base subscriber.
+ */
 
-export abstract class BaseEventSubscriber
-implements EventSubscriber {
+import type { EventHandler, EventSubscriber } from "./contracts";
 
-    abstract subscribe(
-        topic: string,
-        handler: EventHandler
-    ): Promise<void>;
-
-    abstract unsubscribe(
-        topic: string,
-        handler: EventHandler
-    ): Promise<void>;
-
+export abstract class BaseEventSubscriber implements EventSubscriber {
+  abstract subscribe(topic: string, handler: EventHandler): Promise<void>;
+  abstract unsubscribe(topic: string, handler: EventHandler): Promise<void>;
 }

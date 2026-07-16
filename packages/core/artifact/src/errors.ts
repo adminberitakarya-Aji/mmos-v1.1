@@ -1,37 +1,46 @@
-export class ArtifactError
-extends Error {}
+/**
+ * MMOS Artifact — error types.
+ */
 
-export class ArtifactNotFoundError
-extends ArtifactError {
+import { BaseError } from "@mmos/shared/errors";
 
-    constructor(uri: string) {
+const CATEGORY = "artifact" as const;
 
-        super(
-            `Artifact '${uri}' not found.`
-        );
-
-    }
-
+export class ArtifactError extends BaseError {
+  constructor(
+    message: string,
+    options?: { code?: string; cause?: unknown; metadata?: Record<string, unknown> | undefined },
+  ) {
+    super(message, {
+      code: options?.code ?? "ARTIFACT_ERROR",
+      category: CATEGORY,
+      cause: options?.cause,
+      metadata: options?.metadata,
+    });
+    this.name = "ArtifactError";
+  }
 }
 
-export class ArtifactAlreadyExistsError
-extends ArtifactError {
-
-    constructor(uri: string) {
-
-        super(
-            `Artifact '${uri}' already exists.`
-        );
-
-    }
-
+export class ArtifactNotFoundError extends ArtifactError {
+  constructor(id: string) {
+    super(`Artifact not found: ${id}`, {
+      code: "ARTIFACT_NOT_FOUND",
+      metadata: { id },
+    });
+    this.name = "ArtifactNotFoundError";
+  }
 }
 
-export class InvalidArtifactTypeError
-extends ArtifactError {}
-
-export class InvalidArtifactUriError
-extends ArtifactError {}
-
-export class ArtifactStorageError
-extends ArtifactError {}
+export class ArtifactStorageError extends ArtifactError {
+  constructor(
+    message: string,
+    options?: { cause?: unknown; metadata?: Record<string, unknown> | undefined },
+  ) {
+    super(message, {
+      code: "ARTIFACT_STORAGE_ERROR",
+      cause: options?.cause,
+      metadata: options?.metadata,
+    });
+    this.name = "ArtifactStorageError";
+  }
+}

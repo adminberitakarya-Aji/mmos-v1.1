@@ -1,43 +1,56 @@
-export class MemoryError
-extends Error {}
+/**
+ * MMOS Memory — error types.
+ */
 
-export class MemoryNotFoundError
-extends MemoryError {
+import { BaseError } from "@mmos/shared/errors";
 
-    constructor(
-        namespace: string,
-        key: string
-    ) {
+const CATEGORY = "memory" as const;
 
-        super(
-            `Memory '${namespace}/${key}' not found.`
-        );
-
-    }
-
+export class MemoryError extends BaseError {
+  constructor(
+    message: string,
+    options?: { code?: string; cause?: unknown; metadata?: Record<string, unknown> | undefined },
+  ) {
+    super(message, {
+      code: options?.code ?? "MEMORY_ERROR",
+      category: CATEGORY,
+      cause: options?.cause,
+      metadata: options?.metadata,
+    });
+    this.name = "MemoryError";
+  }
 }
 
-export class MemoryAlreadyExistsError
-extends MemoryError {
-
-    constructor(
-        namespace: string,
-        key: string
-    ) {
-
-        super(
-            `Memory '${namespace}/${key}' already exists.`
-        );
-
-    }
-
+export class MemoryNotFoundError extends MemoryError {
+  constructor(id: string) {
+    super(`Memory not found: ${id}`, {
+      code: "MEMORY_NOT_FOUND",
+      metadata: { id },
+    });
+    this.name = "MemoryNotFoundError";
+  }
 }
 
-export class InvalidMemoryTypeError
-extends MemoryError {}
+export class MemoryEntryNotFoundError extends MemoryError {
+  constructor(memoryId: string, key: string) {
+    super(`Memory entry not found: ${memoryId}/${key}`, {
+      code: "MEMORY_ENTRY_NOT_FOUND",
+      metadata: { memoryId, key },
+    });
+    this.name = "MemoryEntryNotFoundError";
+  }
+}
 
-export class MemoryExpiredError
-extends MemoryError {}
-
-export class MemoryProviderError
-extends MemoryError {}
+export class MemoryBackendError extends MemoryError {
+  constructor(
+    message: string,
+    options?: { cause?: unknown; metadata?: Record<string, unknown> | undefined },
+  ) {
+    super(message, {
+      code: "MEMORY_BACKEND_ERROR",
+      cause: options?.cause,
+      metadata: options?.metadata,
+    });
+    this.name = "MemoryBackendError";
+  }
+}

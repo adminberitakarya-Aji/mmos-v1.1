@@ -1,66 +1,49 @@
-import {
-    Capability
-} from "./types";
+/**
+ * MMOS Capability — in-memory registry.
+ */
 
-import {
-    CapabilityRegistry
-} from "./contracts";
+import type { Capability } from "./types";
+import type { CapabilityRegistry } from "./contracts";
+import { CapabilityNotFoundError } from "./errors";
 
-import {
-    CapabilityAlreadyExistsError,
-    CapabilityNotFoundError
-} from "./errors";
+export class InMemoryCapabilityRegistry implements CapabilityRegistry {
+  private readonly capabilities = new Map<string, Capability>();
 
-export class InMemoryCapabilityRegistry
-implements CapabilityRegistry {
+  async register(capability: Capability): Promise<void> {
+    this.capabilities.set(capability.id, capability);
+  }
 
-    private readonly capabilities =
-        new Map<string, Capability>();
+  async unregister(id: string): Promise<void> {
+    this.capabilities.delete(id);
+  }
 
-    async register(
-        capability: Capability
-    ): Promise<void> {
+  async get(id: string): Promise<Capability | null> {
+    return this.capabilities.get(id) ?? null;
+  }
 
-        const name =
-            capability.metadata.name;
-
-        if (this.capabilities.has(name)) {
-
-            throw new CapabilityAlreadyExistsError(name);
-
-        }
-
-        this.capabilities.set(
-            name,
-            capability
-        );
-
+  async findByName(name: string): Promise<Capability | null> {
+    for (const capability of this.capabilities.values()) {
+      if (capability.name === name) return capability;
     }
+    return null;
+  }
 
-    async unregister(
-        name: string
-    ): Promise<void> {
-
-        if (!this.capabilities.delete(name)) {
-
-            throw new CapabilityNotFoundError(name);
-
-        }
-
+  async list(filter?: { category?: Capability["category"]; tag?: string }): Promise<Capability[]> {
+    let result = Array.from(this.capabilities.values());
+    if (filter?.category) {
+      const wanted = filter.category;
+      result = result.filter((c) => c.category === wanted);
     }
-
-    async get(
-        name: string
-    ): Promise<Capability | undefined> {
-
-        return this.capabilities.get(name);
-
+    if (filter?.tag) {
+      const wanted = filter.tag;
+      result = result.filter((c) => c.tags?.includes(wanted) ?? false);
     }
+    return result;
+  }
 
-    async list(): Promise<Capability[]> {
-
-        return [...this.capabilities.values()];
-
-    }
-
+  async requireById(id: string): Promise<Capability> {
+    const capability = await this.get(id);
+    if (!capability) throw new CapabilityNotFoundError(id);
+    return capability;
+  }
 }

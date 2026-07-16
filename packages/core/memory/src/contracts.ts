@@ -1,23 +1,28 @@
-import { Memory } from "./types";
+/**
+ * MMOS Memory — public contracts.
+ */
+
+import type {
+  Memory,
+  MemoryEntry,
+  MemoryQuery,
+  MemoryWriteRequest,
+  MemoryReadResult,
+} from "./types";
+
+export interface MemoryRepository {
+  save(memory: Memory): Promise<void>;
+  update(memory: Memory): Promise<void>;
+  delete(id: string): Promise<void>;
+  findById(id: string): Promise<Memory | null>;
+  list(): Promise<Memory[]>;
+}
 
 export interface MemoryManager {
-
-    put(
-        memory: Memory
-    ): Promise<void>;
-
-    get(
-        namespace: string,
-        key: string
-    ): Promise<Memory | undefined>;
-
-    delete(
-        namespace: string,
-        key: string
-    ): Promise<void>;
-
-    list(
-        namespace?: string
-    ): Promise<Memory[]>;
-
+  write(request: MemoryWriteRequest): Promise<MemoryEntry>;
+  read(memoryId: string, key: string): Promise<MemoryEntry | null>;
+  query(memoryId: string, query: MemoryQuery): Promise<MemoryReadResult>;
+  delete(memoryId: string, key: string): Promise<void>;
+  clear(memoryId: string): Promise<void>;
+  size(memoryId: string): Promise<number>;
 }

@@ -1,9 +1,27 @@
-Response<T>
+/**
+ * Generic API response envelopes.
+ */
 
-SuccessResponse<T>
+import type { PaginationResponse } from "./pagination";
 
-ErrorResponse
+export interface ApiSuccess<T> {
+  success: true;
+  data: T;
+  metadata?: Record<string, unknown>;
+}
 
-ProblemDetails
+export interface ApiFailure {
+  success: false;
+  error: {
+    code: string;
+    message: string;
+    details?: Record<string, unknown>;
+  };
+}
 
-Result<T>
+export type ApiResponse<T> = ApiSuccess<T> | ApiFailure;
+
+export interface PagedResponse<T> {
+  items: T[];
+  pagination: PaginationResponse;
+}

@@ -1,74 +1,72 @@
-export interface Execution {
+/**
+ * MMOS Execution — type definitions.
+ *
+ * Shape derived from `schemas/execution.schema.json` (canonical).
+ */
 
-    apiVersion: string;
+import type { ObjectMetadata, Reference, MmosStatus } from "@mmos/shared/types";
 
-    kind: "Execution";
+export type ExecutionTrigger = "manual" | "api" | "event" | "schedule" | "system" | "retry";
 
-    metadata: ExecutionMetadata;
+export type ExecutionLifecyclePhase = "init" | "queued" | "running" | "paused" | "completing" | "completed" | "failing" | "failed" | "cancelling" | "cancelled" | "timing-out" | "timeout";
 
-    spec: ExecutionSpec;
+export type TaskRunState = "pending" | "queued" | "running" | "completed" | "failed" | "cancelled" | "timeout" | "skipped";
 
-    status: ExecutionStatus;
-
-}
-
-export interface ExecutionMetadata {
-
-    id: string;
-
-    workflowId: string;
-
-    compositionId: string;
-
-    trigger:
-        | "manual"
-        | "api"
-        | "event"
-        | "schedule"
-        | "system";
-
-    createdAt: string;
-
-    updatedAt?: string;
-
+export interface TaskRun {
+  taskId: string;
+  state: TaskRunState;
+  attempt: number;
+  startedAt?: string;
+  finishedAt?: string;
+  input?: Record<string, unknown>;
+  output?: Record<string, unknown>;
+  error?: { code: string; message: string; details?: Record<string, unknown> };
+  durationMs?: number;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ExecutionSpec {
-
-    inputs?: Record<string, unknown>;
-
-    variables?: Record<string, unknown>;
-
-    context?: Record<string, unknown>;
-
+  inputs?: Record<string, unknown>;
+  variables?: Record<string, unknown>;
+  context?: Record<string, unknown>;
+  parameters?: Record<string, unknown>;
+  configuration?: Record<string, unknown>;
+  priority?: number;
+  timeout?: number;
+  retryPolicy?: {
+    maxAttempts?: number;
+    backoff?: "fixed" | "linear" | "exponential";
+  };
+  trace?: {
+    correlationId?: string;
+    causationId?: string;
+    parentExecutionId?: string;
+  };
 }
 
-export interface ExecutionStatus {
-
-    state: ExecutionState;
-
-    progress: number;
-
-    taskRuns: TaskRun[];
-
-}
-
-export interface TaskRun {
-
-    taskId: string;
-
-    state: TaskRunState;
-
-    attempt: number;
-
-    startedAt?: string;
-
-    finishedAt?: string;
-
-    input?: Record<string, unknown>;
-
-    output?: Record<string, unknown>;
-
-    error?: unknown;
-
+export interface Execution {
+  id: string;
+  name?: string;
+  version: string;
+  displayName?: string;
+  description?: string;
+  status?: MmosStatus;
+  metadata?: ObjectMetadata;
+  workflowId: string;
+  compositionId?: string;
+  trigger: ExecutionTrigger;
+  spec: ExecutionSpec;
+  phase?: ExecutionLifecyclePhase;
+  progress?: number;
+  taskRuns?: TaskRun[];
+  startedAt: string;
+  finishedAt?: string;
+  durationMs?: number;
+  outputs?: Record<string, unknown>;
+  state?: Record<string, unknown>;
+  artifacts?: Reference[];
+  events?: Reference[];
+  tags?: string[];
+  labels?: Record<string, string>;
+  error?: { code: string; message: string; details?: Record<string, unknown> };
 }

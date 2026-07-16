@@ -1,54 +1,30 @@
-import { Composition } from "./types";
+/**
+ * MMOS Composition — public contracts.
+ *
+ * Only TypeScript types/interfaces here; implementations live in
+ * `validator.ts`, `repository.ts`, and `service.ts`.
+ */
+
+import type { Composition } from "./types";
 
 export interface CompositionRepository {
-
-    save(
-        composition: Composition
-    ): Promise<void>;
-
-    update(
-        composition: Composition
-    ): Promise<void>;
-
-    delete(
-        id: string
-    ): Promise<void>;
-
-    findById(
-        id: string
-    ): Promise<Composition | null>;
-
-    list(): Promise<Composition[]>;
+  save(composition: Composition): Promise<void>;
+  update(composition: Composition): Promise<void>;
+  delete(id: string): Promise<void>;
+  findById(id: string): Promise<Composition | null>;
+  list(): Promise<Composition[]>;
 }
 
 export interface CompositionValidator {
-
-    validate(
-        composition: Composition
-    ): Promise<void>;
+  validate(composition: Composition): void;
 }
 
 export interface CompositionService {
-
-    create(
-        composition: Composition
-    ): Promise<void>;
-
-    update(
-        composition: Composition
-    ): Promise<void>;
-
-    publish(
-        id: string
-    ): Promise<void>;
-
-    delete(
-        id: string
-    ): Promise<void>;
-
-    get(
-        id: string
-    ): Promise<Composition | null>;
-
-    list(): Promise<Composition[]>;
+  create(composition: Composition): Promise<void>;
+  update(composition: Composition): Promise<void>;
+  publish(id: string): Promise<void>;
+  archive(id: string): Promise<void>;
+  delete(id: string): Promise<void>;
+  get(id: string): Promise<Composition | null>;
+  list(): Promise<Composition[]>;
 }

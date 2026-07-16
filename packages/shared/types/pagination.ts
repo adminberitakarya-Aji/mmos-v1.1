@@ -1,11 +1,20 @@
-Pagination
+/**
+ * Pagination request/response shape — mirrors `schemas/common/pagination.schema.json`.
+ */
 
-PageRequest
+export interface PaginationRequest {
+  page?: number;
+  pageSize?: number;
+  cursor?: string;
+}
 
-PageResponse
-
-Cursor
-
-Offset
-
-Limit
+export interface PaginationResponse {
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+  nextCursor?: string;
+  previousCursor?: string;
+}

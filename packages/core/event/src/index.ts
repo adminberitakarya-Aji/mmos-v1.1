@@ -1,3 +1,7 @@
+/**
+ * MMOS Event — public API.
+ */
+
 export * from "./types";
 export * from "./contracts";
 export * from "./constants";

@@ -1,37 +1,57 @@
-export class AgentError
-extends Error {}
+/**
+ * MMOS Agent — error types.
+ */
 
-export class AgentNotFoundError
-extends AgentError {
+import { BaseError } from "@mmos/shared/errors";
 
-    constructor(name: string) {
+const CATEGORY = "agent" as const;
 
-        super(
-            `Agent '${name}' not found.`
-        );
-
-    }
-
+export class AgentError extends BaseError {
+  constructor(
+    message: string,
+    options?: { code?: string; cause?: unknown; metadata?: Record<string, unknown> | undefined },
+  ) {
+    super(message, {
+      code: options?.code ?? "AGENT_ERROR",
+      category: CATEGORY,
+      cause: options?.cause,
+      metadata: options?.metadata,
+    });
+    this.name = "AgentError";
+  }
 }
 
-export class AgentAlreadyExistsError
-extends AgentError {
-
-    constructor(name: string) {
-
-        super(
-            `Agent '${name}' already exists.`
-        );
-
-    }
-
+export class AgentValidationError extends AgentError {
+  constructor(
+    message: string,
+    options?: { cause?: unknown; metadata?: Record<string, unknown> | undefined },
+  ) {
+    super(message, {
+      code: "AGENT_VALIDATION_ERROR",
+      cause: options?.cause,
+      metadata: options?.metadata,
+    });
+    this.name = "AgentValidationError";
+  }
 }
 
-export class InvalidAgentRoleError
-extends AgentError {}
+export class AgentNotFoundError extends AgentError {
+  constructor(id: string) {
+    super(`Agent not found: ${id}`, {
+      code: "AGENT_NOT_FOUND",
+      metadata: { id },
+    });
+    this.name = "AgentNotFoundError";
+  }
+}
 
-export class InvalidCapabilityError
-extends AgentError {}
-
-export class InvalidProviderError
-extends AgentError {}
+export class AgentInvocationError extends AgentError {
+  constructor(message: string, options?: { cause?: unknown; metadata?: Record<string, unknown> }) {
+    super(message, {
+      code: "AGENT_INVOCATION_ERROR",
+      cause: options?.cause,
+      metadata: options?.metadata,
+    });
+    this.name = "AgentInvocationError";
+  }
+}

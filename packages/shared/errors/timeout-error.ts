@@ -1,14 +1,29 @@
-timeout-error.ts
+/**
+ * MMOS Shared — Timeout errors.
+ */
 
-Error timeout.
+import { BaseError } from "./base-error";
 
-Responsibility
-Request Timeout
-Execution Timeout
-Provider Timeout
-Runtime Timeout
-Scheduler Timeout
+export type TimeoutKind = "request" | "execution" | "provider" | "runtime" | "scheduler";
 
-Class
-
-TimeoutError
+export class TimeoutError extends BaseError {
+  constructor(
+    message: string,
+    options?: {
+      kind?: TimeoutKind;
+      metadata?: Record<string, unknown> | undefined;
+      cause?: unknown;
+    },
+  ) {
+    super(message, {
+      code: "TIMEOUT_ERROR",
+      category: "timeout",
+      cause: options?.cause,
+      metadata: {
+        ...(options?.kind ? { kind: options.kind } : {}),
+        ...(options?.metadata ?? {}),
+      },
+    });
+    this.name = "TimeoutError";
+  }
+}

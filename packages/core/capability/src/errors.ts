@@ -1,37 +1,57 @@
-export class CapabilityError
-extends Error {}
+/**
+ * MMOS Capability — error types.
+ */
 
-export class CapabilityNotFoundError
-extends CapabilityError {
+import { BaseError } from "@mmos/shared/errors";
 
-    constructor(name: string) {
+const CATEGORY = "capability" as const;
 
-        super(
-            `Capability '${name}' not found.`
-        );
-
-    }
-
+export class CapabilityError extends BaseError {
+  constructor(
+    message: string,
+    options?: { code?: string; cause?: unknown; metadata?: Record<string, unknown> | undefined },
+  ) {
+    super(message, {
+      code: options?.code ?? "CAPABILITY_ERROR",
+      category: CATEGORY,
+      cause: options?.cause,
+      metadata: options?.metadata,
+    });
+    this.name = "CapabilityError";
+  }
 }
 
-export class CapabilityAlreadyExistsError
-extends CapabilityError {
-
-    constructor(name: string) {
-
-        super(
-            `Capability '${name}' already exists.`
-        );
-
-    }
-
+export class CapabilityValidationError extends CapabilityError {
+  constructor(
+    message: string,
+    options?: { cause?: unknown; metadata?: Record<string, unknown> | undefined },
+  ) {
+    super(message, {
+      code: "CAPABILITY_VALIDATION_ERROR",
+      cause: options?.cause,
+      metadata: options?.metadata,
+    });
+    this.name = "CapabilityValidationError";
+  }
 }
 
-export class InvalidCapabilityError
-extends CapabilityError {}
+export class CapabilityNotFoundError extends CapabilityError {
+  constructor(id: string) {
+    super(`Capability not found: ${id}`, {
+      code: "CAPABILITY_NOT_FOUND",
+      metadata: { id },
+    });
+    this.name = "CapabilityNotFoundError";
+  }
+}
 
-export class InvalidCapabilityCategoryError
-extends CapabilityError {}
-
-export class CapabilityExecutionError
-extends CapabilityError {}
+export class CapabilityInvocationError extends CapabilityError {
+  constructor(message: string, options?: { cause?: unknown; metadata?: Record<string, unknown> }) {
+    super(message, {
+      code: "CAPABILITY_INVOCATION_ERROR",
+      cause: options?.cause,
+      metadata: options?.metadata,
+    });
+    this.name = "CapabilityInvocationError";
+  }
+}

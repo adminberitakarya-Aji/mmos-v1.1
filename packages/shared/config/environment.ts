@@ -1,11 +1,1 @@
-get()
-
-getString()
-
-getNumber()
-
-getBoolean()
-
-getArray()
-
-exists()
+export {};

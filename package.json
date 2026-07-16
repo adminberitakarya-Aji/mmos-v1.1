@@ -1,0 +1,33 @@
+{
+  "name": "mmos",
+  "version": "1.1.0",
+  "private": true,
+  "description": "MMOS (Media & Multimedia Orchestration System) - Provider-agnostic AI orchestration platform.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "packageManager": "pnpm@10.0.0",
+  "scripts": {
+    "build": "pnpm -r --filter \"./packages/**\" run build",
+    "build:shared": "pnpm --filter @mmos/shared run build",
+    "build:core": "pnpm -r --filter \"./packages/core/**\" run build",
+    "build:runtime": "pnpm -r --filter \"./packages/runtime/**\" run build",
+    "build:orchestrator": "pnpm --filter @mmos/orchestrator run build",
+    "build:sdk": "pnpm --filter @mmos/sdk run build",
+    "build:cli": "pnpm --filter @mmos/cli run build",
+    "build:ordered": "pnpm build:shared && pnpm build:core && pnpm build:runtime && pnpm build:orchestrator && pnpm build:sdk && pnpm build:cli",
+    "clean": "pnpm -r --filter \"./packages/**\" run clean",
+    "typecheck": "pnpm -r --filter \"./packages/**\" run typecheck",
+    "test": "pnpm -r --filter \"./packages/**\" run test",
+    "lint": "pnpm -r --filter \"./packages/**\" run lint",
+    "format": "prettier --write \"packages/**/*.{ts,json,md}\"",
+    "format:check": "prettier --check \"packages/**/*.{ts,json,md}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "typescript": "^5.8.0"
+  }
+}

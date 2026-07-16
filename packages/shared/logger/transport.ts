@@ -1,7 +1,1 @@
-write()
-
-flush()
-
-close()
-
-isAvailable()
+export {};

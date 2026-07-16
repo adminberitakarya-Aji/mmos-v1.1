@@ -1,11 +1,20 @@
-Options
+/**
+ * Generic options shapes used across the platform.
+ */
 
-RetryOptions
+export interface RetryOptions {
+  maxAttempts: number;
+  backoff: "fixed" | "linear" | "exponential";
+  initialDelayMs?: number;
+  maxDelayMs?: number;
+}
 
-TimeoutOptions
+export interface TimeoutOptions {
+  timeoutMs: number;
+}
 
-LoggingOptions
-
-ValidationOptions
-
-SerializationOptions
+export interface RequestOptions {
+  signal?: AbortSignal;
+  headers?: Record<string, string>;
+  timeoutMs?: number;
+}

@@ -1,15 +1,28 @@
-Nullable<T>
+/**
+ * Common TypeScript utility types.
+ *
+ * `Json*` types describe the values that survive a JSON round-trip and are
+ * used throughout the platform to keep configuration, payloads, and storage
+ * shapes predictable.
+ */
 
-Optional<T>
+export type Nullable<T> = T | null;
 
-Dictionary<T>
+export type Optional<T> = T | undefined;
 
-JsonValue
+export type Dictionary<T> = { [key: string]: T };
 
-JsonObject
+export type Primitive = string | number | boolean | bigint | symbol | null | undefined;
 
-JsonArray
+export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
 
-KeyValue<T>
+export interface JsonObject {
+  [key: string]: JsonValue;
+}
 
-Primitive
+export type JsonArray = JsonValue[];
+
+export interface KeyValue<T = string> {
+  key: string;
+  value: T;
+}
