@@ -13,8 +13,7 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": [
-    "src/**/*.ts",
-    "index.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "dist",
@@ -27,7 +26,31 @@
       "path": "../shared"
     },
     {
-      "path": "../core"
+      "path": "../core/composition"
+    },
+    {
+      "path": "../core/workflow"
+    },
+    {
+      "path": "../core/task"
+    },
+    {
+      "path": "../core/agent"
+    },
+    {
+      "path": "../core/capability"
+    },
+    {
+      "path": "../core/artifact"
+    },
+    {
+      "path": "../core/memory"
+    },
+    {
+      "path": "../core/event"
+    },
+    {
+      "path": "../core/execution"
     },
     {
       "path": "../orchestrator"

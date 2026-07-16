@@ -1,3 +1,7 @@
 packages:
   - "packages/shared"
   - "packages/core/*"
+  - "packages/runtime/*"
+  - "packages/orchestrator"
+  - "packages/sdk"
+  - "packages/cli"

@@ -22,8 +22,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -34,6 +32,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile=false
 
+      - name: Build (ordered)
+        run: pnpm build:ordered
+
       - name: Typecheck
         run: pnpm typecheck
 
@@ -42,6 +43,3 @@ jobs:
 
       - name: Test
         run: pnpm test
-
-      - name: Build (ordered)
-        run: pnpm build:ordered

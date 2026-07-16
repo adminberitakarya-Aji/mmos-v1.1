@@ -53,7 +53,7 @@ function formatErrors(errors: ErrorObject[] | null | undefined): string {
 
 export class DefaultCompositionValidator {
   validate(composition: Composition): void {
-    const ok = validateSchema(composition);
+    const ok = validateSchema(composition) as boolean;
     if (!ok) {
       throw new CompositionValidationError(formatErrors(validateSchema.errors), {
         metadata: {

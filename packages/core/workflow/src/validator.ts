@@ -45,7 +45,7 @@ function formatErrors(errors: ErrorObject[] | null | undefined): string {
 
 export class DefaultWorkflowValidator {
   validate(workflow: Workflow): void {
-    const ok = validateSchema(workflow);
+    const ok = validateSchema(workflow) as boolean;
     if (!ok) {
       throw new WorkflowValidationError(formatErrors(validateSchema.errors), {
         metadata: {

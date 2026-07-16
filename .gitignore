@@ -212,6 +212,29 @@ pnpm-lock.yaml
 
 # ------------------------------------------------------------------------------
 
+# TypeScript compiled output
+
+# ------------------------------------------------------------------------------
+
+# Ignore all TypeScript compiled output
+packages/**/*.js
+packages/**/*.js.map
+packages/**/*.d.ts
+packages/**/*.d.ts.map
+examples/**/*.js
+examples/**/*.js.map
+examples/**/*.d.ts
+examples/**/*.d.ts.map
+
+# But keep config files
+!packages/**/*.config.js
+!packages/**/*.config.ts
+!examples/**/*.config.js
+!examples/**/*.config.ts
+!eslint.config.js
+
+# ------------------------------------------------------------------------------
+
 # Misc
 
 # ------------------------------------------------------------------------------

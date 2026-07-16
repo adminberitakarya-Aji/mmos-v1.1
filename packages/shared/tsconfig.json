@@ -10,7 +10,9 @@
     "sourceMap": true,
 
     "noEmitOnError": true,
-    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
+
+    "types": ["node"]
   },
   "include": [
     "**/*.ts"

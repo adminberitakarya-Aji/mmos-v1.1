@@ -43,8 +43,20 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@mmos/core": "workspace:*",
-    "@mmos/runtime": "workspace:*",
+    "@mmos/core-composition": "workspace:*",
+    "@mmos/core-workflow": "workspace:*",
+    "@mmos/core-task": "workspace:*",
+    "@mmos/core-agent": "workspace:*",
+    "@mmos/core-capability": "workspace:*",
+    "@mmos/core-artifact": "workspace:*",
+    "@mmos/core-memory": "workspace:*",
+    "@mmos/core-event": "workspace:*",
+    "@mmos/core-execution": "workspace:*",
+    "@mmos/runtime-planner": "workspace:*",
+    "@mmos/runtime-scheduler": "workspace:*",
+    "@mmos/runtime-queue": "workspace:*",
+    "@mmos/runtime-dispatcher": "workspace:*",
+    "@mmos/runtime-executor": "workspace:*",
     "@mmos/orchestrator": "workspace:*",
     "@mmos/shared": "workspace:*"
   },

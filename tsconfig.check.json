@@ -26,8 +26,7 @@
     },
     "noEmit": true,
     "skipLibCheck": true,
-    "types": ["node"],
-    "typeRoots": ["C:/nvm4w/nodejs/node_modules/@types", "C:/nvm4w/nodejs/node_modules"]
+    "types": ["node"]
   },
   "include": [
     "packages/shared/**/*.ts",

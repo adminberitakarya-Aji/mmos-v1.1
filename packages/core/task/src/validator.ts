@@ -38,7 +38,7 @@ function formatErrors(errors: ErrorObject[] | null | undefined): string {
 
 export class DefaultTaskValidator {
   validate(task: Task): void {
-    const ok = validateSchema(task);
+    const ok = validateSchema(task) as boolean;
     if (!ok) {
       throw new TaskValidationError(formatErrors(validateSchema.errors), {
         metadata: {
