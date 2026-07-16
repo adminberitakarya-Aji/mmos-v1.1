@@ -1,0 +1,15 @@
+diff --git a/.gitignore b/.gitignore
+index 4d32a06..5d906b3 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -192,7 +192,9 @@ gen/
+ 
+ package-lock.json
+ yarn.lock
+-pnpm-lock.yaml
++
++# pnpm-lock.yaml intentionally NOT ignored - this is a pnpm workspace,
++# the lockfile must be committed for reproducible installs and CI
+ 
+ # Keep Go dependency lock file
+ 
